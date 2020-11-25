@@ -1,0 +1,26 @@
+
+<!-- 
+	##################################################
+					用户信息编辑表单
+	##################################################
+ -->
+ 
+<form class="user-table-addUser" style="margin-top: 1.6rem;" data-parsley-validate>
+	<div class="form-group row">
+	    <label for="example-text-input" class="col-4 col-sm-3 col-form-label">用户名</label>
+	    <div class="col-sm-9">
+	        <input class="form-control" type="text" name="username" id="username" autocomplete="off" placeholder="请输入用户名"
+	        		data-parsley-required="true" data-parsley-required-message="用户名不可为空"
+	        		data-parsley-pattern="^[a-zA-Z0-9_]{1,15}$" data-parsley-pattern-message="用户名由1-15字母，数字，下划线"
+	        		data-parsley-trigger="focusout">
+	    </div>
+	</div>
+	<div class="form-group row">
+	    <label for="example-text-input" class="col-4 col-sm-3 col-form-label">密码</label>
+	    <div class="col-sm-9">
+	        <input class="form-control" type="text" name="password" id="password" autocomplete="off" placeholder="请输入密码"
+	        		data-parsley-required="true" data-parsley-required-message="密码不可为空"
+					data-parsley-trigger="focusout">
+	    </div>
+	</div>
+</form>

@@ -1,0 +1,33 @@
+<!-- 用户组数据表格 -->
+<table id= "userGroup-allocate-table"></table>
+
+
+
+<script type="text/javascript">
+		//角色数据表格对象
+		var _userGroupAlloTable = $("#userGroup-allocate-table");
+		
+		myBsTable.pageTable(_userGroupAlloTable, {
+			url: '/framework/usergroup/getPage',
+			columns: [
+				{ checkbox: true, formatter: function(value, row, index) {
+	        		<#if userUserGroups??>
+						<#list userUserGroups as uug> 
+					if (row.id === '${uug.userGroupId}') return true;
+						</#list>
+					</#if>
+	        		return false;
+	        	}},
+				{field: 'name', title: '用户组名称'},
+				{field: 'descrip', title: '用户组描述'}
+			],
+			onClickRow: function(row, tr, flied) {
+				var checked = row['0'];
+				var op = checked? 'uncheckBy' : 'checkBy';
+				_userGroupAlloTable.bootstrapTable(op, {field: 'id', values: [row.id]});
+	        },
+			// 加载完成方法
+			onLoadSuccess: function (data) {
+			},
+		});
+</script>

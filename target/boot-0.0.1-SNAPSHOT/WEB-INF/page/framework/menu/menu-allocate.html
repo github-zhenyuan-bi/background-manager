@@ -1,0 +1,63 @@
+<!-- 菜单供选择分配的树形表格 -->
+<table id="menu-allocate-table"></table>
+
+
+<script type="text/javascript">
+	// 分配菜单树形表格dom
+	var _menuAllocateTable = $('#menu-allocate-table');
+	// 选择事件传递子支点
+	var enable_check_child = true;
+	
+	
+	myBsTable.treeTable(_menuAllocateTable, {
+    	url: '/framework/menu/getList',
+    	// 在哪一列展开树形 按钮
+        treeShowField: 'name',
+        clickToSelect: true,
+        // 字段
+        columns: [
+        	{ checkbox: true, formatter: function(value, row, index) {
+        		<#if roleMenus??>
+					<#list roleMenus as rm> 
+				if (row.id === '${rm.menuId}') return true;
+					</#list>
+				</#if>
+        		return false;
+        	}},
+            { field: 'name',  title: '名称', halign: 'left', align: 'left' },
+            { field: 'filterExp',  title: '权限过滤', halign: 'left', align: 'left' }
+        ],
+        onClickRow: function(row, tr, flied) {
+        },
+        onCheck:function(row) {
+        	// 父节点选中 则向全部子节点传递默认选择 （非子节点传递的选择事件）
+        	if (enable_check_child)
+        		_menuAllocateTable.bootstrapTable('checkBy', {field: 'pid', values: [row.id]});
+        	// 子节点选中后 向父节点传递选择事件 （必须存在父节点）
+        	enable_check_child = true;
+        	if (row.pid && row.pid != '-1') {
+        		enable_check_child = false;
+        		_menuAllocateTable.bootstrapTable('checkBy', {field: 'id', values: [row.pid]});
+        	}
+        },
+        onUncheck:function(row) {
+        	enable_check_child = true;
+        	_menuAllocateTable.bootstrapTable('uncheckBy', {field: 'pid', values: [row.id]});
+        },
+        onResetView: function(data) {
+            _menuAllocateTable.treegrid({
+                initialState: 'expanded',// 所有节点都折叠 （展开就是 expanded）
+                treeColumn: 1,
+                expanderExpandedClass: 'fa fa-caret-down',  //图标样式
+                expanderCollapsedClass: 'fa fa-angle-right',
+                onChange: function() {
+                    //_menuAllocateTable.bootstrapTable('resetWidth');
+                }
+            });
+        },
+     	// 加载完成方法
+		onLoadSuccess: function (data) {
+		},
+    });	
+	
+</script>

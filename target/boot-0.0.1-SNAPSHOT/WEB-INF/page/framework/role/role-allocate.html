@@ -1,0 +1,15 @@
+<style>
+</style>
+
+<form id="roleAllocate-form" class="cbx-form" >
+	<input type="hidden" name="userId" value="${(curUser.id)! }">
+    <div class="form-group">
+        <div class="my-cbx-box">
+        	<#assign checkbox_datalist = cboxRoleList />
+	        <#assign idField = 'id' />
+	        <#assign nameField = 'name' />
+	        <#assign extraField = 'descrip' />
+        	<#include "/template/form/checkbox.html">
+        </div>
+    </div>
+</form>

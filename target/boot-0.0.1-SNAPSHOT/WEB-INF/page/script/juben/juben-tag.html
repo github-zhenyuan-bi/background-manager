@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
+        <title>${(db_constants.system_management_title)!'后台管理'}</title>
+        <meta content="Admin Dashboard" name="description" />
+        <meta content="Themesbrand" name="author" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+        <!-- App Icons -->
+        <link rel="shortcut icon" href="/assets/images/favicon.ico">
+
+        <!-- App css -->
+        <link href="/assets/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+        <link href="/assets/css/icons.css" rel="stylesheet" type="text/css" />
+        <link href="/assets/css/style.css" rel="stylesheet" type="text/css" />
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+		<link href="/assets/icons/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+		
+		<!-- Sweet Alert -->
+        <link href="/assets/js/bootstrap-plugins/sweetAlert/sweetalert2.min.css" rel="stylesheet" type="text/css">
+		
+		<!-- table -->
+		<link href="/assets/js/bootstrap-plugins/table/bootstrap-table.min.css" rel="stylesheet">
+		<!-- switch -->
+		<link href="/assets/js/bootstrap-plugins/switch/bootstrap-switch.min.css" rel="stylesheet">
+		<!-- fileupload -->
+		<link href="/assets/js/bootstrap-plugins/fileUpload/fileinput.css" rel="stylesheet">
+		
+		<link href="/assets/css/common/common.css" rel="stylesheet">
+    </head>
+
+
+    <body>
+
+        <!-- Loader -->
+        <div id="preloader"><div id="status"><div class="spinner"></div></div></div>
+		
+		<!-- 页面头 -->
+		<#include "/template/common/header/header-template.html" />
+        
+        <div class="wrapper">
+            <div class="container-fluid">
+
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card m-b-20">
+                            <div class="card-body">  
+                            	<h4 class="mt-0 header-title">#剧本标签数据表格</h4>
+                            	<!-- 头部工具栏 -->
+								<div id="jubenTag-table-toolbar">
+									<button type="button" class="btn btn-primary" data-event="addJubenTag">
+										<i class="fa fa-plus" aria-hidden="true"></i>  新增标签</button></div>
+								<!-- 角色数据表格 -->
+								<table id= "jubenTag-table" data-toolbar="#jubenTag-table-toolbar"></table>
+								
+								<div class="jubenTagFormWrapper" style="display: none;">
+									<!-- 页面头 -->
+									<#include "./tag-add.html" />
+								</div>
+							</div>
+                        </div>
+                    </div>
+                </div>
+
+            </div> <!-- end container -->
+        </div>
+        <!-- end wrapper -->
+
+
+		<!-- 后台管理公共底部 -->
+		<#include "/template/common/footer-template.html">
+
+        <!-- jQuery  -->
+        <script src="/assets/js/jquery.min.js"></script>
+        <script src="/assets/js/bootstrap.min.js"></script>
+        <script src="/assets/js/modernizr.min.js"></script>
+        <script src="/assets/js/waves.js"></script>
+        <script src="/assets/js/jquery.slimscroll.js"></script>
+        <script src="/assets/js/jquery.nicescroll.js"></script>
+        <script src="/assets/js/jquery.scrollTo.min.js"></script>
+	
+		<!-- my -->
+		<script src="/assets/js/common/my-fetch.js?v=1.1"></script>
+		<script src="/assets/js/common/my.js?v=1.1"></script>
+		
+        <!-- App js -->
+        <script src="/assets/js/app.js"></script>
+
+		<!-- table -->
+		<script src="/assets/js/bootstrap-plugins/table/bootstrap-table.min.js"></script>
+		<script src="/assets/js/bootstrap-plugins/table/my-table.js"></script>
+		<!-- treegrid -->
+		<script src="/assets/js/bootstrap-plugins/table/jquery.treegrid.min.js"></script>
+		<script src="/assets/js/bootstrap-plugins/table/bootstrap-table-treegrid.js"></script>
+                     
+		<!-- Sweet-Alert  -->
+        <script src="/assets/js/bootstrap-plugins/sweetAlert/sweetalert2.all.min.js"></script>
+        <script src="/assets/js/bootstrap-plugins/sweetAlert/my-sweet-alert.js"></script>
+        
+		<!-- echart -->
+		<script src="/assets/js/charts/echart/echarts.min.js"></script>
+		<script src="/assets/js/charts/echart/my-echart.js"></script>
+		
+		<!-- form-valid -->
+		<script src="/assets/plugins/parsleyjs/parsley.min.js"></script>
+		
+		<!-- fileupload -->
+		<script src="/assets/js/bootstrap-plugins/fileUpload/fileinput.js"></script>
+		<script src="/assets/js/bootstrap-plugins/fileUpload/fileinput_locale_zh.js"></script>
+		
+		<script src="/assets/js/plugins/upload/upload.js"></script>
+		
+		<script type="text/javascript">
+			// 用户数据表格
+			var _tagTable = $("#jubenTag-table");
+			var _tagForm     = $(".jubenTagFormWrapper").find(".jubenTag-table-addTag");
+			
+			// 表格工具栏事件
+			window.operateScriptEvents = {
+					// e: 事件对象  value: 单元格绑定的字段值  row: 当前行对象  index: 行编号
+					'click .tb-op': function(e, value, row, index) {
+						var $btn = $(e.currentTarget);
+						var event = $btn.data("event");
+						//var dd = $("#user-table").bootstrapTable('getData');
+						operateScriptEvents[event]? operateScriptEvents[event]($btn, value, row, index) : "";
+					},
+					/*
+					 * 增加剧本标签
+					 */
+					addJubenTag: function($btn, value, row, index) {
+						var $formDom = _tagForm.clone();
+						mySwal.loadHtml("编辑标签", $formDom, {
+							preConfirm: function() {
+								var $scriptForm = $("#swal2-content .jubenTag-table-addTag");
+								// 表单验证
+								/* var formValidRes = $scriptForm.parsley().validate();
+								if (!formValidRes) 
+									return false; */
+								// 表单提交
+								return fetchPostSwalComfirm("/script/tag/addRecord", {
+											body: JSON.stringify($scriptForm.serializeFormToJson())
+										}, function(res) {
+											mySwal.alertForRes(res, {
+												text: "增加标签成功",
+												onOpen: function() {_tagTable.bootstrapTable('refresh');}
+											});
+										});
+							}
+						});
+					},
+					/*
+					 * 删除标签
+					 */
+					remove: function($btn, value, row, index) {
+						mySwal.delConfirm({
+							// 删除请求
+							url: "/script/tag/deleteById?id="+value,
+							// 删除成功后的回调方法
+							afterConfirm: function(res) {
+								_tagTable.bootstrapTable('refresh');
+							}
+						});
+					}
+			}
+			// 增加剧本按钮点击事件
+			$("#jubenTag-table-toolbar button").click(function() {
+				var event = $(this).data("event");
+				operateScriptEvents[event]? operateScriptEvents[event]($(this)) : "";
+			});
+			// 表格加载
+			myBsTable.pageTable(_tagTable, {
+				url: '/script/tag/getPage',
+				columns: [
+					{title: '#', width: 50, formatter: function (value, row, index) {return '<strong><i>'+(index+1)+'</i></strong>';}},
+					{field: 'name', title: '标签名'},
+					{field: 'id',title: '操作', width: 220, events: operateScriptEvents, formatter: function(value, row, index) {
+						return '<a class="tb-op edit" data-event="edit" title="编辑标签" href="javascript:void(0);"><i class="fa fa-pencil"></i></a>' +
+							   '<a class="tb-op remove" data-event="remove" title="删除" href="javascript:void(0);"><i class="fa fa-trash-o"></i></a>';
+					}}
+				],
+				// 加载完成方法
+				onLoadSuccess: function (data) {
+					// 初始化开关组件
+					//mySwitch.load($('.role-forbidden-switch'));
+				},
+			});
+		</script>
+    </body>
+</html>

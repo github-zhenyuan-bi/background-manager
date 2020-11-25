@@ -1,0 +1,40 @@
+<form id="timerTask-add-card" style="margin-top: 1.6rem;">
+	<input type="hidden" name="id" value="${(task.id)!}">
+	<input type="hidden" name="enable" value="${(task.enable)!'0'}">
+	<div class="form-group row">
+	    <label for="example-text-input" class="col-sm-3 col-form-label">任务名称</label>
+	    <div class="col-sm-9">
+	        <input class="form-control" type="text" name="name" value="${(task.name)!}" autocomplete="off">
+	    </div>
+	</div>
+	<div class="form-group row">
+	    <label for="example-text-input" class="col-sm-3 col-form-label">任务说明</label>
+	    <div class="col-sm-9">
+	        <input class="form-control" type="text" name="descp" value="${(task.descp)!}" autocomplete="off">
+	    </div>
+	</div>
+	<div class="form-group row">
+	    <label for="example-text-input" class="col-sm-3 col-form-label">任务周期</label>
+	    <div class="col-sm-9">
+	        <select class="form-control" name="corn">
+				<#if constants??>
+					<#list constants as constant>
+						<option value="${(constant.value)!}">${(constant.descp)!}</option>
+					</#list>
+				</#if> 
+            </select>
+	    </div>
+	</div>
+	<div class="form-group row">
+	    <label for="example-text-input" class="col-sm-3 col-form-label">执行方法</label>
+	    <div class="col-sm-9">
+	        <select class="form-control" name="methodname">
+				<#if taskMethods??>
+					<#list taskMethods?keys as methodName>
+						<option value="${(methodName)!}">(${(methodName)!})${(taskMethods[methodName])!}</option>
+					</#list>
+				</#if> 
+            </select>
+	    </div>
+	</div>
+</form>

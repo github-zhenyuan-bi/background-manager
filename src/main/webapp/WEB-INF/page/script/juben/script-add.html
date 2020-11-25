@@ -1,0 +1,183 @@
+
+<form class="script-table-addScript" style="margin-top: 1.6rem;">
+	<input type="hidden" name="id" value="${(juben.id)!}">
+	
+	<div class="form-row">
+		<div class="col-sm-6">
+			<div class="form-row">
+				<label class="col-sm-2 col-form-label">封面</label>
+			    <div class="form-group col-sm-10">
+			        <div id="drop_area"></div>
+			        <input type="text" name="coverImg" style="display: none;" value="${(juben.coverImg)!}"
+			        		data-parsley-required="true" data-parsley-required-message="剧本封面图必须上传"
+			        		data-parsley-trigger="focusout">
+			    </div>
+			</div>
+		</div>
+			
+		<div class="col-sm-6">
+			<div class="form-row">
+			    <label class="col-sm-3 col-form-label">剧本名</label>
+			    <div class="form-group col-sm-9">
+			        <input class="form-control" autocomplete="off" type="text" maxlength="15"
+			        		name="name" value="${(juben.name)!}" placeholder="填入剧本名称"
+			        	data-parsley-required="true" data-parsley-required-message="剧本名称不能为空"
+			        	data-parsley-maxlength="15" data-parsley-maxlength-message="剧本名称最多为15个字符"
+						data-parsley-trigger="focusout">
+			    </div>
+			</div>
+			<div class="form-row">
+				<label class="col-sm-3 col-form-label">类型/难度</label>
+			    <div class="form-group col-sm-5">
+			        <select class="form-control" name="jbType">
+		                <option value="1" <#if juben?? && juben.jbType == '1'>selected</#if>>普通本</option>
+		                <option value="2" <#if juben?? && juben.jbType == '2'>selected</#if>>城市限定</option>
+		                <option value="3" <#if juben?? && juben.jbType == '3'>selected</#if>>独家本</option>
+		            </select>
+			    </div>
+			    <div class="form-group input-group col-sm-4 ">
+			        <select class="form-control" name="difficulty">
+		                <option value="1" <#if juben?? && juben.difficulty == '1'>selected</#if>>简单</option>
+		                <option value="2" <#if juben?? && juben.difficulty == '2'>selected</#if>>一般</option>
+		                <option value="3" <#if juben?? && juben.difficulty == '3'>selected</#if>>困难</option>
+		                <option value="4" <#if juben?? && juben.difficulty == '4'>selected</#if>>硬核</option>
+		            </select>
+			    </div>
+			</div>
+			
+			<div class="form-row">
+			    <label class="col-sm-3 col-form-label">剧本简介</label>
+			    <div class="form-group col-sm-9">
+			        <textarea class="form-control" rows="3" name="introduction" placeholder="填入剧本的基本介绍内容"
+			        		data-parsley-required="true" data-parsley-required-message="剧本简介不能为空"
+			        		data-parsley-maxlength="400" data-parsley-maxlength-message="剧本简介最多为400个字符"
+			        		data-parsley-trigger="focusout">${(juben.introduction)!}</textarea>
+			    </div>
+			</div>
+			<div class="form-row">
+			    <label class="col-sm-3 col-form-label">时长</label>
+			    <div class="form-group input-group col-sm-9">
+			    	<div class="input-group-prepend">
+					    <span class="input-group-text" >耗时(h)</span>
+					</div>
+			        <input class="form-control" type="number" min="1" max="10" autocomplete="off" 
+			        		name="gameTime" value="${(juben.gameTime)!}" placeholder="填入剧本平均时长(小时)"
+			        		data-parsley-required="true" data-parsley-required-message="剧本时长不能为空"
+			        		data-parsley-min="1" data-parsley-min-message="剧本时长最少为1"
+			        		data-parsley-max="10" data-parsley-max-message="剧本时长最大为10"
+			        		data-parsley-pattern=^\d*\.?\d+$ data-parsley-pattern-message="时长必须是正数"
+			        		data-parsley-trigger="focusout">
+			    </div>
+			</div>
+			<div class="form-row">
+				<label class="col-sm-3 col-form-label">玩家人数</label>
+			    <div class="form-group input-group  col-sm-4">
+			    	<div class="input-group-prepend">
+					    <span class="input-group-text" >男玩家</span>
+					</div>
+			        <input class="form-control" type="text" autocomplete="off" 
+			        		name="gamerMaleCount" value="${(juben.gamerMaleCount)!}" placeholder=""
+			        		data-parsley-required="true" data-parsley-required-message="男玩家人数不能为空"
+			        		data-parsley-min="0" data-parsley-min-message="男玩家人数最少为0"
+			        		data-parsley-max="12" data-parsley-max-message="男玩家人数最大为12"
+			        		data-parsley-pattern=^\d+$ data-parsley-pattern-message="男玩家人数必须是正数"
+			        		data-parsley-trigger="focusout">
+			    </div>
+			    <div class="form-group input-group col-sm-4 ">
+			    	<div class="input-group-prepend">
+					    <span class="input-group-text" >女玩家</span>
+					</div>
+			        <input class="form-control" type="text" autocomplete="off"
+			        		name="gamerFemaleCount" value="${(juben.gamerMaleCount)!}" placeholder=""
+			        		data-parsley-required="true" data-parsley-required-message="女玩家人数不能为空"
+			        		data-parsley-min="0" data-parsley-min-message="女玩家人数最少为0"
+			        		data-parsley-max="12" data-parsley-max-message="女玩家人数最大为12"
+			        		data-parsley-pattern=^\d+$ data-parsley-pattern-message="女玩家人数必须是正数"
+			        		data-parsley-trigger="focusout">
+			    </div>
+			</div>
+			
+			<div class="form-row">
+				<label class="col-sm-3 col-form-label">剧本价格</label>
+			    <div class="form-group input-group col-sm-4">
+			    	<div class="input-group-prepend">
+					    <span class="input-group-text" >进价</span>
+					</div>
+			        <input class="form-control" type="text"autocomplete="off" 
+			        		name="importPrice" value="${(juben.importPrice)!}" placeholder=""
+			        		data-parsley-required="true" data-parsley-required-message="剧本进价不能为空"
+			        		data-parsley-min="0" data-parsley-min-message="剧本进价最少为0"
+			        		data-parsley-max="10000" data-parsley-max-message="剧本进价最大为10000"
+			        		data-parsley-pattern=^\d*\.?\d+$ data-parsley-pattern-message="剧本进价必须是正数">
+			    </div>
+			    <div class="form-group input-group col-sm-5">
+			    	<div class="input-group-prepend">
+					    <span class="input-group-text" >售价</span>
+					</div>
+			        <input class="form-control" type="text" autocomplete="off" 
+			        		name="sellPrice" value="${(juben.sellPrice)!}" placeholder="元/人" 
+			        		data-parsley-required="true" data-parsley-required-message="剧本售价不能为空"
+			        		data-parsley-min="0" data-parsley-min-message="剧本售价最少为0"
+			        		data-parsley-max="500" data-parsley-max-message="剧本售价最大为500"
+			        		data-parsley-pattern=^\d*\.?\d+$ data-parsley-pattern-message="剧本售价必须是正数">
+			    </div>
+			</div>
+			
+			<div class="form-row">
+				<label class="col-sm-3 col-form-label">反串/上架</label>
+			    <div class="form-group col-sm-5">
+			        <select class="form-control" name="roleReversalEnbale">
+		                <option value="1" <#if juben?? && juben.roleReversalEnbale == '1'>selected</#if>>允许反串</option>
+		                <option value="0" <#if juben?? && juben.roleReversalEnbale == '0'>selected</#if>>不允许</option>
+		            </select>
+			    </div>
+			    <div class="form-group input-group col-sm-4 ">
+			        <select class="form-control" name="isSell">
+			        	<option value="0" <#if juben?? && juben.isSell == 0>selected</#if>>下架</option>
+		                <option value="1" <#if juben?? && juben.isSell == 1>selected</#if>>上架</option>
+		            </select>
+			    </div>
+			</div>
+		</div>
+	</div>
+
+
+
+	
+</form>
+<script>
+	var $imgArea = $("#drop_area");
+	var $imgInput = $imgArea.next('[name="coverImg"]');
+	var dragImgUpload = new DragImgUpload("#drop_area",{
+		boxWidth: '80%',
+		imgurl: '${(juben.coverImg)!}',
+	    callback:function (files) {
+	        //回调函数，可以传递给后台等等
+	        var file = files[0];
+	        // 非图片格式
+	        if (!checkFileTypeImg(file.name)) {
+	        	
+	        	return;
+	        }
+	        
+	        var form = new FormData();
+	        form.append("img", file);
+	        $.ajax({
+	            url:"/upload/jubenCoverImg",
+	            type:"POST",
+	            data:form,
+	            processData : false,
+	            contentType : false,
+	            dataType : 'json',
+	            success : function (res) {
+	            	if (res.code === 200) {
+	            		$imgInput.val(res.data);
+	            	} else {
+	            		$imgArea.find('img').attr("src", "/assets/images/upload.png");
+	            		$imgInput.val('');
+	            	}
+	            }    
+	        })  
+	    }
+	});
+</script>

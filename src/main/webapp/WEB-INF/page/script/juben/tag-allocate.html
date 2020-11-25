@@ -1,0 +1,23 @@
+<#if tags??>
+	<#list tags as tag>
+	
+		<input class="inp-cbx" type="checkbox" style="display: none;"
+				id="${tag.id }" 
+				value="${tag.id }" 
+				name="tagId"
+				${tag.jubenHas?string('checked', '')}>
+				
+		<label class="cbx" for="${tag.id }" style="width: auto;"> 
+			<span><svg width="12px" height="10px">
+				<use xlink:href="#check"></use></svg></span><span>
+					${tag.name }
+					</span></label>
+			
+	</#list>
+</#if>
+
+<!--SVG Sprites--><svg class="inline-svg">
+        <symbol id="check" viewBox="0 0 12 10">
+            <polyline points="1.5 6 4.5 9 10.5 1"></polyline>
+        </symbol>
+    </svg>

@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
+        <title>${(db_constants.system_management_title)!'后台管理'}</title>
+        <meta content="Admin Dashboard" name="description" />
+        <meta content="Themesbrand" name="author" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+        <!-- App Icons -->
+        <link rel="shortcut icon" href="/assets/images/favicon.ico">
+
+        <!-- App css -->
+        <link href="/assets/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+        <link href="/assets/css/icons.css" rel="stylesheet" type="text/css" />
+        <link href="/assets/css/style.css" rel="stylesheet" type="text/css" />
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+		<link href="/assets/icons/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+		
+		<!-- Sweet Alert -->
+        <link href="/assets/js/bootstrap-plugins/sweetAlert/sweetalert2.min.css" rel="stylesheet" type="text/css">
+		
+		<!-- table -->
+		<link href="/assets/js/bootstrap-plugins/table/bootstrap-table.min.css" rel="stylesheet">
+		<!-- treegrid -->
+		<link rel="stylesheet" type="text/css" href="/assets/js/bootstrap-plugins/table/jquery.treegrid.min.css">
+		
+		<!-- switch -->
+		<link href="/assets/js/bootstrap-plugins/switch/bootstrap-switch.min.css" rel="stylesheet">
+		
+		<!-- checkbox -->
+		<link href="/assets/css/plugins/form/checkbox/style.css" rel="stylesheet">
+		
+		<link href="/assets/css/common/common.css" rel="stylesheet">
+		
+    </head>
+
+
+    <body>
+        <!-- Loader -->
+        <div id="preloader"><div id="status"><div class="spinner"></div></div></div>
+
+        <!-- 页面头 -->
+		<#include "/template/common/header/header-template.html" />
+
+
+        <div class="wrapper">
+            <div class="container-fluid">
+
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="card m-b-20">
+                            <div class="card-body">
+                            
+                                <!-- <h4 class="mt-0 header-title">系统后台管理</h4>
+                                <p class="text-muted m-b-30 font-14">做一些系统基本架构的配置操作</p> -->
+                                
+                                <!-- Nav tabs -->
+                                <ul class="nav nav-tabs nav-tabs-custom" role="tablist">
+                                    <li class="nav-item"><a class="nav-link" data-toggle="tab" role="tab" href="#user">用户</a></li>
+                                    <li class="nav-item"><a class="nav-link" data-toggle="tab" role="tab" href="#role">角色</a></li>
+                                    <li class="nav-item"><a class="nav-link" data-toggle="tab" role="tab" href="#usergroup">用户组</a></li>
+                                    <li class="nav-item"><a class="nav-link" data-toggle="tab" role="tab" href="#menu">菜单</a></li>
+                                    <li class="nav-item"><a class="nav-link" data-toggle="tab" role="tab" href="#constant">常量</a></li>
+                                    <li class="nav-item"><a class="nav-link" data-toggle="tab" role="tab" href="#log">日志</a></li>
+                                    <li class="nav-item"><a class="nav-link" data-toggle="tab" role="tab" href="#timerTask">定时任务</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                            
+                            	<div class="tab-content">
+                                    <div class="tab-pane fade" role="tabpanel" id="user"></div>
+                                    <div class="tab-pane fade" role="tabpanel" id="role"></div>
+                                    <div class="tab-pane fade" role="tabpanel" id="usergroup"></div>
+                                    <div class="tab-pane fade" role="tabpanel" id="menu"></div>
+                                    <div class="tab-pane fade" role="tabpanel" id="constant"></div>
+                                    <div class="tab-pane fade" role="tabpanel" id="log"></div>
+                                    <div class="tab-pane fade" role="tabpanel" id="timerTask"></div>
+                                </div>
+                            
+
+            </div> <!-- end container -->
+        </div>
+        <!-- end wrapper -->
+
+
+        <!-- 页面底部 -->
+		<#include "/template/common/footer-template.html">
+
+        <!-- jQuery  -->
+        <script src="/assets/js/jquery.min.js"></script>
+        <script src="/assets/js/bootstrap.min.js"></script>
+        <script src="/assets/js/modernizr.min.js"></script>
+        <script src="/assets/js/waves.js"></script>
+        <script src="/assets/js/jquery.slimscroll.js"></script>
+        <script src="/assets/js/jquery.nicescroll.js"></script>
+        <script src="/assets/js/jquery.scrollTo.min.js"></script>
+	
+		<!-- my -->
+		<script src="/assets/js/common/my-fetch.js?v=1.1"></script>
+		<script src="/assets/js/common/my.js?v=1.1"></script>
+		
+        <!-- App js -->
+        <script src="/assets/js/app.js"></script>
+
+		<!-- table -->
+		<script src="/assets/js/bootstrap-plugins/table/bootstrap-table.min.js"></script>
+		<script src="/assets/js/bootstrap-plugins/table/my-table.js"></script>
+		<!-- treegrid -->
+		<script src="/assets/js/bootstrap-plugins/table/jquery.treegrid.min.js"></script>
+		<script src="/assets/js/bootstrap-plugins/table/bootstrap-table-treegrid.js"></script>
+                     
+		<!-- Sweet-Alert  -->
+        <script src="/assets/js/bootstrap-plugins/sweetAlert/sweetalert2.all.min.js"></script>
+        <script src="/assets/js/bootstrap-plugins/sweetAlert/my-sweet-alert.js"></script>
+        
+		<!-- switch -->
+		<script src="/assets/js/bootstrap-plugins/switch/highlight.js"></script>
+		<script src="/assets/js/bootstrap-plugins/switch/bootstrap-switch.min.js"></script>
+		<script src="/assets/js/bootstrap-plugins/switch/my-switch.js"></script>
+		
+		<!-- bootbox -->
+		<script src="/assets/js/bootstrap-plugins/bootbox/bootbox.all.min.js"></script>
+		<script src="/assets/js/bootstrap-plugins/bootbox/my-bootbox.js"></script>
+		
+		<!-- echart -->
+		<script src="/assets/js/charts/echart/echarts.min.js"></script>
+		<script src="/assets/js/charts/echart/my-echart.js"></script>
+		
+		<!-- md5 -->
+		<script src="/assets/js/md5.js"></script>
+		
+		<!-- form-valid -->
+		<script src="/assets/plugins/parsleyjs/parsley.min.js"></script>
+		
+		<script type="text/javascript">
+			var timeoutObj = {};
+		
+			$('a[data-toggle="tab"]').on('show.bs.tab', function (e) {
+				var $curTab = $(e.target);// 当前激活tab
+				var $lastTab = $(e.relatedTarget);// 先前激活面板tab
+				
+				curActivePaneLoadHtml($curTab);
+				/* if ($.isEmptyObject($($curTab.attr('href')).html())) {
+					curActivePaneLoadHtml($curTab);
+				} else {
+					window.location.href = "system-manager" + $curTab.attr('href');
+				} */
+			});
+			
+			function curActivePaneLoadHtml($curTab) {
+				var activeId = $curTab.attr('href');
+				var type = activeId.substring(1);
+				$(activeId).load("/framework/"+type+"/management", function() {
+				});
+				window.location.href = "#" + type;
+			}
+			
+			var url = window.location.href;
+			var indexOfTab = url.lastIndexOf('#');
+			var $activeDom = $('.nav .nav-item .nav-link').first();
+			if (indexOfTab != -1) {
+				var tabHref = url.substr(indexOfTab);
+				$activeDom = $("a[href='"+tabHref+"']")
+				$activeDom.tab('show');
+			} 
+			$activeDom.tab('show');
+		</script>
+    </body>
+</html>

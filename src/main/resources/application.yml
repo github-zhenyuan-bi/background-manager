@@ -1,0 +1,47 @@
+#=============【server】====================
+server:
+  port: 80
+  tomcat:
+    uri-encoding: UTF-8 
+
+
+
+#=============【spring】==================== 
+spring:
+  #启用的主文件
+  profiles:
+    active: dev
+  # 缓存
+  cache:
+    # ehcache
+    ehcache:
+      config: classpath:cache/ehcache.xml
+  mvc: 
+    view:
+      prefix: /WEB-INF/page/
+      suffix: .html
+    resources:
+      static-locations: 
+  freemarker:
+    allow-request-override: false
+    cache: false
+    check-template-location: true
+    suffix: .html
+    charset: UTF-8
+    content-type: text/html; charset=utf-8
+    template-loader-path: /WEB-INF/page/
+      
+      
+#=============【mybatis】====================
+mybatis-plus:
+  config-locations: 
+  mapper-locations: 
+  type-aliases-package: 
+  #配置
+  configuration:
+    map-underscore-to-camel-case: true #驼峰式命名 
+    #二级缓存
+    #cache-enabled: false
+  
+  
+  
