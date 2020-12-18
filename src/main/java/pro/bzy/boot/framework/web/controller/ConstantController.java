@@ -3,7 +3,7 @@ package pro.bzy.boot.framework.web.controller;
 import pro.bzy.boot.framework.web.domain.entity.Constant;
 import pro.bzy.boot.framework.web.mapper.ConstantMapper;
 import pro.bzy.boot.framework.web.service.ConstantService;
-
+import pro.bzy.boot.framework.web.annoations.FormValid;
 import pro.bzy.boot.framework.web.domain.bean.R;
 import pro.bzy.boot.framework.utils.ExceptionCheckUtil;
 
@@ -12,6 +12,7 @@ import javax.annotation.Resource;
 import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 
 import java.util.Arrays;
 import java.util.List;
@@ -36,7 +37,7 @@ import com.github.xiaoymin.knife4j.annotations.ApiSupport;
  * @author zhenyuan.bi
  * @since 2020-10-01
  */
-@Api(tags = {"系统常量表"})
+@Api(tags = {"系统常量"})
 @ApiSupport(order = 100)
 @RequestMapping("/framework/constant")
 @RestController
@@ -50,11 +51,7 @@ public class ConstantController {
     
     
     
-    /**
-     * 使用id查询数据
-     * @param id
-     * @return
-     */
+    @ApiOperation(value="id查询常量")
     @GetMapping("getById")
     public R<Constant> getById(final String id) {
         ExceptionCheckUtil.hasLength(id, "ID 不能为空");
@@ -64,9 +61,8 @@ public class ConstantController {
 
     
     
-    /**
-     * 查询数据列表
-     */
+    
+    @ApiOperation(value="常量列表")
     @GetMapping("getList")
     public R<List<Constant>> getList(Constant queryBean) {
         List<Constant> constants = constantService.list(Wrappers.<Constant>lambdaQuery(queryBean));
@@ -75,24 +71,23 @@ public class ConstantController {
     
     
     
-    /**
-     * 查询数据分页
-     */
+    
+    @ApiOperation(value="常量分页")
     @GetMapping("getPage")
     public R<Page<Constant>> getPage(int pageNo, int pageSize, String search, Constant queryBean) {
         Page<Constant> page = new Page<>(pageNo, pageSize);
         constantService.page(page, Wrappers.<Constant>lambdaQuery(queryBean)
                 .likeRight(!StringUtils.isEmpty(search), Constant::getConstType, search)
                 .or(!StringUtils.isEmpty(search))
-                .likeRight(!StringUtils.isEmpty(search), Constant::getConstKey, search));
+                .likeRight(!StringUtils.isEmpty(search), Constant::getConstKey, search)
+                .orderByAsc(Constant::getConstType));
         return R.ofSuccess(page);
     }
     
     
     
-    /**
-     * 根据id删除数据
-     */
+    
+    @ApiOperation(value="ID删除")
     @DeleteMapping("deleteById")
     public R<String> deleteById(final String id) {
         ExceptionCheckUtil.hasLength(id, "ID 不能为空");
@@ -103,9 +98,7 @@ public class ConstantController {
     
     
     
-    /**
-     * 批量删除 根据id数组
-     */
+    @ApiOperation(value="IDs批量删除")
     @DeleteMapping("batchDeleteByIds")
     public R<String> batchDeleteByIds(String[] ids) {
         ExceptionCheckUtil.notEmpty(ids, "批量删除的IDs 不能为空");
@@ -116,14 +109,12 @@ public class ConstantController {
     
     
     
-    /**
-     * 插入一条新数据
-     * @param constant 数据
-     * @param bindingResult 表单校验结果
-     * @return
-     */
+    
+    @ApiOperation(value="增加常量")
     @PostMapping("addRecord")
-    public R<String> addRecord(@Validated(value= {}) @RequestBody Constant constant, BindingResult bindingResult) {
+    public R<String> addRecord(
+            @Validated(value= {FormValid.class}) 
+            @RequestBody Constant constant, BindingResult bindingResult) {
         if (StringUtils.isEmpty(constant.getId()))
             constant.setId(null);
         
@@ -133,14 +124,11 @@ public class ConstantController {
     
     
     
-    /**
-     * 更新数据
-     * @param updateBean 数据
-     * @param bindingResult 表单校验结果
-     * @return
-     */
+    @ApiOperation(value="ID更新")
     @PostMapping("updateById")
-    public R<String> updateById(@Validated(value= {}) @RequestBody Constant updateBean, BindingResult bindingResult) {
+    public R<String> updateById(
+            @Validated(value= {FormValid.class}) 
+            @RequestBody Constant updateBean, BindingResult bindingResult) {
         ExceptionCheckUtil.hasLength(updateBean.getId(), "ID 不能为空");
         
         boolean flag = constantService.updateById(updateBean);

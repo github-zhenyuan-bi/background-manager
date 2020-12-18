@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+		<title>通知公告模板</title>
+        <!-- App Icons -->
+        <link rel="shortcut icon" href="/assets/images/favicon.ico">
+
+        <!-- App css -->
+        <#include "/template/css/bootstrap-css.html" />
+        <#include "/template/css/bootstrap-table-css.html" />
+        <#include "/template/css/bootstrap-switch-css.html" />
+        
+        <#include "/template/css/font-awesome-css.html" />
+		<#include "/template/css/my-css.html" />
+		
+    </head>
+
+
+    <body>
+
+        <!-- Loader -->
+        <div id="preloader"><div id="status"><div class="spinner"></div></div></div>
+		
+		<!-- 页面头 -->
+		<div class="header-bg">
+			<#include "/template/common/header/header-template.html" />
+        </div>
+        
+        <div class="wrapper">
+            <div class="container-fluid">
+
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card m-b-20">
+                            <div class="card-body">  
+                            	<a id="temp-sett" class="mt-0 header-title" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="true" aria-controls="collapseExample">
+                            		#通知公告模板配置  <i class="fa fa-caret-down" aria-hidden="true"></i></a>
+                            	
+                            	<div class="row collapse m-b-30" id="collapseExample">
+                            		<div class="col-md-5 offset-md-1">
+	                            		<#include "./bulletin-template-add.html">
+	                            		<div class="row">
+	                            			<div class="col-md-4">
+	                            				<button id="bull-reset-btn" class="btn btn-light w-md waves-effect waves-light btn-block" type="button">重置</button>
+	                            			</div>
+	                            			<div class="col-md-8">
+	                            				<button id="bull-submit-btn" class="btn btn-primary w-md waves-effect waves-light btn-block" type="button">提交</button>
+	                            			</div>
+	                            		</div>
+	                            		
+	                            	</div>
+									<div class="col-md-4 offset-md-1">
+										<div class="pd-tb-20">
+											<h6>---示例---</h6>
+											<div class="row">
+												<div id="top-target"></div>
+												<div class="col-12 pd-tb-10 d-flex flex-row border-bottom opc-7">
+													<div class="m-l-10 bg-grey box-wh-40"></div>
+													<div class="flex-full pd-lr-15">
+														<div class="d-flex flex-row m-b-5">
+															<div class="bf-b font-14">示例模板标题3</div>
+															<div class="flex-full text-right font-8 font-color-g">2020-12-12</div>
+														</div>
+														<div class="font-14">示例模板内容示例模板内容</div>
+													</div>
+												</div>
+												<div class="col-12 pd-tb-10 d-flex flex-row border-bottom opc-7">
+													<div class="m-l-10 bg-grey box-wh-40 "></div>
+													<div class="flex-full pd-lr-15">
+														<div class="d-flex flex-row m-b-5">
+															<div class="bf-b font-14">示例模板标题2</div>
+															<div class="flex-full text-right font-8 font-color-g">2020-12-12</div>
+														</div>
+														<div class="font-14">示例模板内容示例模板内容</div>
+													</div>
+												</div>
+												<div id="org-target"></div>
+												<div id="temp-dom" class="col-12 pd-tb-10 d-flex flex-row border-bottom">
+													<div id="temp-icon-bg" class="m-l-10 bg-grey pos-r box-wh-40 ">
+														<img id="temp-iconPath" src="" class="invisible box-wh-40 ">
+														<span id="temp-titleExtend" class="badge badge-danger">副</span>
+													</div>
+													<div class="flex-full pd-lr-15">
+														<div class="d-flex flex-row m-b-5">
+															<div class="bf-b font-14"><span id="temp-title">输入标题</span></div>
+															<div class="flex-full text-right font-8 font-color-g">2020-12-12</div>
+														</div>
+														<div class="font-14" id="temp-content">请输入通知公告内容</div>
+													</div>
+												</div>
+												<div class="col-12 pd-tb-10 d-flex flex-row border-bottom opc-7">
+													<div class="m-l-10 bg-grey pos-r box-wh-40 "><span class="badge badge-danger">副</span></div>
+													<div class="flex-full pd-lr-15">
+														<div class="d-flex flex-row m-b-5">
+															<div class="bf-b font-14">示例模板标题1</div>
+															<div class="flex-full text-right font-8 font-color-g">2020-12-12</div>
+														</div>
+														<div class="font-14">示例模板内容示例模板内容</div>
+													</div>
+												</div>
+											</div>
+										</div>
+	                            	</div>
+                            	</div>
+                            	
+                            	
+                            	
+                            	<div class="m-t-30 m-b-30"></div>
+								<h4 class="mt-0 header-title">#模板展示</h4>
+								
+								<h3 class="text-center w-100 m-b-20">通知公告模板</h3>
+								<table id= "bulletin-table"></table>
+							</div>
+                        </div>
+                    </div>
+                </div>
+
+            </div> <!-- end container -->
+        </div>
+        <!-- end wrapper -->
+
+
+		<!-- 后台管理公共底部 -->
+		<#include "/template/common/footer-template.html">
+
+
+
+        <!-- js模块  -->
+        <#include "/template/js/jquery-plugins-js.html" />
+        <#include "/template/js/bootstrap-propers-js.html" />
+        <#include "/template/js/bootstrap-js.html" />
+        
+		<#include "/template/js/my-js.html" />
+
+        <#include "/template/js/bootstrap-table-js.html" />
+		<#include "/template/js/bootstrap-sweet-alert-js.html" />
+		
+		<#include "/template/js/md5-and-parsley.html" />
+		<#include "/template/js/upload-js.html" />
+		
+		<!-- App js -->
+        <script src="/assets/js/app.js"></script>
+        
+		<script type="text/javascript">
+		
+			/** ======================================
+		      	 图标图片选择事件事件 
+			=========================================*/
+			var $imgArea = $("#drop_area");
+			var $imgInput = $imgArea.next('[name="iconPath"]');
+			var dragImgUpload = new DragImgUpload("#drop_area",{
+				boxWidth: '64px',
+				imgurl: '',
+			    callback:function (files) {
+			        //回调函数，可以传递给后台等等
+			        var file = files[0];
+			        // 非图片格式
+			        if (!checkFileTypeImg(file.name)) {
+			        	return;
+			        }
+			        if (file.size > 1024*10) {
+			        	$("#temp-icon-bg").addClass("bg-grey");
+	            		$imgArea.find('img').attr("src", "/assets/images/upload.png");
+	            		$imgInput.val('');
+			        	alert("图标大小不能超过10kb")
+			        	return;
+			        }
+			        
+			        var form = new FormData();
+			        form.append("img", file);
+			        $.ajax({
+			            url: "/upload/bulletinIconImg",
+			            type:"POST",
+			            data:form,
+			            processData : false,
+			            contentType : false,
+			            dataType : 'json',
+			            success : function (res) {
+			            	if (res.code === 200) {
+			            		$imgInput.val(res.data);
+			            		$("#temp-icon-bg").removeClass("bg-grey");
+			            		$("#temp-iconPath").attr("src", res.data).removeClass("invisible");
+			            	} else {
+			            		$("#temp-icon-bg").addClass("bg-grey");
+			            		$("#temp-iconPath").addClass("invisible");
+			            		$imgArea.find('img').attr("src", "/assets/images/upload.png");
+			            		$imgInput.val('');
+			            	}
+			            }    
+			        })  
+			    }
+			});
+			
+			
+			
+			/** ======================================
+		    	  表单内容改变事件 
+			=========================================*/
+			var $form = $("#bulletin-template-form");
+			var $te = $form.find("input[name='titleExtend']");
+			$form.find("input,select,textarea").on("input", function(){
+				var _formdata = $form.serializeFormToJson();
+				refreshExample(_formdata);
+			});
+			
+			
+			
+			/** ======================================
+		    	  加载表单数据
+			=========================================*/
+			function initForm(row) {
+				// 表单图标图片
+				$imgArea.find('img').attr("src", row.iconPath? row.iconPath : "/assets/images/upload.png");
+				$imgInput.val(row.iconPath? row.iconPath : "");
+				// id
+				$("#bull-id").val(row.id? row.id : "");
+				// 标题
+				$("#bull-title").val(row.title? row.title : "");
+				// 标签
+				$("#bull-titleExtend").val(row.titleExtend? row.titleExtend : "");
+				// 类型
+				$("#bull-theme").val(row.theme? row.theme : "剧本");
+				// 置顶
+				$("#bull-isFixedTop").val(row.isFixedTop? '1' : '0');
+				// 内容
+				$("#bull-content").val(row.content? row.content : "");
+				
+				refreshExample(row);
+			}
+			
+			
+			/** ======================================
+		    	  更新表单右侧示例
+			=========================================*/
+			function refreshExample(data) {
+				// 如果空数据则重置示例
+				if ($.isEmptyObject(data)) {
+					$("#temp-dom").removeClass("bg-grey-1").insertAfter("#org-target");
+					$("#temp-icon-bg").addClass("bg-grey");
+					$("#temp-iconPath").addClass("invisible");
+					$("#temp-titleExtend").html("");
+					$("#temp-title").html("输入标题");
+					$("#temp-content").html("请输入通知公告内容");
+					return;
+				}
+				for (var key in data) {
+					var value = data[key];
+					$("#temp-" + key).html(value);
+					// 置顶操作
+					if (key === 'isFixedTop') {
+						if (value == 1) {
+							$("#temp-dom").addClass("bg-grey-1");
+							$("#temp-dom").insertAfter("#top-target");
+						} else {
+							$("#temp-dom").removeClass("bg-grey-1");
+							$("#temp-dom").insertAfter("#org-target");
+						}
+					}
+					// 示例图片
+					if (key === 'iconPath') {
+						$("#temp-icon-bg").removeClass("bg-grey");
+						$("#temp-" + key).html('').attr('src', value).removeClass("invisible");
+					}
+				}
+			}
+			
+			
+			/** ======================================
+			       提交按钮点击事件 
+			=========================================*/
+			$("#bull-submit-btn").click(function(e) {
+				var flag = $form.parsley().validate();
+				if (!flag) return;
+				
+				var _formData = $form.serializeFormToJson();
+				_formData.isFixedTop = (_formData.isFixedTop==1);
+				
+				var url = "/script/bulletinTemplate/addRecord";
+				if (_formData.id)
+					url = "/script/bulletinTemplate/updateById";
+				
+				fetchPostSwalComfirm(url
+						, {
+							body: JSON.stringify(_formData)
+						}, function(res) {
+							mySwal.alertForRes(res, {
+								text: "编辑通知公告模板成功",
+								onOpen: function() {
+									$("#bull-id").val(res.data);
+									$bulletinTable.bootstrapTable('refresh');
+								}
+							});
+						}) 
+			});
+			$("#bull-reset-btn").click(function(e) {
+				initForm({});
+			});
+			
+			
+			
+			window.operateScriptBulletinEvents = {
+					// e: 事件对象  value: 单元格绑定的字段值  row: 当前行对象  index: 行编号
+					'click .tb-op': function(e, value, row, index) {
+						var $btn = $(e.currentTarget);
+						var event = $btn.data("event");
+						//var dd = $("#user-table").bootstrapTable('getData')
+						operateScriptBulletinEvents[event]? operateScriptBulletinEvents[event]($btn, value, row, index) : "";
+					},
+					remove: function($btn, value, row, index) {
+						mySwal.delConfirm({
+							// 删除请求
+							url: "/script/bulletinTemplate/deleteById?id="+value,
+							// 删除成功后的回调方法
+							afterConfirm: function(res) {
+								$bulletinTable.bootstrapTable('refresh');
+							}
+						});
+					}
+			}
+			/** ======================================
+			       表格加载 
+			=========================================*/
+			var $bulletinTable = $("#bulletin-table");
+			myBsTable.listTable($bulletinTable, {
+				url: '/script/bulletinTemplate/getList',
+				// 刷新按钮
+				columns: [
+					{title: '#', width: 50, formatter: function (value, row, index) {return '<strong><i>'+(index+1)+'</i></strong>';}},
+					{field: 'iconPath',title: '图标', formatter: function(value, row, index) {
+						return '<img src="'+value+'" class="box-wh-40 ">';
+					}},
+					{field: 'title', title: '标题'},
+					{field: 'titleExtend', title: '标签', formatter: function(value, row, index) {
+						return '<span class="badge badge-danger">'+value+'</span>';
+					}},
+					{field: 'content', title: '通知内容'},
+					{field: 'theme',title: '主题类型', formatter: function(value, row, index) {
+						return value;
+					}},
+					{field: 'isFixedTop',title: '是否置顶', formatter: function(value, row, index) {
+						return value? '置顶' : '非置顶';
+					}},
+					{field: 'id',title: '操作', width: 120, events: operateScriptBulletinEvents, formatter: function(value, row, index) {
+						return '<a class="tb-op remove" data-event="remove" title="删除" href="javascript:void(0);"><i class="fa fa-trash-o"></i></a>';
+					}}
+				],
+				onClickRow:function (row,$element) {
+					initForm(row);
+					$("#collapseExample").collapse('show')
+					$("html, body").animate({
+					      scrollTop: $("#temp-sett").offset().top + "px"
+					}, {
+					      duration: 300,
+					      easing: "linear"
+					});
+                },
+				// 加载完成方法
+				onLoadSuccess: function (data) {
+					
+				},
+			});
+		</script>
+    </body>
+</html>

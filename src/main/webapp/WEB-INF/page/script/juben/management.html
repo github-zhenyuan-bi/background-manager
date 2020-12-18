@@ -4,35 +4,21 @@
         <meta charset="utf-8" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
-        <title>${(db_constants.system_management_title)!'后台管理'}</title>
-        <meta content="Admin Dashboard" name="description" />
-        <meta content="Themesbrand" name="author" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 
+		<title>剧本管理</title>
         <!-- App Icons -->
         <link rel="shortcut icon" href="/assets/images/favicon.ico">
 
         <!-- App css -->
-        <link href="/assets/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
-        <link href="/assets/css/icons.css" rel="stylesheet" type="text/css" />
-        <link href="/assets/css/style.css" rel="stylesheet" type="text/css" />
-		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
-		<link href="/assets/icons/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+        <#include "/template/css/bootstrap-css.html" />
+        <#include "/template/css/bootstrap-table-css.html" />
+        <#include "/template/css/bootstrap-switch-css.html" />
+        
+        <#include "/template/css/font-awesome-css.html" />
+        <#include "/template/css/checkbox-css.html" />
+		<#include "/template/css/my-css.html" />
 		
-		<!-- Sweet Alert -->
-        <link href="/assets/js/bootstrap-plugins/sweetAlert/sweetalert2.min.css" rel="stylesheet" type="text/css">
-		
-		<!-- table -->
-		<link href="/assets/js/bootstrap-plugins/table/bootstrap-table.min.css" rel="stylesheet">
-		<link href="/assets/js/bootstrap-plugins/table/bootstrap-table-fixed-columns.min.css" rel="stylesheet">
-		<!-- switch -->
-		<link href="/assets/js/bootstrap-plugins/switch/bootstrap-switch.min.css" rel="stylesheet">
-		<!-- checkbox -->
-		<link href="/assets/css/plugins/form/checkbox/style.css" rel="stylesheet">
-		<!-- fileupload -->
-		<link href="/assets/js/bootstrap-plugins/fileUpload/fileinput.css" rel="stylesheet">
-		
-		<link href="/assets/css/common/common.css" rel="stylesheet">
     </head>
 
 
@@ -42,7 +28,9 @@
         <div id="preloader"><div id="status"><div class="spinner"></div></div></div>
 		
 		<!-- 页面头 -->
-		<#include "/template/common/header/header-template.html" />
+		<div class="header-bg">
+			<#include "/template/common/header/header-template.html" />
+        </div>
         
         <div class="wrapper">
             <div class="container-fluid">
@@ -72,47 +60,24 @@
 		<!-- 后台管理公共底部 -->
 		<#include "/template/common/footer-template.html">
 
-        <!-- jQuery  -->
-        <script src="/assets/js/jquery.min.js"></script>
-        <script src="/assets/js/bootstrap.min.js"></script>
-        <script src="/assets/js/modernizr.min.js"></script>
-        <script src="/assets/js/waves.js"></script>
-        <script src="/assets/js/jquery.slimscroll.js"></script>
-        <script src="/assets/js/jquery.nicescroll.js"></script>
-        <script src="/assets/js/jquery.scrollTo.min.js"></script>
-	
-		<!-- my -->
-		<script src="/assets/js/common/my-fetch.js?v=1.1"></script>
-		<script src="/assets/js/common/my.js?v=1.1"></script>
-		
-        <!-- App js -->
-        <script src="/assets/js/app.js"></script>
 
-		<!-- table -->
-		<script src="/assets/js/bootstrap-plugins/table/bootstrap-table.min.js"></script>
-		<script src="/assets/js/bootstrap-plugins/table/my-table.js"></script>
-		<script src="/assets/js/bootstrap-plugins/table/bootstrap-table-fixed-columns.min.js"></script>
-		<!-- treegrid -->
-		<script src="/assets/js/bootstrap-plugins/table/jquery.treegrid.min.js"></script>
-		<script src="/assets/js/bootstrap-plugins/table/bootstrap-table-treegrid.js"></script>
-                     
-		<!-- Sweet-Alert  -->
-        <script src="/assets/js/bootstrap-plugins/sweetAlert/sweetalert2.all.min.js"></script>
-        <script src="/assets/js/bootstrap-plugins/sweetAlert/my-sweet-alert.js"></script>
+
+        <!-- js模块  -->
+        <#include "/template/js/jquery-plugins-js.html" />
+        <#include "/template/js/bootstrap-propers-js.html" />
+        <#include "/template/js/bootstrap-js.html" />
         
-		<!-- echart -->
-		<script src="/assets/js/charts/echart/echarts.min.js"></script>
-		<script src="/assets/js/charts/echart/my-echart.js"></script>
+		<#include "/template/js/my-js.html" />
+
+        <#include "/template/js/bootstrap-table-js.html" />
+		<#include "/template/js/bootstrap-sweet-alert-js.html" />
 		
-		<!-- form-valid -->
-		<script src="/assets/plugins/parsleyjs/parsley.min.js"></script>
+		<#include "/template/js/md5-and-parsley.html" />
+		<#include "/template/js/upload-js.html" />
 		
-		<!-- fileupload -->
-		<script src="/assets/js/bootstrap-plugins/fileUpload/fileinput.js"></script>
-		<script src="/assets/js/bootstrap-plugins/fileUpload/fileinput_locale_zh.js"></script>
-		
-		<script src="/assets/js/plugins/upload/upload.js"></script>
-		
+		<!-- App js -->
+        <script src="/assets/js/app.js"></script>
+        
 		<script type="text/javascript">
 			// 用户数据表格
 			var _scriptTable = $("#script-table");
@@ -273,6 +238,7 @@
 				var event = $(this).data("event");
 				operateScriptEvents[event]? operateScriptEvents[event]($(this)) : "";
 			});
+			
 			// 表格加载
 			myBsTable.pageTable(_scriptTable, {
 				url: '/script/juben/getPage',

@@ -1,0 +1,62 @@
+<form id="bulletin-template-form" style="margin-top: 1.6rem;">
+	<input id="bull-id" type="hidden" name="id">
+	
+	<div class="form-group row">
+	    <label for="example-text-input" class="col-sm-2 col-md-3 col-form-label">图标</label>
+	    <div class="col-sm-10 col-md-9">
+	        <div id="drop_area"></div>
+	        <input type="text" name="iconPath" style="display: none;" value=""
+	        		data-parsley-required="true" data-parsley-required-message="通知图标必须上传"
+			        data-parsley-trigger="focusout">
+	    </div>
+	</div>
+	
+	
+	<div class="form-row">
+		<label class="col-sm-2 col-md-3 col-form-label">类型/置顶</label>
+	    <div class="form-group col-6 col-sm-5 col-md-5">
+	        <select id="bull-theme" class="form-control" name="theme">
+	        	<#if themeList??>
+	        		<#list themeList as theme>
+	        			<option value="${(theme.constValue)!}">${(theme.constValue)!}</option>
+	        		</#list>
+	        		<#else>
+	        			<option value="0">无</option>
+	        	</#if>
+            </select>
+	    </div>
+	    <div class="form-group input-group col-6 col-sm-5 col-md-4">
+	        <select id="bull-isFixedTop" class="form-control" name="isFixedTop">
+	        	<option value="0">否</option>
+	        	<option value="1">是</option>
+            </select>
+	    </div>
+	</div>
+	
+	
+	<div class="form-row">
+		<label class="col-sm-2 col-md-3 col-form-label">标题/副标题</label>
+	    <div class="form-group col-6 col-sm-5 col-md-5">
+	        <input id="bull-title" class="form-control" type="text" maxlength="10" name="title" autocomplete="off" placeholder="输入标题"
+	        		data-parsley-required="true" data-parsley-required-message="标题不能为空"
+			        data-parsley-maxlength="10" data-parsley-maxlength-message="标题最多为10个字符"
+					data-parsley-trigger="focusout">
+	    </div>
+	    <div class="form-group input-group col-6 col-sm-5 col-md-4">
+	        <input id="bull-titleExtend" class="form-control" type="text" maxlength="1" name="titleExtend" autocomplete="off" placeholder="输入副标题"
+			        data-parsley-maxlength="1" data-parsley-maxlength-message="副标题最多为1个字符"
+					data-parsley-trigger="focusout">
+	    </div>
+	</div>
+	
+	
+	<div class="form-row">
+	    <label class="col-sm-2 col-md-3 col-form-label">内容</label>
+	    <div class="form-group col-sm-10 col-md-9">
+	    	<textarea id="bull-content" class="form-control" name="content" maxlength="300" rows="3" placeholder="请输入通知公告内容(<br>代表换行)"
+	    				data-parsley-required="true" data-parsley-required-message="内容不能为空"
+	    				data-parsley-maxlength="300" data-parsley-maxlength-message="内容最多为300个字符"
+						data-parsley-trigger="focusout"></textarea>
+	    </div>
+	</div>
+</form>

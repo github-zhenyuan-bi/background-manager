@@ -27,6 +27,7 @@ public class SchedulingRunnable implements Runnable {
     private ExecutableFunction execFunc;
     
     
+    
     @Override
     public void run() {
         log.info("任务#【{}】开始执行", name);
@@ -38,6 +39,7 @@ public class SchedulingRunnable implements Runnable {
             
         } catch (Exception e) {
             log.info("任务#【{}】执行过程中发生异常，原因：", e.getMessage());
+            throw new RuntimeException(e);
         }
     }
     
@@ -57,6 +59,8 @@ public class SchedulingRunnable implements Runnable {
             return false;
         }
     }
+    
+    
     
     public int hashCode() {
         return Objects.hash(name);

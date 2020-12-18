@@ -26,13 +26,15 @@ public interface SystemConstant {
     
     Integer DEFAULT_HANDLE_LOG_PERIOD = 3;
     
-    String SCHEDULING_TASK_METHODS_KEY = "taskMethods";
     
     String BACKGROUND_MANAGER_MENU_KEY = "bgManage";
     
     
     
-    
+    /* 定时器使用的系统常量cron表达式 */
+    String SCHEDULE_CRON_CONSTANT_KEY = "constants";
+    String SCHEDULE_CRON_CONSTANT_QUERY_TYPE = "schedule_cron";
+    String SCHEDULE_TASK_METHODS_KEY = "taskMethods";
     
     
     /*
@@ -61,7 +63,8 @@ public interface SystemConstant {
     String RESPONSE_MSG_OK = "ok";  // 响应消息-正常码
     
     
-    
+    String VIEW_RENDER_PARAMS_USERID = "view_render_userid";
+    String VIEW_RENDER_PARAMS_USERNAME = "view_render_username";
     
     /*
      * ---------------------------------------
@@ -75,6 +78,7 @@ public interface SystemConstant {
     String APPLICATION_PROPERTIES = "application.properties";   // application配置文件名称
     
     String EHCACHE_FILE = "cache/ehcache.xml";  // 缓存 ehcache 配置文件classpath路径
+    String EHCACHE_APIDESC_CACHE_NAME = "api_desc_onMethod_cache";
     
     String SAVED_URL = "savedUrl";
     
@@ -87,17 +91,33 @@ public interface SystemConstant {
     String CACHE_EHCACHE = "ehcache";
     String CACHE_REDIS = "redis";
     
-    String LOG_ARCHIVE_DICT = "/log/system-log/log-archive/";
+    String LOG_ARCHIVE_DICT_KEY_IN_YML = "app.config.log.systemlog-archive-dictPath";
+    String LOG_ARCHIVE_DICT = WEB_INF_PATH + "/log/system-log/log-archive/";
     
     
-    public static final String JWT_TOKEN_BASE_LOGIN_ISS_KEY = "sub";
+    String JWT_TOKEN_BASE_LOGIN_ISS_KEY = "sub";
     // token 和 refreshtoken 的key
-    public static final String JWT_ACCESS_TOKEN_KEY = "access_token";
-    public static final String JWT_REFRESH_TOKEN_KEY = "refresh_token";
+    String JWT_ACCESS_TOKEN_KEY = "access_token";
+    String JWT_REFRESH_TOKEN_KEY = "refresh_token";
     // token 的过期时间 10分钟
-    public static final int JWT_ACCESS_TOKEN_EXPIRE = 1000*30;//1000*60*10;
-    public static final int JWT_REFRESH_TOKEN_EXPIRE = JWT_ACCESS_TOKEN_EXPIRE*20;
+    //int JWT_ACCESS_TOKEN_EXPIRE = 1000*30;//1000*60*10;
+    //int JWT_REFRESH_TOKEN_EXPIRE = JWT_ACCESS_TOKEN_EXPIRE*20;
     // cookie 存储token得到时间
-    public static final int COOKIE_JWT_ACCESS_TOKEN_EXPIRE = 60*5;//60*60*24*3;
-    public static final int COOKIE_JWT_REFRESH_TOKEN_EXPIRE = COOKIE_JWT_ACCESS_TOKEN_EXPIRE;
+    //int COOKIE_JWT_ACCESS_TOKEN_EXPIRE = 60*5;//60*60*24*3;
+    //int COOKIE_JWT_REFRESH_TOKEN_EXPIRE = COOKIE_JWT_ACCESS_TOKEN_EXPIRE;
+    String JWT_ACCESS_TOKEN_EXPIRE_KEY_IN_YML = "app.config.jwt.access-token-expire";
+    String JWT_REFRESH_TOKEN_EXPIRE_KEY_IN_YML = "app.config.jwt.refresh-token-expire";
+
+    String JWT_LOGIN_FROMWHERE_KEY = "loginBackground";
+    String JWT_LOGIN_FROMWHERE_BACKGROUND = "background";
+    String JWT_LOGIN_FROMWHERE_WECHAT = "wechat";
+    String JWT_LOGIN_USERID_KEY = "userid";
+    String JWT_LOGIN_USER = "user";
+    String JWT_LOGIN_USER_IP_KEY = "userip";
+    String JWT_BASESTORAGE_DATAS_KEY = "jwttoken_basedata";
+    int JWT_ERROR_RESPONSE_CODE = 600;
+    
+    
+    String SCHEDULING_EXECUTE_FAILURE = "0";
+    String SCHEDULING_EXECUTE_SUCCESS = "1";
 }

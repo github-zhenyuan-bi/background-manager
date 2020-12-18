@@ -4,6 +4,11 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
 import java.util.Date;
+
+import javax.validation.constraints.NotNull;
+
+import org.hibernate.validator.constraints.Length;
+
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
@@ -18,6 +23,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
+import pro.bzy.boot.framework.web.annoations.FormValid;
 
 /**
  * 用户组 
@@ -59,18 +65,24 @@ public class Usergroup extends Model<Usergroup> {
     
     
     
+    @NotNull(message="用户组名称不能为空", groups= {FormValid.class})
+    @Length(min=1, max=15, message="用户组名称应在1-15个字符", groups = {FormValid.class})
     @ApiModelProperty(value = "用户组名称", position = 10)
     @TableField("NAME")
     private String name;
     
     
     
+    @NotNull(message="用户组描述不能为空", groups= {FormValid.class})
+    @Length(min=1, max=30, message="用户组描述应在1-30个字符", groups = {FormValid.class})
     @ApiModelProperty(value = "用户组描述", position = 15)
     @TableField("DESCRIP")
     private String descrip;
     
     
     
+    @NotNull(message="用户组类型不能为空", groups= {FormValid.class})
+    @Length(min=1, max=10, message="用户组类型应在1-10个字符", groups = {FormValid.class})
     @ApiModelProperty(value = "用户组类型", position = 20)
     @TableField("GROUP_TYPE")
     private String groupType;

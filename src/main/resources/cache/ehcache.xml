@@ -39,15 +39,4 @@
             timeToLiveSeconds="600"
             memoryStoreEvictionPolicy="LRU" />
 
-    <!-- 自定义缓存 -->
-    <cache
-            name="MyCache"
-            eternal="false"
-            maxElementsInMemory="1000"
-            overflowToDisk="false"
-            diskPersistent="false"
-            timeToIdleSeconds="5"
-            timeToLiveSeconds="5"
-            memoryStoreEvictionPolicy="LRU" />
-
 </ehcache>

@@ -57,4 +57,15 @@ public class SpringContextUtil implements ApplicationContextAware {
         }
         return urls;
     }
+    
+    
+    /**
+     * 获取spring容器中实现了某一接口得全部bean
+     * @param interfaceClass
+     * @return
+     */
+    public static <T> Map<String, T> getBeansOfType(Class<T> interfaceClass) {
+        return getApplicationContext().getBeansOfType(interfaceClass);
+    }
+    
 }

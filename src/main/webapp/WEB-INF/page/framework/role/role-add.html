@@ -3,21 +3,25 @@
 	<div class="form-group row">
 	    <label for="example-text-input" class="col-sm-3 col-form-label">角色名称</label>
 	    <div class="col-sm-9">
-	        <input class="form-control" type="text" name="name" autocomplete="off"
-	        	placeholder="输入角色名称（唯一不重复）">
+	        <input class="form-control" type="text" maxlength="15" name="name" autocomplete="off" placeholder="输入角色名称（唯一不重复）"
+	        		data-parsley-required="true" data-parsley-required-message="角色名不可为空"
+	        		data-parsley-pattern="^[a-zA-Z0-9_]{1,15}$" data-parsley-pattern-message="角色名由1-15字母，数字，下划线"
+	        		data-parsley-trigger="focusout">
 	    </div>
 	</div>
 	<div class="form-group row">
 	    <label for="example-text-input" class="col-sm-3 col-form-label">角色描述</label>
 	    <div class="col-sm-9">
-	        <input class="form-control" type="text" name="descrip" autocomplete="off"
-	        	placeholder="输入角色的描述">
+	        <input class="form-control" type="text" maxlength="15" name="descrip" autocomplete="off" placeholder="输入角色的描述"
+	        		data-parsley-required="true" data-parsley-required-message="角色描述不可为空"
+	        		data-parsley-pattern="^[a-zA-Z0-9_]{1,20}$" data-parsley-pattern-message="角色描述由1-20字母，数字，下划线"
+	        		data-parsley-trigger="focusout">
 	    </div>
 	</div>
 	<div class="form-group row">
         <label for="example-text-input" class="col-sm-3 col-form-label">排序</label>
         <div class="col-sm-9">
-	        <input class="form-control" type="number" name="sort" autocomplete="off"/>
+	        <input class="form-control" type="number" max="999" name="sort" autocomplete="off"/>
 	    </div>
     </div>
 </form>

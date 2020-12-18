@@ -25,6 +25,8 @@
     			mySwal.formHtml("添加资源菜单", $addMenu, {
     				preConfirm: function() {
     					var _addMenuForm = $("#swal2-content .menu-table-addMenu");
+    					var flag = _addMenuForm.parsley().validate();
+    					if (!flag) return false;
     					return fetchPostSwalComfirm('/framework/menu/addRecord'
     							, {body: JSON.stringify(_addMenuForm.serializeFormToJson())}
     							, function(res) {
@@ -64,8 +66,8 @@
     				preConfirm: function() {
     				    var _editMenuForm = $("#swal2-content .menu-table-addMenu");
     				    var newRow = _editMenuForm.serializeFormToJson();
-    				    console.log(value)
-    				    console.log(newRow)
+    				    var flag = _editMenuForm.parsley().validate();
+    					if (!flag) return false;
     					return fetchPostSwalComfirm('/framework/menu/updateById'
     							, {body: JSON.stringify(newRow)}
     							, function(res) {
@@ -89,6 +91,8 @@
     				},
     				preConfirm: function() {
     					var _addMenuForm = $("#swal2-content .menu-table-addMenu");
+    					var flag = _addMenuForm.parsley().validate();
+    					if (!flag) return false;
     					return fetchPostSwalComfirm('/framework/menu/addRecord'
     							, {body: JSON.stringify(_addMenuForm.serializeFormToJson())}
     							, function(res) {

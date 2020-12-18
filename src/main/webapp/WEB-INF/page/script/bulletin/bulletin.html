@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+		<title>通知公告</title>
+        <!-- App Icons -->
+        <link rel="shortcut icon" href="/assets/images/favicon.ico">
+
+        <!-- App css -->
+        <#include "/template/css/bootstrap-css.html" />
+        <#include "/template/css/bootstrap-table-css.html" />
+        <#include "/template/css/bootstrap-switch-css.html" />
+        
+        <#include "/template/css/font-awesome-css.html" />
+		<#include "/template/css/my-css.html" />
+		
+    </head>
+
+
+    <body>
+
+        <!-- Loader -->
+        <div id="preloader"><div id="status"><div class="spinner"></div></div></div>
+		
+		<!-- 页面头 -->
+		<div class="header-bg">
+			<#include "/template/common/header/header-template.html" />
+        </div>
+        
+        <div class="wrapper">
+            <div class="container-fluid">
+
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card m-b-20">
+                            <div class="card-body">  
+                            	
+								<h4 class="mt-0 header-title">#通知公告</h4>
+								
+							</div>
+                        </div>
+                    </div>
+                </div>
+
+            </div> <!-- end container -->
+        </div>
+        <!-- end wrapper -->
+
+
+		<!-- 后台管理公共底部 -->
+		<#include "/template/common/footer-template.html">
+
+
+
+        <!-- js模块  -->
+        <#include "/template/js/jquery-plugins-js.html" />
+        <#include "/template/js/bootstrap-propers-js.html" />
+        <#include "/template/js/bootstrap-js.html" />
+        
+		<#include "/template/js/my-js.html" />
+
+        <#include "/template/js/bootstrap-table-js.html" />
+		<#include "/template/js/bootstrap-sweet-alert-js.html" />
+		
+		<#include "/template/js/md5-and-parsley.html" />
+		
+		<!-- App js -->
+        <script src="/assets/js/app.js"></script>
+        
+		<script type="text/javascript">
+		
+		</script>
+    </body>
+</html>

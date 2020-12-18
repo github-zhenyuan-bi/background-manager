@@ -4,14 +4,16 @@ import ${package.Entity}.${entity};
 import ${package.Mapper}.${table.mapperName};
 import ${package.Service}.${table.serviceName};
 
-import com.supwisdom.framework.web.domain.bean.R;
-import com.supwisdom.framework.utils.ExceptionCheckUtil;
+import pro.bzy.boot.framework.web.domain.bean.R;
+import pro.bzy.boot.framework.web.annoations.FormValid;
+import pro.bzy.boot.framework.utils.ExceptionCheckUtil;
 
 import javax.annotation.Resource;
 
 import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 
 import java.util.Arrays;
 import java.util.List;
@@ -53,11 +55,7 @@ public class ${table.controllerName} {
     
     
     
-    /**
-     * 使用id查询数据
-     * @param id
-     * @return
-     */
+    @ApiOperation(value="id查询")
     @GetMapping("getById")
     public R<${entity}> getById(final String id) {
         ExceptionCheckUtil.hasLength(id, "ID 不能为空");
@@ -67,9 +65,7 @@ public class ${table.controllerName} {
 
     
     
-    /**
-     * 查询数据列表
-     */
+    @ApiOperation(value="查询数据列表")
     @GetMapping("getList")
     public R<List<${entity}>> getList(${entity} queryBean) {
         List<${entity}> ${lEntity}s = ${serviceBean}.list(Wrappers.<${entity}>lambdaQuery(queryBean));
@@ -78,9 +74,7 @@ public class ${table.controllerName} {
     
     
     
-    /**
-     * 查询数据分页
-     */
+    @ApiOperation(value="查询数据分页")
     @GetMapping("getPage")
     public R<Page<${entity}>> getPage(int pageNo, int pageSize, ${entity} queryBean) {
         Page<${entity}> page = new Page<>(pageNo, pageSize);
@@ -90,9 +84,7 @@ public class ${table.controllerName} {
     
     
     
-    /**
-     * 根据id删除数据
-     */
+    @ApiOperation(value="id删除数据")
     @DeleteMapping("deleteById")
     public R<String> deleteById(final String id) {
         ExceptionCheckUtil.hasLength(id, "ID 不能为空");
@@ -103,9 +95,7 @@ public class ${table.controllerName} {
     
     
     
-    /**
-     * 批量删除 根据id数组
-     */
+    @ApiOperation(value="批量删除")
     @DeleteMapping("batchDeleteByIds")
     public R<String> batchDeleteByIds(String[] ids) {
         ExceptionCheckUtil.notEmpty(ids, "批量删除的IDs 不能为空");
@@ -116,14 +106,9 @@ public class ${table.controllerName} {
     
     
     
-    /**
-     * 插入一条新数据
-     * @param ${lEntity} 数据
-     * @param bindingResult 表单校验结果
-     * @return
-     */
+    @ApiOperation(value="插入一条新数据")
     @PostMapping("addRecord")
-    public R<String> addRecord(@Validated(value= {}) @RequestBody ${entity} ${lEntity}, BindingResult bindingResult) {
+    public R<String> addRecord(@Validated(value= {FormValid.class}) @RequestBody ${entity} ${lEntity}, BindingResult bindingResult) {
         if (StringUtils.isEmpty(${lEntity}.getId()))
             ${lEntity}.setId(null);
         
@@ -133,14 +118,9 @@ public class ${table.controllerName} {
     
     
     
-    /**
-     * 更新数据
-     * @param updateBean 数据
-     * @param bindingResult 表单校验结果
-     * @return
-     */
+    @ApiOperation(value="ID更新数据")
     @PostMapping("updateById")
-    public R<String> updateById(@Validated(value= {}) @RequestBody ${entity} updateBean, BindingResult bindingResult) {
+    public R<String> updateById(@Validated(value= {FormValid.class}) @RequestBody ${entity} updateBean, BindingResult bindingResult) {
         ExceptionCheckUtil.hasLength(updateBean.getId(), "ID 不能为空");
         
         boolean flag = ${serviceBean}.updateById(updateBean);

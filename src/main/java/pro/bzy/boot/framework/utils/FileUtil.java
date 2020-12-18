@@ -56,6 +56,9 @@ public class FileUtil implements MyUtil {
         
         // 2. 上传目标文件 若该文件夹不存在 则创建
         File destFile = new File(uploadPath + handledFileName);
+        File pFile = destFile.getParentFile();
+        if (!pFile.exists())
+            pFile.mkdirs();
         
         // 3. 将上传文件数据输入到此目标文件中
         imgFile.transferTo(destFile);
@@ -238,7 +241,7 @@ public class FileUtil implements MyUtil {
     
     public static int removeNonUsedFiles(File[] allFiles, List<String> usedFileNames) {
         // 0. 无文件 不操作
-        if (allFiles == null || allFiles.length == 0)
+        if (CollectionUtil.isEmpty(allFiles))
             return 0;
         
         // 1.1 如果不存在被使用的文件 则当前文件全删

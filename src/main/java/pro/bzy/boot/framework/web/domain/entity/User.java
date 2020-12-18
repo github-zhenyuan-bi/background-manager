@@ -8,6 +8,10 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.baomidou.mybatisplus.annotation.TableId;
 import java.util.Date;
 
+import javax.validation.constraints.NotNull;
+
+import org.hibernate.validator.constraints.Length;
+
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.baomidou.mybatisplus.annotation.TableField;
@@ -21,6 +25,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
+import pro.bzy.boot.framework.web.annoations.FormValid;
 
 /**
  * 用户 
@@ -36,7 +41,7 @@ import lombok.experimental.Accessors;
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-@JsonIgnoreProperties({"password", "deleted", "gmtCreator", "gmtModifier"})
+@JsonIgnoreProperties({"deleted", "gmtCreator", "gmtModifier"})
 @TableName("T_USER")
 @ApiModel(value="User", description="用户")
 public class User extends Model<User> {
@@ -62,13 +67,15 @@ public class User extends Model<User> {
     private String id;
     
     
-    
+    @NotNull(message="用户名不能为空", groups= {FormValid.class})
+    @Length(min=1, max=30, message="用户名长度应在1-20个字符", groups = {FormValid.class})
     @ApiModelProperty(value = "登录账号", position = 10)
     @TableField("USERNAME")
     private String username;
     
     
-    
+    @NotNull(message="用户密码不能为空", groups= {FormValid.class})
+    @Length(min=6, max=32, message="密码长度应在6-32个字符", groups = {FormValid.class})
     @ApiModelProperty(value = "登录密码", position = 15)
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @TableField("PASSWORD")
@@ -104,6 +111,11 @@ public class User extends Model<User> {
     @ApiModelProperty(value = "创建时间", position = 40)
     @TableField(value = "GMT_CREATETIME", fill = FieldFill.INSERT)
     private Date gmtCreatetime;
+
+
+    @ApiModelProperty(value = "头像地址", position = 45)
+    @TableField(value = "AVATAR")
+    private String avatar;
     
     
     /**

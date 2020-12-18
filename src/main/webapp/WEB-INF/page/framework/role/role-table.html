@@ -39,6 +39,8 @@
     			mySwal.loadHtml("添加角色", $addRole, {
     				preConfirm: function() {
     					var addRoleForm = $("#swal2-content .role-table-addRole");
+    					var flag = addRoleForm.parsley().validate();
+    					if (!flag) return false;
     					return fetchPostSwalComfirm('/framework/role/addRecord'
     							, {body: JSON.stringify(addRoleForm.serializeFormToJson())}
     							, function(res) {
@@ -60,9 +62,12 @@
 					},
     				preConfirm: function() {
     					var addRoleForm = $("#swal2-content .role-table-addRole");
+    					var flag = addRoleForm.parsley().validate();
+						if (!flag) return false;
     					return fetchPostSwalComfirm('/framework/role/updateById'
     							, {body: JSON.stringify(addRoleForm.serializeFormToJson())}
     							, function(res) {
+    								load_${echartId }();
     								mySwal.alertForRes(res, {
     									text: "编辑角色成功",
     									onOpen: function() {_roleTable.bootstrapTable('refresh');}
@@ -81,6 +86,7 @@
 					// 删除成功后的回调方法
 					afterConfirm: function(res) {
 						_roleTable.bootstrapTable('refresh');
+						load_${echartId }();
 					}
 				});
 			},
@@ -89,7 +95,7 @@
 			 */
 			allocatePerms: function($btn, value, row, index) {
 				var $addRole = _roleAdd.clone();
-				mySwal.loadHtml("分配菜单权限", "/framework/menu/bgManage/system/form/menu-allocate?id=" + value, {
+				mySwal.loadHtml("分配菜单权限", "/framework/menu/form/menu-allocate?id=" + value, {
     				preConfirm: function() {
     					var selcDatas = $('#menu-allocate-table').bootstrapTable('getSelections');
     					var menuidArr = [];

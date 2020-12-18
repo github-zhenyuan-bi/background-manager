@@ -3,25 +3,34 @@
 	<div class="form-group row">
 	    <label for="example-text-input" class="col-sm-3 col-form-label">常量类型</label>
 	    <div class="col-sm-9">
-	        <input class="form-control" type="text" name="type" >
+	        <input class="form-control" type="text" maxlength="30" name="constType" 
+	        		data-parsley-required="true" data-parsley-required-message="常量类型不可为空"
+	        		data-parsley-pattern="^[a-zA-Z0-9_]{1,30}$" data-parsley-pattern-message="常量类型由1-30字母，数字，下划线"
+	        		data-parsley-trigger="focusout">
 	    </div>
 	</div>
 	<div class="form-group row">
 	    <label for="example-text-input" class="col-sm-3 col-form-label">常量KEY</label>
 	    <div class="col-sm-9">
-	        <input class="form-control" type="text" name="key" autocomplete="off">
+	        <input class="form-control" type="text" maxlength="30" name="constKey" autocomplete="off"
+	        		data-parsley-required="true" data-parsley-required-message="常量KEY不可为空"
+	        		data-parsley-pattern="^[a-zA-Z0-9_]{1,30}$" data-parsley-pattern-message="常量KEY由1-30字母，数字，下划线"
+	        		data-parsley-trigger="focusout">
 	    </div>
 	</div>
 	<div class="form-group row">
 	    <label for="example-text-input" class="col-sm-3 col-form-label">常量Value</label>
 	    <div class="col-sm-9">
-	        <input class="form-control" type="text" name="value" autocomplete="off">
+	        <input class="form-control" type="text" maxlength="1000" name="constValue" autocomplete="off"
+	        		data-parsley-trigger="focusout">
 	    </div>
 	</div>
 	<div class="form-group row">
 	    <label for="example-text-input" class="col-sm-3 col-form-label">常量说明</label>
 	    <div class="col-sm-9">
-	        <input class="form-control" type="text" name="descp" autocomplete="off">
+	        <input class="form-control" type="text" maxlength="30" name="descp" autocomplete="off"
+	        		data-parsley-required="true" data-parsley-required-message="常量说明不可为空"
+	        		data-parsley-trigger="focusout">
 	    </div>
 	</div>
 	<div class="form-group row">
@@ -34,5 +43,4 @@
             </select>
 	    </div>
 	</div>
-	<div clas
 </form>

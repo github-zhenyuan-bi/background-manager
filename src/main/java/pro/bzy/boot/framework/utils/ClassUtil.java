@@ -34,19 +34,18 @@ public class ClassUtil extends ClassUtils implements MyUtil {
      */
     public static Map<String, String> getMethodNameWithDescription(@NonNull Class<?> clazz) {
         Method[] methods = clazz.getDeclaredMethods();
-        if (CollectionUtil.isEmpty(methods)) {
+        Map<String, String> res = Maps.newHashMap();
+        if (methods != null) {
+            for (Method m : methods) {
+                Description desc = m.getAnnotation(Description.class);
+                if (desc != null) {
+                    res.put(m.getName(), desc.value());
+                }
+            }
+        } else {
             log.warn("类{}中还未添加方法", clazz.getName());
-            return Maps.newHashMap();
         }
-        
-        // 将反射得方法数组映射为 方法名-方法注释 得map
-        return CollectionUtil.collToMap(Arrays.asList(methods), 
-                    method -> method.getName(), 
-                    method -> {
-                        Description desc = method.getAnnotation(Description.class);
-                        return (desc != null)? desc.value() : "未添加方法注释！";
-                    });
-        
+        return res;
     }
     
     

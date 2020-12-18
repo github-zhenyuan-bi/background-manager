@@ -4,7 +4,7 @@ import pro.bzy.boot.framework.utils.ClassUtil;
 import pro.bzy.boot.framework.utils.CollectionUtil;
 import pro.bzy.boot.framework.utils.DateUtil;
 import pro.bzy.boot.framework.utils.ExcelUtil;
-import pro.bzy.boot.framework.utils.PathUtil;
+import pro.bzy.boot.framework.utils.PropertiesUtil;
 import pro.bzy.boot.framework.utils.SystemConstant;
 import pro.bzy.boot.framework.web.domain.entity.Log;
 import pro.bzy.boot.framework.web.mapper.LogMapper;
@@ -35,8 +35,9 @@ public class LogServiceImpl extends ServiceImpl<LogMapper, Log> implements LogSe
     public File archiveLog(List<Log> logs) {
         try {
             // 0. 生成归档日志得名称
-            String logArchiveDict = PathUtil.getWebappResourcePath(SystemConstant.LOG_ARCHIVE_DICT);
-            String excelFileName = "系统日志归档(" + CollectionUtil.size(logs) + ")" + DateUtil.formateNow();
+            //String logArchiveDict = PathUtil.getWebappResourcePath(SystemConstant.LOG_ARCHIVE_DICT);
+            String logArchiveDict = PropertiesUtil.get(SystemConstant.LOG_ARCHIVE_DICT_KEY_IN_YML);
+            String excelFileName = "系统日志归档(" + CollectionUtil.size(logs) + "条)" + DateUtil.formateNow() + ".xlsx";
             
             // 1. 生成日志excel文档
             List<String> titles = null;

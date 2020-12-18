@@ -26,7 +26,8 @@ DragImgUpload.prototype = {
 			'border' : this.opts.boxBorder,
 			'border-color' : this.opts.boxBorderColor,
 			'padding' : '10px',
-			'cursor' : 'pointer'
+			'cursor' : 'pointer',
+			'margin' : this.opts.margin
 		})
 		this.preview.css({
 			'height' : '100%',

@@ -1,19 +1,26 @@
 package pro.bzy.boot.framework.config.interceptor.parent;
 
+import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
 import org.springframework.util.StringUtils;
+import org.springframework.web.method.HandlerMethod;
 
+import com.google.common.collect.Maps;
+
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import pro.bzy.boot.framework.config.jwt.JwtUtil;
+import pro.bzy.boot.framework.utils.RequestAndResponseUtil;
 import pro.bzy.boot.framework.utils.DateUtil;
 import pro.bzy.boot.framework.utils.SystemConstant;
 import pro.bzy.boot.framework.web.domain.entity.Log;
-import pro.bzy.boot.framework.web.domain.entity.User;
 import pro.bzy.boot.framework.web.mapper.LogMapper;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -25,7 +32,6 @@ import lombok.Setter;
  *
  */
 @NoArgsConstructor
-@AllArgsConstructor
 public abstract class MyAbstractInterceptor {
 
     /**
@@ -36,32 +42,6 @@ public abstract class MyAbstractInterceptor {
         request.getSession().setAttribute(SystemConstant.SAVED_URL, request.getRequestURI());
     }
     
-    
-    
-    /**
-     * 获取请求IP
-     * @param request
-     * @return
-     */
-    protected String getClientIp(HttpServletRequest request) {
-        String ip = request.getHeader("x-forwarded-for");
-        if (StringUtils.isEmpty(ip) || "unknown".equalsIgnoreCase(ip)) 
-            ip = request.getHeader("Proxy-Client-IP");
-        if (StringUtils.isEmpty(ip) || "unknown".equalsIgnoreCase(ip)) 
-            ip = request.getHeader("WL-Proxy-Client-IP");
-        if (StringUtils.isEmpty(ip) || "unknown".equalsIgnoreCase(ip)) 
-            ip = request.getRemoteAddr();
-        
-        // 多个路由时，取第一个非unknown的ip
-        final String[] arr = ip.split(",");
-        for (final String str : arr) {
-            if (!"unknown".equalsIgnoreCase(str)) {
-                ip = str;
-                break;
-            }
-        }
-        return ip;
-    }
     
     
     
@@ -81,15 +61,59 @@ public abstract class MyAbstractInterceptor {
     @Setter 
     protected LogMapper logMapper;
     
-    protected void logToDB(HttpServletRequest request) {
-        User user = (User) SecurityUtils.getSubject().getSession().getAttribute("user");
-        String accessor = user == null? null : user.getId();
-        logMapper.insert(Log.builder()
-                .id(null)
-                .accessor(accessor)
-                .accessTime(DateUtil.getNow())
-                .accessModule(request.getRequestURI())
-                .accessorIp(request.getRemoteAddr())
-                .build());
+    protected Map<String, String> apiDescCache = Maps.newConcurrentMap();
+    
+    
+    
+    /**
+     * 访问信息存储到数据库中
+     * @param request
+     * @param handler
+     */
+    protected void logToDB(HttpServletRequest request, Object handler) {
+        if (handler instanceof HandlerMethod) { 
+            /*if ("/".equals(request.getRequestURI())) 
+                return;*/
+            
+            String access_token = RequestAndResponseUtil.getJwtTokenFromCookiesOrRequestHeader(SystemConstant.JWT_ACCESS_TOKEN_KEY, request); 
+            String refresh_token = RequestAndResponseUtil.getJwtTokenFromCookiesOrRequestHeader(SystemConstant.JWT_REFRESH_TOKEN_KEY, request);
+            String accesstor = "", fromWhere = "";
+            if (StringUtils.hasText(access_token) && StringUtils.hasText(refresh_token)) {
+                try {
+                    Map<String, Object> baseStorageDatas = JwtUtil.getBaseStorageDatasFromClaims(new JwtUtil().decode(access_token));
+                    accesstor = baseStorageDatas.getOrDefault(SystemConstant.JWT_LOGIN_USERID_KEY, "").toString();
+                    fromWhere = baseStorageDatas.getOrDefault(SystemConstant.JWT_LOGIN_FROMWHERE_KEY, "").toString();
+                } catch (Exception e) {
+                    System.err.println(e.getMessage());
+                }
+            } else {
+                return;
+            }
+            String apidesc = apiDescCache.get(request.getRequestURI());
+            if (StringUtils.isEmpty(apidesc)) {
+                HandlerMethod handerMethod = (HandlerMethod) handler;
+                Api controllerApiAnno = handerMethod.getBeanType().getAnnotation(Api.class);
+                ApiOperation methodApiOperationAnno = handerMethod.getMethodAnnotation(ApiOperation.class);
+                String apidescTemp = controllerApiAnno == null? "" : controllerApiAnno.value()+"-";
+                apidescTemp += methodApiOperationAnno == null? "" : methodApiOperationAnno.value();
+                apiDescCache.put(request.getRequestURI(), apidescTemp);
+                apidesc = apidescTemp;
+            }
+            logMapper.insert(Log.builder()
+                    .accessorIp(RequestAndResponseUtil.getIpAddress(request))
+                    .accessor(accesstor)
+                    .accessModule(request.getRequestURI())
+                    .accessTime(DateUtil.getNow())
+                    .field1(apidesc)
+                    .field2(fromWhere)
+                    .build());
+        }
+    }
+
+
+
+    public MyAbstractInterceptor(LogMapper logMapper) {
+        super();
+        this.logMapper = logMapper;
     }
 }

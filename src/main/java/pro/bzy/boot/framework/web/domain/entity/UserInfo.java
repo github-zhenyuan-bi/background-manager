@@ -3,6 +3,7 @@ package pro.bzy.boot.framework.web.domain.entity;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableField;
 import java.io.Serializable;
@@ -75,6 +76,7 @@ public class UserInfo extends Model<UserInfo> {
     
     
     
+    @JsonFormat(locale="zh", timezone="GMT+8", pattern="yyyy-MM-dd")
     @ApiModelProperty(value = "生日", position = 25)
     @TableField("BIRTH")
     private Date birth;

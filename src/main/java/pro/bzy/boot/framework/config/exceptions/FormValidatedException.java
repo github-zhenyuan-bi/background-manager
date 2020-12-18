@@ -56,6 +56,20 @@ extends RuntimeException implements MyException{
     public FormValidatedException(Throwable cause) {
         super(cause);
     }
+
+
+    @Override
+    public int getCode() {
+        // TODO Auto-generated method stub
+        return 0;
+    }
+
+
+    @Override
+    public String getMsg() {
+        // TODO Auto-generated method stub
+        return null;
+    }
     
     
 }

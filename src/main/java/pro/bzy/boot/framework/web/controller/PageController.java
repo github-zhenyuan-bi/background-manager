@@ -6,16 +6,12 @@ import java.util.Map;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
-import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 
-import pro.bzy.boot.framework.config.schedule.SchedulingFunctions;
-import pro.bzy.boot.framework.utils.ClassUtil;
-import pro.bzy.boot.framework.utils.SystemConstant;
 import pro.bzy.boot.framework.web.controller.parent.MyAbstractController;
 import pro.bzy.boot.framework.web.domain.entity.Menu;
 import pro.bzy.boot.framework.web.domain.entity.RoleMenu;
@@ -37,7 +33,8 @@ import pro.bzy.boot.framework.web.service.UserUsergroupService;
  * @author user
  *
  */
-@Controller
+//@Controller
+@Deprecated
 public class PageController extends MyAbstractController{
     
     @Resource
@@ -103,12 +100,8 @@ public class PageController extends MyAbstractController{
             List<TimerTask> tasks =  timerTaskService.list();
             model.put("tasks", tasks);
             // 定时任务可执行方法
-            Object taskMethods = getObjFromSession(request, SystemConstant.SCHEDULING_TASK_METHODS_KEY);
-            if (taskMethods == null) {
-                taskMethods = ClassUtil.getMethodNameWithDescription(SchedulingFunctions.class);
-                setValueToSession(request, SystemConstant.SCHEDULING_TASK_METHODS_KEY, taskMethods);
-            }
-            model.put(SystemConstant.SCHEDULING_TASK_METHODS_KEY, taskMethods);
+            //Object taskMethods = ClassUtil.getMethodNameWithDescription(SchedulingFunctions.class);
+            //model.put(SystemConstant.SCHEDULE_TASK_METHODS_KEY, taskMethods);
             
         }
     }
@@ -184,12 +177,7 @@ public class PageController extends MyAbstractController{
     private void prepareExtraDataForForm(String module, HttpServletRequest request, Map<String, Object> model) {
         switch (module) {
             case "timerTask":
-                Object taskMethods = getObjFromSession(request, SystemConstant.SCHEDULING_TASK_METHODS_KEY);
-                if (taskMethods == null) {
-                    taskMethods = ClassUtil.getMethodNameWithDescription(SchedulingFunctions.class);
-                    setValueToSession(request, SystemConstant.SCHEDULING_TASK_METHODS_KEY, taskMethods);
-                }
-                model.put(SystemConstant.SCHEDULING_TASK_METHODS_KEY, taskMethods);
+                
                 break;
             default:
                 break;

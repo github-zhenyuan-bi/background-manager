@@ -34,6 +34,35 @@ COMMON_TABLE_OPTION = {
 
 
 /**
+ * 默认列表表格Option
+ */
+DEFAULT_LIST_TABLE_OPTIONS = {}
+$.extend(DEFAULT_LIST_TABLE_OPTIONS, COMMON_TABLE_OPTION);
+$.extend(DEFAULT_LIST_TABLE_OPTIONS, {
+	// 表格
+	toggle: 'table',
+	// 是否分页
+	pagination: false,
+	pageList: "",
+	paginationLoop: false,
+	// 后台数据分页
+	sidePagination: "server",
+	// 请求数据处理器
+	responseHandler: function(res) {
+		return res.data;
+	},
+	// 请求参数处理 分页参数变量指定
+	queryParams: function(params) {
+		/*params.pageNo   = params.offset / params.limit + 1; 
+		params.pageSize = params.limit;
+		delete params.offset;
+		delete params.limit;
+		return params;*/
+	}
+});
+
+
+/**
  * 默认分页表格Option
  */
 DEFAULT_PAGE_TABLE_OPTIONS = {}
@@ -49,10 +78,14 @@ $.extend(DEFAULT_PAGE_TABLE_OPTIONS, {
 	sidePagination: "server",
 	// 请求数据处理器
 	responseHandler: function(res) {
-		var pageDatas = {};
-		pageDatas.rows = res.data.records;
-		pageDatas.total = res.data.total
-		return pageDatas;
+		if (res.code === 200) {
+			var pageDatas = {};
+			pageDatas.rows = res.data.records;
+			pageDatas.total = res.data.total
+			return pageDatas;
+		} else if (res.code === 600) {
+			redirectToLogin(res.code)
+		}
 	},
 	// 请求参数处理 分页参数变量指定
 	queryParams: function(params) {
@@ -81,14 +114,18 @@ $.extend(DEFAULT_TREEGRID_TABLE_OPTIONS, {
     parentIdField: 'pid',
     // 请求数据处理
     responseHandler: function(res) {
-    	var dataList = res.data;
-    	if (dataList) {
-    		for (let item of dataList) {
-				if (item.pid == '-1')
-					item.pid = null;
-			}
-    	}
-    	return dataList;
+    	if (res.code === 200) { 
+    		var dataList = res.data;
+        	if (dataList) {
+        		for (let item of dataList) {
+    				if (item.pid == '-1')
+    					item.pid = null;
+    			}
+        	}
+        	return dataList;
+    	} else if (res.code === 600) {
+    		redirectToLogin(res.code)
+		}
 	},
     // 异步请求分支数据
     onPostBody: function() {
@@ -103,6 +140,18 @@ $.extend(DEFAULT_TREEGRID_TABLE_OPTIONS, {
  */
 var myBsTable = {
 		/*
+		 * 列表表格
+		 * $selc: table表格的dom
+		 * options：初始化参数
+		 */
+		listTable: function($selc, options) {
+			var opt = {};
+			$.extend(opt, DEFAULT_LIST_TABLE_OPTIONS);
+			$.extend(opt, options);
+			alignTableHeadAndColumn(opt);
+			$selc.bootstrapTable(opt);
+		},
+		/*
 		 * 分页表格
 		 * $selc: table表格的dom
 		 * options：初始化参数
@@ -115,7 +164,7 @@ var myBsTable = {
 			$selc.bootstrapTable(opt);
 		},
 		/*
-		 * 分页表格
+		 * 树形表格
 		 * $selc: table表格的dom
 		 * options：初始化参数
 		 */

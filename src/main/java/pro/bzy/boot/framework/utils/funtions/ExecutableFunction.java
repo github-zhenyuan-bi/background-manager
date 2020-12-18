@@ -6,5 +6,5 @@ package pro.bzy.boot.framework.utils.funtions;
 @FunctionalInterface
 public interface ExecutableFunction {
 
-    void execute();
+    void execute() throws RuntimeException;
 }

@@ -4,13 +4,17 @@
 	<div class="form-group row">
 	    <label for="example-text-input" class="col-sm-3 col-form-label">任务名称</label>
 	    <div class="col-sm-9">
-	        <input class="form-control" type="text" name="name" value="${(task.name)!}" autocomplete="off">
+	        <input class="form-control" type="text" maxlength="30" name="name" value="${(task.name)!}" autocomplete="off"
+	        		data-parsley-required="true" data-parsley-required-message="任务名称不可为空"
+	        		data-parsley-trigger="focusout">
 	    </div>
 	</div>
 	<div class="form-group row">
 	    <label for="example-text-input" class="col-sm-3 col-form-label">任务说明</label>
 	    <div class="col-sm-9">
-	        <input class="form-control" type="text" name="descp" value="${(task.descp)!}" autocomplete="off">
+	        <input class="form-control" type="text" maxlength="30" name="descp" value="${(task.descp)!}" autocomplete="off"
+	        		data-parsley-required="true" data-parsley-required-message="任务说明不可为空"
+	        		data-parsley-trigger="focusout">
 	    </div>
 	</div>
 	<div class="form-group row">
@@ -19,7 +23,7 @@
 	        <select class="form-control" name="corn">
 				<#if constants??>
 					<#list constants as constant>
-						<option value="${(constant.value)!}">${(constant.descp)!}</option>
+						<option value="${(constant.constValue)!}" <#if task?? && task.corn == constant.constValue>selected</#if>>${(constant.constValue)!}(${(constant.descp)!})</option>
 					</#list>
 				</#if> 
             </select>
@@ -31,7 +35,7 @@
 	        <select class="form-control" name="methodname">
 				<#if taskMethods??>
 					<#list taskMethods?keys as methodName>
-						<option value="${(methodName)!}">(${(methodName)!})${(taskMethods[methodName])!}</option>
+						<option value="${(methodName)!}" <#if task?? && task.methodname == methodName>selected</#if>>(${(methodName)!})${(taskMethods[methodName])!}</option>
 					</#list>
 				</#if> 
             </select>

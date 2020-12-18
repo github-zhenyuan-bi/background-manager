@@ -3,22 +3,28 @@
 	<div class="form-group row">
 	    <label for="example-text-input" class="col-3 col-form-label">用户组名称</label>
 	    <div class="col-9">
-	        <input class="form-control" type="text" name="name" autocomplete="off"
-	        	placeholder="输入用户组名称（唯一不重复）">
+	        <input class="form-control" type="text" maxlength="15" name="name" autocomplete="off" placeholder="输入用户组名称（唯一不重复）"
+	        		data-parsley-required="true" data-parsley-required-message="用户组名称不可为空"
+	        		data-parsley-pattern="^[a-zA-Z0-9_]{1,15}$" data-parsley-pattern-message="用户名由1-15字母，数字，下划线"
+	        		data-parsley-trigger="focusout">
 	    </div>
 	</div>
 	<div class="form-group row">
 	    <label for="example-text-input" class="col-sm-3 col-form-label">用户组描述</label>
 	    <div class="col-sm-9">
-	        <input class="form-control" type="text" name="descrip" autocomplete="off"
-	        	placeholder="输入用户组的描述">
+	        <input class="form-control" type="text" maxlength="30" name="descrip" autocomplete="off" placeholder="输入用户组的描述"
+	        		data-parsley-required="true" data-parsley-required-message="用户组描述不可为空"
+	        		data-parsley-pattern="^[a-zA-Z0-9_]{1,30}$" data-parsley-pattern-message="用户组描述由1-30字母，数字，下划线"
+	        		data-parsley-trigger="focusout">
 	    </div>
 	</div>
 	<div class="form-group row">
 	    <label for="example-text-input" class="col-sm-3 col-form-label">用户组类别</label>
 	    <div class="col-sm-9">
-	        <input class="form-control" type="text" name="groupType" autocomplete="off"
-	        	placeholder="输入用户组的类别">
+	        <input class="form-control" type="text" maxlength="10" name="groupType" autocomplete="off" placeholder="输入用户组的类别"
+	        		data-parsley-required="true" data-parsley-required-message="用户组类别不可为空"
+	        		data-parsley-pattern="^[a-zA-Z0-9_]{1,10}$" data-parsley-pattern-message="用户组类别由1-10字母，数字，下划线"
+	        		data-parsley-trigger="focusout">
 	    </div>
 	</div>
 </form>

@@ -34,7 +34,7 @@ public class R<T> {
     public static final Integer ERROR = 500;
     
     /** 控制层表单校验错误 */
-    public static final Integer FORM_VALIDATE_ERROR = 600;
+    public static final Integer FORM_VALIDATE_ERROR = 650;
     
     /** shiro认证错误 */
     public static final Integer SHIRO_AUTHENTICATION_ERROR = 601;

@@ -11,6 +11,10 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
+import javax.validation.constraints.NotNull;
+
+import org.hibernate.validator.constraints.Length;
+
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
@@ -20,6 +24,7 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 import pro.bzy.boot.framework.utils.SystemConstant;
+import pro.bzy.boot.framework.web.annoations.FormValid;
 import pro.bzy.boot.framework.web.domain.bean.TreeDomain;
 
 /**
@@ -68,12 +73,16 @@ public class Menu extends Model<Menu> implements TreeDomain<Menu>{
     
     
     
+    @NotNull(message="菜单名称不能为空", groups= {FormValid.class})
+    @Length(min=1, max=20, message="菜单名称长度应在1-20个字符", groups = {FormValid.class})
     @ApiModelProperty(value = "菜单名称", position = 15)
     @TableField("NAME")
     private String name;
     
     
     
+    @NotNull(message="菜单url不能为空", groups= {FormValid.class})
+    @Length(min=1, max=1000, message="菜单url长度应在1-1000个字符", groups = {FormValid.class})
     @ApiModelProperty(value = "菜单url", position = 20)
     @TableField("URL")
     private String url;
@@ -92,6 +101,8 @@ public class Menu extends Model<Menu> implements TreeDomain<Menu>{
     
     
     
+    @NotNull(message="菜单url不能为空", groups= {FormValid.class})
+    @Length(min=1, max=1000, message="菜单url长度应在1-1000个字符", groups = {FormValid.class})
     @ApiModelProperty(value = "权限过滤表达式", position = 35)
     @TableField("FILTER_EXP")
     private String filterExp;

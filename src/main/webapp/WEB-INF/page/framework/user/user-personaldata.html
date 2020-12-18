@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html>
+    <head>
+    	<title>个人信息</title>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+        <!-- App Icons -->
+        <link rel="shortcut icon" href="/assets/images/favicon.ico">
+
+        <!-- App css -->
+        <#include "/template/css/bootstrap-css.html" />
+		<#include "/template/css/font-awesome-css.html" />
+		<#include "/template/css/my-css.html" />
+		
+		<style type="text/css">
+			.form-group .form-control {
+				border-top: none;
+				border-left: none;
+				border-right: none;
+				border-radius: 0;
+			}
+		</style>
+    </head>
+
+
+    <body>
+        <!-- Loader -->
+        <div id="preloader"><div id="status"><div class="spinner"></div></div></div>
+
+		<div class="header-bg">
+	        <!-- 页面头 -->
+			<#include "/template/common/header/header-template.html" />
+		</div>
+
+        <div class="wrapper">
+            <div class="container-fluid">
+
+                <div class="row">
+	                    <div class="col-lg-10 offset-lg-1">
+	                        <div class="card m-b-20">
+	                            <div class="card-body">
+	                            
+	                                <h3 class="mt-0 header-title">个人中心</h3>
+	                                <p class="text-muted font-14">这里可以查看和修改个人数据</p>
+	                                <hr>
+	                                <form id="personaldata-form">
+	                                	<input type="hidden" name="id" value="${(current_userinfo.id)!}">
+		                                <div class="row no-gutters">
+		                                	<div class="col-sm-6 p-3">
+		                                		<h5>#头像</h5>
+		                                		<div class="form-group row">
+													<div class="col-sm-12 text-center">
+														<div id="drop_area"></div>
+													</div>
+												</div>
+												<h5>#基本信息</h5>
+												<div class="form-group row">
+				                                    <label for="user-username" class="col-sm-3 col-form-label">用户名</label>
+				                                    <div class="col-sm-9">
+				                                    	<div class="form-control" id="user-username">${(current_user.username)!}</div>
+				                                    </div>
+				                                </div>
+				                                
+				                                <div class="form-group row">
+				                                    <label for="userinfo-realName" class="col-sm-3 col-form-label">真实姓名</label>
+				                                    <div class="col-sm-9">
+				                                        <input class="form-control" type="text" name="realName" value="${(current_userinfo.realName)!}" id="userinfo-realName"
+				                                        	data-parsley-pattern="^[\u4E00-\u9FA5]{2,4}$" data-parsley-pattern-message="真实姓名只能由2-4个汉字组成"
+	        												data-parsley-trigger="focusout">
+				                                    </div>
+				                                </div>
+				                                
+				                                <div class="form-group row">
+				                                    <label for="userinfo-age" class="col-sm-3 col-form-label">年龄</label>
+				                                    <div class="col-sm-9">
+				                                        <input class="form-control" type="number" name="age" value="${(current_userinfo.age)!}" id="userinfo-age"
+				                                        	data-parsley-pattern="^[1-9][0-9]$" data-parsley-pattern-message="年龄必须在18-99岁之间"
+	        												data-parsley-trigger="focusout">
+				                                    </div>
+				                                </div>
+				                                
+				                                <div class="form-group row">
+				                                    <label for="userinfo-sex" class="col-sm-3 col-form-label">性别</label>
+				                                    <div class="col-sm-9" style="padding: 8px 15px;">
+				                                    	<div class="form-check form-check-inline">
+												          <input class="form-check-input" type="radio" name="sex" id="gridRadios1" value="1" <#if current_userinfo.sex == 1>checked</#if>>
+												          <label class="form-check-label" for="gridRadios1">男</label>
+												        </div>
+												        <div class="form-check form-check-inline">
+												          <input class="form-check-input" type="radio" name="sex" id="gridRadios2" value="2" <#if current_userinfo.sex == 2>checked</#if>>
+												          <label class="form-check-label" for="gridRadios2">女</label>
+												        </div>
+				                                    </div>
+				                                </div>
+											</div>
+		                                	<div class="col-sm-6 p-3">
+		                                		<h5>#角色信息</h5>
+		                                		<div class="form-group row">
+				                                    <label for="example-text-input" class="col-sm-3 col-form-label">拥有角色</label>
+				                                    <div class="col-sm-9">
+				                                    	<div class="form-control text-truncate">
+				                                    		<#if current_userroles??>
+					                                    		<#list current_userroles as role>
+					                                    			<span>${(role.name)!}(${(role.descrip)!})、</span>
+					                                    		</#list>
+					                                    	</#if>
+				                                    	</div>
+				                                        <!-- <input class="form-control" type="text" value="Artisanal kale" id="example-text-input"> -->
+				                                    </div>
+				                                </div>
+				                                <br>
+		                                		<h5>#额外信息</h5>
+		                                		<div class="form-group row">
+				                                    <label for="userinfo-birth" class="col-sm-3 col-form-label">生日</label>
+				                                    <div class="col-sm-9">
+				                                        <input class="form-control" type="date" name="birth" value='${(current_userinfo.birth?string("yyyy-MM-dd"))!}' id="userinfo-birth">
+				                                    </div>
+				                                </div>
+				                                
+				                                <div class="form-group row">
+				                                    <label for="userinfo-phone" class="col-sm-3 col-form-label">手机号</label>
+				                                    <div class="col-sm-9">
+				                                        <input class="form-control" type="text" name="phone" value="${(current_userinfo.phone)!}" id="userinfo-phone">
+				                                    </div>
+				                                </div>
+		                                		<div class="form-group row">
+				                                    <label for="userinfo-qq" class="col-sm-3 col-form-label">QQ号</label>
+				                                    <div class="col-sm-9">
+				                                        <input class="form-control" type="text" name="qq" value="${(current_userinfo.qq)!}" id="userinfo-qq"
+				                                        	data-parsley-pattern="[1-9][0-9]{4,}" data-parsley-pattern-message="QQ号格式不正确"
+	        												data-parsley-trigger="focusout">
+				                                    </div>
+				                                </div>
+				                                
+				                                <div class="form-group row">
+				                                    <label for="userinfo-wechat" class="col-sm-3 col-form-label">微信号</label>
+				                                    <div class="col-sm-9">
+				                                        <input class="form-control" type="text" name="wechat" value="${(current_userinfo.wechat)!}" id="userinfo-wechat">
+				                                    </div>
+				                                </div>
+				                                
+				                                <div class="form-group row">
+				                                    <label for="userinfo-email" class="col-sm-3 col-form-label">邮箱</label>
+				                                    <div class="col-sm-9">
+				                                        <input class="form-control" type="text" name="email" value="${(current_userinfo.email)!}" id="userinfo-email"
+				                                        	data-parsley-pattern="^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$" data-parsley-pattern-message="邮箱格式不正确"
+	        												data-parsley-trigger="focusout">
+				                                    </div>
+				                                </div>
+											</div>
+		                                	<div class="col-sm-12 p-3 text-center">
+		                                		<button type="button" class="btn btn-primary btn-block waves-effect waves-light invisible" id="personaldata-save-btn">保存</button>
+		                                	</div>
+		                                </div>
+	                                </form>
+	                                
+	                            </div>
+	                        </div>
+	                    </div>
+                </div>
+                            
+                          
+            </div> <!-- end container -->
+        </div>
+        <!-- end wrapper -->
+
+
+        <!-- 页面底部 -->
+		<#include "/template/common/footer-template.html">
+
+        <!-- js模块  -->
+        <#include "/template/js/jquery-plugins-js.html" />
+        <#include "/template/js/bootstrap-propers-js.html" />
+        <#include "/template/js/bootstrap-js.html" />
+
+		<#include "/template/js/my-js.html" />
+		<#include "/template/js/bootstrap-sweet-alert-js.html" />
+		
+		<!-- form-valid -->
+		<#include "/template/js/md5-and-parsley.html" />
+		<#include "/template/js/upload-js.html" />
+		
+		<!-- App js -->
+        <script src="/assets/js/app.js"></script>
+		<script type="text/javascript">//serializeFormToJson
+		
+			var $form = $("#personaldata-form");
+			var $allInput = $form.find("input");
+			var $pdsBtn = $("#personaldata-save-btn");
+			
+			$allInput.change(function() {
+				$pdsBtn.removeClass("invisible");
+			});
+		
+			var dragImgUpload = new DragImgUpload("#drop_area",{
+				boxWidth: '200px',
+				imgurl: '${(current_user.avatar)!}',
+			    callback:function (files) {
+			        //回调函数，可以传递给后台等等
+			        var file = files[0];
+			        // 非图片格式
+			        if (!checkFileTypeImg(file.name)) {
+			        	return;
+			        }
+			        
+			        var form = new FormData();
+			        form.append("img", file);
+			        
+			        __jqAjax({
+			        	url: "/framework/user/uploadAvatar?userid=${(current_userinfo.id)!}",
+			            type: "POST",
+			            data: form,
+			            processData : false,
+			            contentType : false,
+			            dataType : 'json',
+			        }).then(res=> {
+			        	console.log(res)
+			        })
+			    }
+			});
+				
+			
+			$pdsBtn.click(function() {
+				var checkForm = $form.parsley().validate();
+				if (!checkForm) return false;
+
+				var _formData = $form.serializeFormToJson();
+				fetchPost("/framework/userInfo/updateRecord", 
+						{body: JSON.stringify(_formData)}, function(res){
+							mySwal.alertForRes(res, {
+								text: "更新个人数据成功",
+								onOpen: function() {}
+							});
+						});
+			});
+		</script>
+    </body>
+</html>

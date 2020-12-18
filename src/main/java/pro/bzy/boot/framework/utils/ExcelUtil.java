@@ -73,7 +73,10 @@ public class ExcelUtil implements MyUtil {
         
         // 5. 导出excel
         File file = new File(excelFile);
-        if (!file.exists())
+        File parentFile = file.getParentFile();
+        if (!parentFile.exists())
+            parentFile.mkdirs();
+        if (!file.exists()) 
             file.createNewFile();
         @Cleanup FileOutputStream fileOut = new FileOutputStream(file);
         workbook.write(fileOut);

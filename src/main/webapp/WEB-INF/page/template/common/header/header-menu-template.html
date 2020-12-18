@@ -12,7 +12,8 @@
 				<#if bgManageMenus??>
 					<#list bgManageMenus as bgmMenu>
 				<li class="has-submenu">
-					<a href="<#if !bgmMenu.hasChild??>${(bgmMenu.url)!}<#else>#</#if>"><i class="${(bgmMenu.icon)!}"></i>${(bgmMenu.name)!}</a>	
+					<a href="<#if bgmMenu.childs?? && bgmMenu.childs?size gt 0>#<#else>${(bgmMenu.url)!}</#if>">
+						<i class="${(bgmMenu.icon)!}"></i>${(bgmMenu.name)!}</a>	
 					<#if bgmMenu.hasChild?? && bgmMenu.childs?? && bgmMenu.childs?size gt 0>
 						<ul class="submenu megamenu">
 			                <li>

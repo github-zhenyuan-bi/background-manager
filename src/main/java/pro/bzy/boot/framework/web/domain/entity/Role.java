@@ -11,6 +11,11 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import java.io.Serializable;
 import java.util.Date;
 
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+
+import org.hibernate.validator.constraints.Length;
+
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
@@ -19,6 +24,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
+import pro.bzy.boot.framework.web.annoations.FormValid;
 
 /**
  * 角色 
@@ -60,7 +66,8 @@ public class Role extends Model<Role> {
     private String id;
     
     
-    
+    @NotNull(message="角色名不能为空", groups= {FormValid.class})
+    @Length(min=1, max=30, message="角色名长度应在1-20个字符", groups = {FormValid.class})
     @ApiModelProperty(value = "角色名", position = 10)
     @TableField("NAME")
     private String name;
@@ -73,6 +80,7 @@ public class Role extends Model<Role> {
     
     
     
+    @Min(value = 1, message="排序的最小值为1", groups= {FormValid.class})
     @ApiModelProperty(value = "显示排序", position = 20)
     @TableField("SORT")
     private Integer sort;
@@ -122,6 +130,8 @@ public class Role extends Model<Role> {
     
     
     
+    @NotNull(message="角色说明不能为空", groups= {FormValid.class})
+    @Length(min=1, max=30, message="角色说明长度应在1-20个字符", groups = {FormValid.class})
     @ApiModelProperty(value = "说明", position = 60)
     @TableField("DESCRIP")
     private String descrip;

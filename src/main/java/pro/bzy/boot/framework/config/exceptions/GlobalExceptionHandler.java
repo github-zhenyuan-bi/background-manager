@@ -39,6 +39,12 @@ public class GlobalExceptionHandler {
     
     
     
+    @ExceptionHandler({MyFrameworkException.class})
+    public @ResponseBody R<Object> myFrameworkException (HttpServletRequest request, MyFrameworkException mfe) {
+        return R.builder().code(mfe.getCode()).msg(mfe.getMsg()).build();
+    }
+    
+    
     
     /**
      * 全局未知异常捕捉
@@ -46,6 +52,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(value = Exception.class)
     public @ResponseBody R<Object> unknownExceptionHandler(
             HttpServletRequest req, Exception e) {
+        e.printStackTrace();
         return R.ofError(e);
     }
 }

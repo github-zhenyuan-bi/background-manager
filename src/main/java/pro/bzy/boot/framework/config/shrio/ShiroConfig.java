@@ -44,6 +44,7 @@ import net.sf.ehcache.CacheManager;
  */
 @Data
 @ConfigurationProperties(prefix = "app.config.shiro")
+@Deprecated
 public class ShiroConfig implements MyShiroConfig{
     
     /** 登陆url */

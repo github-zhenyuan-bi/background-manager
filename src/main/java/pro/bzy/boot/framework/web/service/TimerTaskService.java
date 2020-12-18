@@ -20,4 +20,7 @@ public interface TimerTaskService extends IService<TimerTask> {
     /** 动态启动或者挂起定时任务 */
     void suspendTimertask(TimerTask timerTask);
     
+    
+    /** 注册定时任务 */
+    void registerTimerTaskToSchedulingRunnable(TimerTask timerTask);
 }

@@ -3,7 +3,7 @@ package pro.bzy.boot.framework.web.controller;
 import pro.bzy.boot.framework.web.domain.entity.UserInfo;
 import pro.bzy.boot.framework.web.mapper.UserInfoMapper;
 import pro.bzy.boot.framework.web.service.UserInfoService;
-
+import pro.bzy.boot.framework.web.annoations.FormValid;
 import pro.bzy.boot.framework.web.domain.bean.R;
 import pro.bzy.boot.framework.utils.ExceptionCheckUtil;
 
@@ -12,6 +12,7 @@ import javax.annotation.Resource;
 import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 
 import java.util.Arrays;
 import java.util.List;
@@ -22,6 +23,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
@@ -35,7 +37,7 @@ import com.github.xiaoymin.knife4j.annotations.ApiSupport;
  * @author zhenyuan.bi
  * @since 2020-09-07
  */
-@Api(tags = {"用户基本信息表"})
+@Api(tags = {"用户基本信息表"}, value="用户信息")
 @ApiSupport(order = 100)
 @RequestMapping("/framework/userInfo")
 @RestController
@@ -49,11 +51,7 @@ public class UserInfoController {
     
     
     
-    /**
-     * 使用id查询数据
-     * @param id
-     * @return
-     */
+    @ApiOperation(value="id查询")
     @GetMapping("getById")
     public R<UserInfo> getById(final String id) {
         ExceptionCheckUtil.hasLength(id, "ID 不能为空");
@@ -63,9 +61,7 @@ public class UserInfoController {
 
     
     
-    /**
-     * 查询数据列表
-     */
+    @ApiOperation(value="列表数据")
     @GetMapping("getList")
     public R<List<UserInfo>> getList(UserInfo queryBean) {
         List<UserInfo> userInfos = userInfoService.list(Wrappers.<UserInfo>lambdaQuery(queryBean));
@@ -74,9 +70,7 @@ public class UserInfoController {
     
     
     
-    /**
-     * 查询数据分页
-     */
+    @ApiOperation(value="分页数据")
     @GetMapping("getPage")
     public R<Page<UserInfo>> getPage(int pageNo, int pageSize, UserInfo queryBean) {
         Page<UserInfo> page = new Page<>(pageNo, pageSize);
@@ -86,9 +80,7 @@ public class UserInfoController {
     
     
     
-    /**
-     * 根据id删除数据
-     */
+    @ApiOperation(value="ID删除")
     @DeleteMapping("deleteById")
     public R<String> deleteById(final String id) {
         ExceptionCheckUtil.hasLength(id, "ID 不能为空");
@@ -99,9 +91,7 @@ public class UserInfoController {
     
     
     
-    /**
-     * 批量删除 根据id数组
-     */
+    @ApiOperation(value="IDs批量删除")
     @DeleteMapping("batchDeleteByIds")
     public R<String> batchDeleteByIds(String[] ids) {
         ExceptionCheckUtil.notEmpty(ids, "批量删除的IDs 不能为空");
@@ -112,12 +102,7 @@ public class UserInfoController {
     
     
     
-    /**
-     * 插入一条新数据
-     * @param userInfo 数据
-     * @param bindingResult 表单校验结果
-     * @return
-     */
+    @ApiOperation(value="增加数据")
     @PostMapping("addRecord")
     public R<String> addRecord(@Validated(value= {}) UserInfo userInfo, BindingResult bindingResult) {
         if (StringUtils.isEmpty(userInfo.getId()))
@@ -129,16 +114,14 @@ public class UserInfoController {
     
     
     
-    /**
-     * 更新数据
-     * @param updateBean 数据
-     * @param bindingResult 表单校验结果
-     * @return
-     */
-    public R<String> updateById(@Validated(value= {}) UserInfo updateBean, BindingResult bindingResult) {
-        ExceptionCheckUtil.hasLength(updateBean.getId(), "ID 不能为空");
+    @ApiOperation(value="ID更新")
+    @PostMapping("updateRecord")
+    public R<String> updateById(
+            @Validated(value= {FormValid.class}) 
+            @RequestBody UserInfo userinfo, BindingResult bindingResult) {
+        ExceptionCheckUtil.hasLength(userinfo.getId(), "ID 不能为空");
         
-        boolean flag = userInfoService.updateById(updateBean);
+        boolean flag = userInfoService.updateById(userinfo);
         return R.ofSuccess(flag? "更新成功" : "更新失败");
     }
 }

@@ -202,7 +202,7 @@ mySwal = {
 			option.title = title;
 			if ($.type(target) === "string") {
 				option.onOpen = function(dom) {
-					$.get(target, function(res) {
+					__jqGet(target).done(res=> {
 						option.html = res;
 						mySwal.html(option);
 					});
@@ -219,9 +219,12 @@ mySwal = {
 			if ($.type(target) === "string") {
 				option.html = "加载中...";
 				option.onOpen = function(dom) {
-					$.get(target, function(res) {
+					__jqGet(target).done(res=> {
 						$(dom).find(".swal2-content #swal2-content").html(res);
 					});
+//					$.get(target, function(res) {
+//						$(dom).find(".swal2-content #swal2-content").html(res);
+//					});
 				}
 				return mySwal.html(option);
 			} else {
@@ -258,10 +261,14 @@ mySwal = {
 				}
 			}*/
 			if ($.type(target) === "string") {
-				$.get(target, function(res) {
+				__jqGet(target).done(res=> {
 					option.html = res;
 					mySwal.html(option);
 				});
+//				$.get(target, function(res) {
+//					option.html = res;
+//					mySwal.html(option);
+//				});
 			} else {
 				option.html = target;
 				return mySwal.html(option);
@@ -342,7 +349,9 @@ function handleAlertArgs(argCount, arg1, arg2, arg3, arg4) {
 }
 
 
-
+function dumiaotishi() {
+	alert(1)
+}
 function handleConfirmArgs(argCount, arg1, arg2, arg3, arg4) {
 	var opt = {};
 	switch (argCount) {

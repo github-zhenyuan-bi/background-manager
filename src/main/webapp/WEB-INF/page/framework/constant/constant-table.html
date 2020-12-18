@@ -27,6 +27,8 @@
 				mySwal.formHtml("添加系统常量", $addConstant, {
 					preConfirm: function() {
     					var _addConstantForm = $("#swal2-content .constant-table-addConstant");
+    					var flag = _addConstantForm.parsley().validate();
+    					if (!flag) return false;
     					return fetchPostSwalComfirm('/framework/constant/addRecord'
     							, {body: JSON.stringify(_addConstantForm.serializeFormToJson())}
     							, function(res) {
@@ -49,7 +51,8 @@
 					},
 					preConfirm: function() {
     					var _addConstantForm = $("#swal2-content .constant-table-addConstant");
-    					
+    					var flag = _addConstantForm.parsley().validate();
+    					if (!flag) return false;
     					return fetchPostSwalComfirm('/framework/constant/updateById'
     							, {body: JSON.stringify(_addConstantForm.serializeFormToJson())}
     							, function(res) {
@@ -87,9 +90,9 @@
 		showRefresh: true,
 		columns: [
 			{title: '#', width: 50, formatter: function (value, row, index) {return '<strong><i>'+(index+1)+'</i></strong>';}},
-			{field: 'type', title: '常量类型'},
-			{field: 'key', title: '常量键'},
-			{field: 'value', title: '常量值'},
+			{field: 'constType', title: '常量类型'},
+			{field: 'constKey', title: '常量键'},
+			{field: 'constValue', title: '常量值'},
 			{field: 'descp', title: '常量说明'},
 			{field: 'id',title: '操作', width: 120, events: operateConstantEvents, formatter: function(value, row, index) {
 				return '<a class="tb-op edit" data-event="edit" title="编辑常量配置" href="javascript:void(0);"><i class="fa fa-pencil"></i></a>' + 

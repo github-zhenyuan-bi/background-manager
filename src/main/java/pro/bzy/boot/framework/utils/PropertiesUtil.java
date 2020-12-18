@@ -39,8 +39,23 @@ public class PropertiesUtil implements MyUtil{
      * @param key
      * @return
      */
-    public static String get(String key) {
+    public final static String get(String key) {
         return props.get(key);
+    }
+    
+    
+    
+    /**
+     * 从yml配置文件里查询jwtToken的过期时间
+     * @param key
+     * @return
+     */
+    public final static long getJwtTokenExpire(final String key) {
+        String access_token_expire = get(key);
+        if (StringUtils.hasText(access_token_expire)) {
+            return Long.valueOf(access_token_expire);
+        }
+        return -1;
     }
     
     

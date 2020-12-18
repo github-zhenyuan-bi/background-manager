@@ -12,6 +12,7 @@ import javax.annotation.Resource;
 import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 
 import java.util.Arrays;
 import java.util.List;
@@ -36,7 +37,7 @@ import com.github.xiaoymin.knife4j.annotations.ApiSupport;
  * @author zhenyuan.bi
  * @since 2020-10-01
  */
-@Api(tags = {"定时器任务"})
+@Api(tags = {"定时器任务"}, value="定时器任务")
 @ApiSupport(order = 100)
 @RequestMapping("/framework/timerTask")
 @RestController
@@ -50,11 +51,7 @@ public class TimerTaskController {
     
     
     
-    /**
-     * 使用id查询数据
-     * @param id
-     * @return
-     */
+    @ApiOperation(value="id查询常量")
     @GetMapping("getById")
     public R<TimerTask> getById(final String id) {
         ExceptionCheckUtil.hasLength(id, "ID 不能为空");
@@ -64,9 +61,7 @@ public class TimerTaskController {
 
     
     
-    /**
-     * 查询数据列表
-     */
+    @ApiOperation(value="列表数据")
     @GetMapping("getList")
     public R<List<TimerTask>> getList(TimerTask queryBean) {
         List<TimerTask> timerTasks = timerTaskService.list(Wrappers.<TimerTask>lambdaQuery(queryBean));
@@ -75,9 +70,7 @@ public class TimerTaskController {
     
     
     
-    /**
-     * 查询数据分页
-     */
+    @ApiOperation(value="分页数据")
     @GetMapping("getPage")
     public R<Page<TimerTask>> getPage(int pageNo, int pageSize, TimerTask queryBean) {
         Page<TimerTask> page = new Page<>(pageNo, pageSize);
@@ -87,9 +80,7 @@ public class TimerTaskController {
     
     
     
-    /**
-     * 根据id删除数据
-     */
+    @ApiOperation(value="ID删除")
     @DeleteMapping("deleteById")
     public R<String> deleteById(final String id) {
         ExceptionCheckUtil.hasLength(id, "ID 不能为空");
@@ -100,9 +91,7 @@ public class TimerTaskController {
     
     
     
-    /**
-     * 批量删除 根据id数组
-     */
+    @ApiOperation(value="IDs批量删除")
     @DeleteMapping("batchDeleteByIds")
     public R<String> batchDeleteByIds(String[] ids) {
         ExceptionCheckUtil.notEmpty(ids, "批量删除的IDs 不能为空");
@@ -113,12 +102,7 @@ public class TimerTaskController {
     
     
     
-    /**
-     * 插入一条新数据
-     * @param timerTask 数据
-     * @param bindingResult 表单校验结果
-     * @return
-     */
+    @ApiOperation(value="增加定时任务")
     @PostMapping("addRecord")
     public R<String> addRecord(@Validated(value= {}) @RequestBody TimerTask timerTask, BindingResult bindingResult) {
         if (StringUtils.isEmpty(timerTask.getId()))
@@ -130,12 +114,7 @@ public class TimerTaskController {
     
     
     
-    /**
-     * 更新数据
-     * @param updateBean 数据
-     * @param bindingResult 表单校验结果
-     * @return
-     */
+    @ApiOperation(value="ID更新")
     @PostMapping("updateById")
     public R<String> updateById(@Validated(value= {}) @RequestBody TimerTask updateBean, BindingResult bindingResult) {
         ExceptionCheckUtil.hasLength(updateBean.getId(), "ID 不能为空");
@@ -145,9 +124,7 @@ public class TimerTaskController {
     }
     
     
-    /**
-     * 挂起任务
-     */
+    @ApiOperation(value="任务挂起")
     @PostMapping("startupOrShutdownTask")
     public R<String> startupOrShutdownTask(String id, Integer enable) {
         ExceptionCheckUtil.hasLength(id, "ID 不能为空");

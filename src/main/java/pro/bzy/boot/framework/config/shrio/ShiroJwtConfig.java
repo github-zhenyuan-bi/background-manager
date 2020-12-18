@@ -33,6 +33,8 @@ public class ShiroJwtConfig implements MyShiroConfig{
     /** 权限验证成功url */
     @Setter private String successUrl;
     
+    
+    
     /*
      * a. 告诉shiro不要使用默认的DefaultSubject创建对象，因为不能创建Session
      * */
@@ -49,10 +51,9 @@ public class ShiroJwtConfig implements MyShiroConfig{
     @Bean
     public DefaultWebSecurityManager securityManager() {
         DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager();
+        //securityManager.setCacheManager(ehCacheManager());
         securityManager.setRealm(realm());
-        /*
-         * b
-         * */
+        
         // 关闭 ShiroDAO 功能
         DefaultSubjectDAO subjectDAO = new DefaultSubjectDAO();
         DefaultSessionStorageEvaluator defaultSessionStorageEvaluator = new DefaultSessionStorageEvaluator();
@@ -89,7 +90,10 @@ public class ShiroJwtConfig implements MyShiroConfig{
         filterRuleMap.put("/assets/**", "anon");
         filterRuleMap.put("/webjars/**", "anon");
         filterRuleMap.put("/error/**", "anon");
+        filterRuleMap.put("/404**", "anon");
+        filterRuleMap.put("/500**", "anon");
         filterRuleMap.put("/**/favicon.ico", "anon");
+        
         
         filterRuleMap.put("/script/juben/showpage", "anon");
         
@@ -104,4 +108,18 @@ public class ShiroJwtConfig implements MyShiroConfig{
 
         return shiroFilter;
     }
+    
+    
+    
+    
+    /**
+     * shiro包装的ehcache缓存
+     * @return
+     */
+//    @Bean
+//    public EhCacheManager ehCacheManager() {
+//        EhCacheManager em = new EhCacheManager();
+//        //em.setCacheManager(cacheManager);
+//        return em;
+//    }
 }

@@ -13,22 +13,30 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+
+import io.swagger.annotations.ApiOperation;
 import pro.bzy.boot.framework.utils.CollectionUtil;
 import pro.bzy.boot.framework.utils.SystemConstant;
 import pro.bzy.boot.framework.web.controller.parent.MyAbstractController;
-import pro.bzy.boot.framework.web.domain.entity.Menu;
+import pro.bzy.boot.framework.web.domain.entity.Constant;
+import pro.bzy.boot.framework.web.service.ConstantService;
 import pro.bzy.boot.framework.web.service.MenuService;
+import pro.bzy.boot.script.domain.entity.BulletinTemplate;
 import pro.bzy.boot.script.domain.entity.JubenCharacter;
 import pro.bzy.boot.script.domain.entity.Tag;
+import pro.bzy.boot.script.service.BulletinTemplateService;
 import pro.bzy.boot.script.service.JubenCharacterService;
 import pro.bzy.boot.script.service.JubenService;
 import pro.bzy.boot.script.service.JubenTagService;
 import pro.bzy.boot.script.service.TagService;
+import pro.bzy.boot.script.utils.ScriptConstant;
 
 @Controller
 @RequestMapping("/script")
 public class ScriptPageController extends MyAbstractController {
 
+    @Resource
+    private ConstantService constantService;
     @Resource
     private JubenService jubenService;
     @Resource
@@ -40,12 +48,12 @@ public class ScriptPageController extends MyAbstractController {
     @Resource
     private JubenTagService jubenTagService;
     
+    @Resource
+    private BulletinTemplateService bulletinTemplateService;
     
     
     
-    /**
-     * 剧本管理主页
-     */
+    @ApiOperation(value="剧本管理主页")
     @GetMapping("juben/management")
     public String management(HttpServletRequest request, Map<String, Object> model) {
         // 提供一些菜单数据共视图渲染
@@ -53,13 +61,9 @@ public class ScriptPageController extends MyAbstractController {
         return "/script/juben/management";
     }
     
-    /**
-     * 剧本管理表单填写页面
-     * @param pageName
-     * @param request
-     * @param model
-     * @return
-     */
+
+    
+    @ApiOperation(value="剧本管理表单填写页面")
     @GetMapping("juben/form/{pageName}")
     public String editForm(@PathVariable("pageName") String pageName,
             HttpServletRequest request, Map<String, Object> model) {
@@ -99,6 +103,8 @@ public class ScriptPageController extends MyAbstractController {
     }
     
     
+    
+    @ApiOperation(value="剧本管理表单-分配标签")
     @GetMapping("juben/allocateTag")
     public String allocateTag(String jubenId, HttpServletRequest request, Map<String, Object> model) {
         // 全部标签
@@ -117,18 +123,15 @@ public class ScriptPageController extends MyAbstractController {
     }
     
     
+    
+    
+    @ApiOperation(value="后台主页面")
     @GetMapping("business/show")
     public String businessShow(HttpServletRequest request, Map<String, Object> model) {
-        List<Menu> menuList = menuService.getByTypeThenOrder(SystemConstant.BACKGROUND_MANAGER_MENU_KEY);
-        model.put("bgManageMenus", menuList);
-        Object id = request.getParameter("id");
-        if (!StringUtils.isEmpty(id)) {
-            model.put("curMenu", menuService.getById(id.toString()));
-        }
+        prepareMenuData(request, model, menuService);
         // 为表单提供渲染数据
         return "/script/business/show";
     }
-    
     
     
     
@@ -139,5 +142,46 @@ public class ScriptPageController extends MyAbstractController {
     public String showpage(HttpServletRequest request, Map<String, Object> model) {
         // 为表单提供渲染数据
         return "/script/show/showJuben";
+    }
+    
+    
+    
+    @ApiOperation(value="剧本公告页面")
+    @GetMapping("bulletin/{pagename}")
+    public String bulletinPage(@PathVariable("pagename") String pagename,
+            HttpServletRequest request, Map<String, Object> model) {
+        prepareMenuData(request, model, menuService);
+        List<Constant> themeList = constantService
+                .listByType(ScriptConstant.BULLETIN_THEME_CONSTANT_KEY);
+        model.put("themeList", themeList);
+        return "/script/bulletin/" + pagename;
+    }
+    
+    /*@ApiOperation(value="剧本公告模板配置页面")
+    @GetMapping("bulletin/template")
+    public String bulletinPage(HttpServletRequest request, Map<String, Object> model) {
+        prepareMenuData(request, model, menuService);
+        List<BulletinTemplate> templateList = bulletinTemplateService.list();
+        model.put("templateList", templateList);
+        return "/script/bulletin/bulletin-template";
+    }*/
+    
+    
+    
+    @ApiOperation(value="剧本公告表单填写页面")
+    @GetMapping("bulletin/setting/form/{pageName}")
+    public String bulletinFormPage(@PathVariable("pageName") String pageName,
+            HttpServletRequest request, Map<String, Object> model) {
+        Object id = request.getParameter("id");
+        if (!StringUtils.isEmpty(id)) {
+            model.put("bullSett", bulletinTemplateService.getById(id.toString()));
+        }
+        List<Constant> themeList = constantService
+                .listByType(ScriptConstant.BULLETIN_THEME_CONSTANT_KEY);
+        List<BulletinTemplate> templateList = bulletinTemplateService
+                .list(Wrappers.<BulletinTemplate>lambdaQuery().orderByDesc(BulletinTemplate::getGmtCreatetime));
+        model.put("templateList", templateList);
+        model.put("themeList", themeList);
+        return "/script/bulletin/" + pageName;
     }
 }

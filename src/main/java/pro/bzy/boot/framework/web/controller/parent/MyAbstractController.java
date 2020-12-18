@@ -103,9 +103,11 @@ public abstract class MyAbstractController {
         if (!CollectionUtil.isEmpty(menuList)) {
             String uri = request.getRequestURI();
             Optional<Menu> curMenu = menuList.stream().filter(menuItem -> uri.equals(menuItem.getUrl())).findFirst();
-            model.put("curMenu", curMenu.get());
+            if (curMenu.isPresent())
+                model.put("curMenu", curMenu.get());
         }
     }
+    
     
     
 }

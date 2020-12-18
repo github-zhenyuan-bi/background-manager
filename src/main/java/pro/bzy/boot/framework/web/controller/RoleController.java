@@ -5,7 +5,7 @@ import pro.bzy.boot.framework.web.mapper.RoleMapper;
 import pro.bzy.boot.framework.web.mapper.UserRoleMapper;
 import pro.bzy.boot.framework.web.service.RoleMenuService;
 import pro.bzy.boot.framework.web.service.RoleService;
-
+import pro.bzy.boot.framework.web.annoations.FormValid;
 import pro.bzy.boot.framework.web.domain.bean.R;
 import pro.bzy.boot.framework.utils.ExceptionCheckUtil;
 
@@ -14,6 +14,7 @@ import javax.annotation.Resource;
 import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 
 import java.util.Arrays;
 import java.util.List;
@@ -39,7 +40,7 @@ import com.github.xiaoymin.knife4j.annotations.ApiSupport;
  * @author zhenyuan.bi
  * @since 2020-09-07
  */
-@Api(tags = {"角色"})
+@Api(tags = {"角色"}, value="角色")
 @ApiSupport(order = 100)
 @RequestMapping("/framework/role")
 @RestController
@@ -56,11 +57,7 @@ public class RoleController {
     private RoleMenuService roleMenuService;
     
     
-    /**
-     * 使用id查询数据
-     * @param id
-     * @return
-     */
+    @ApiOperation(value="id查询")
     @GetMapping("getById")
     public R<Role> getById(final String id) {
         ExceptionCheckUtil.hasLength(id, "ID 不能为空");
@@ -70,9 +67,7 @@ public class RoleController {
 
     
     
-    /**
-     * 查询数据列表
-     */
+    @ApiOperation(value="列表数据")
     @GetMapping("getList")
     public R<List<Role>> getList(Role queryBean) {
         List<Role> roles = roleService.list(Wrappers.<Role>lambdaQuery(queryBean));
@@ -81,9 +76,7 @@ public class RoleController {
     
     
     
-    /**
-     * 查询数据分页
-     */
+    @ApiOperation(value="分页数据")
     @GetMapping("getPage")
     public R<Page<Role>> getPage(int pageNo, int pageSize, Role queryBean) {
         Page<Role> page = new Page<>(pageNo, pageSize);
@@ -93,9 +86,7 @@ public class RoleController {
     
     
     
-    /**
-     * 根据id删除数据
-     */
+    @ApiOperation(value="ID删除")
     @DeleteMapping("deleteById")
     public R<String> deleteById(final String id) {
         ExceptionCheckUtil.hasLength(id, "ID 不能为空");
@@ -106,9 +97,7 @@ public class RoleController {
     
     
     
-    /**
-     * 批量删除 根据id数组
-     */
+    @ApiOperation(value="IDs批量删除")
     @DeleteMapping("batchDeleteByIds")
     public R<String> batchDeleteByIds(String[] ids) {
         ExceptionCheckUtil.notEmpty(ids, "批量删除的IDs 不能为空");
@@ -119,14 +108,11 @@ public class RoleController {
     
     
     
-    /**
-     * 插入一条新数据
-     * @param role 数据
-     * @param bindingResult 表单校验结果
-     * @return
-     */
+    @ApiOperation(value="增加角色")
     @PostMapping("addRecord")
-    public R<String> addRecord(@Validated(value= {}) @RequestBody Role role, BindingResult bindingResult) {
+    public R<String> addRecord(
+            @Validated(value= {FormValid.class}) 
+            @RequestBody Role role, BindingResult bindingResult) {
         if (StringUtils.isEmpty(role.getId()))
             role.setId(null);
         
@@ -136,14 +122,9 @@ public class RoleController {
     
     
     
-    /**
-     * 更新数据
-     * @param updateBean 数据
-     * @param bindingResult 表单校验结果
-     * @return
-     */
+    @ApiOperation(value="ID更新")
     @PostMapping("updateById")
-    public R<String> updateById(@Validated(value= {}) @RequestBody Role updateBean, BindingResult bindingResult) {
+    public R<String> updateById(@Validated(value= {FormValid.class}) @RequestBody Role updateBean, BindingResult bindingResult) {
         ExceptionCheckUtil.hasLength(updateBean.getId(), "ID 不能为空");
         
         boolean flag = roleService.updateById(updateBean);
@@ -152,10 +133,8 @@ public class RoleController {
     
     
     
-    /**
-     * 查询每个角色对应得用户数量
-     * @return
-     */
+    
+    @ApiOperation(value="每个角色对应得用户数量")
     @GetMapping("getUserNumsGroupByRole")
     public R<Object> getUserNumsGroupByRole() {
         Object data = userRoleMapper.getUserNumsGroupByRole();
@@ -164,12 +143,8 @@ public class RoleController {
     
     
     
-    /**
-     * 重构角色菜单关系
-     * @param updateBean
-     * @param bindingResult
-     * @return
-     */
+    
+    @ApiOperation(value="重构角色菜单关系")
     @PostMapping("updateRoleWithMenuRelationship")
     public R<String> updateRoleWithMenuRelationship(@RequestBody Map<String, Object> params) {
         Object roleId  = params.get("roleId");

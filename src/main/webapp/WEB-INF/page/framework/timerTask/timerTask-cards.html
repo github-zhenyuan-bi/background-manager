@@ -30,7 +30,7 @@
 			<span>
 				<#if constants??>
 					<#list constants as constant>
-						<#if constant.value == task.corn>${(constant.descp)!}</#if>
+						<#if constant.constValue == task.corn>（${(constant.constValue)!}）${(constant.descp)!}</#if>
 					</#list>
 				</#if> 
 			</span>
@@ -75,15 +75,17 @@
 	
 	// 添加定时任务模块点击事件
 	$("#addTimerTaskBlock").click(function(){
-		mySwal.formHtml("添加定时任务", '/framework/timerTask/bgManage/system/form/timerTask-add', {
+		mySwal.formHtml("添加定时任务", '/framework/timerTask/form/timerTask-add', {
 			preConfirm: function() {
 				var _addTaskForm = $("#swal2-content #timerTask-add-card");
+				var flag = _addTaskForm.parsley().validate();
+				if (!flag) return false;
 				return fetchPostSwalComfirm('/framework/timerTask/addRecord'
 						, {body: JSON.stringify(_addTaskForm.serializeFormToJson())}
 						, function(res) {
 							mySwal.alertForRes(res, {
 								text: "添加定时任务成功",
-								onOpen: function() {window.location.reload();}
+								willClose: function() {window.location.reload();}
 							});
 						});
 			}
@@ -98,14 +100,16 @@
 		//$input.bootstrapSwitch("state", !state);
 		
 		editableTaskIcon($input, state);
-		//onTaskSwitchClick($input, state);
+		onTaskSwitchClick($input, state);
 	});
 	
 	
 	function openEditTaskPage(dom, id) {
-		mySwal.formHtml("编辑定时任务", '/framework/timerTask/bgManage/system/form/timerTask-add?id=' + id, {
+		mySwal.formHtml("编辑定时任务", '/framework/timerTask/form/timerTask-add?id=' + id, {
 			preConfirm: function() {
 				var _addTaskForm = $("#swal2-content #timerTask-add-card");
+				var flag = _addTaskForm.parsley().validate();
+				if (!flag) return false;
 				return fetchPostSwalComfirm('/framework/timerTask/updateById'
 						, {body: JSON.stringify(_addTaskForm.serializeFormToJson())}
 						, function(res) {

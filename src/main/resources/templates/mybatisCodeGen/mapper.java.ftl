@@ -6,7 +6,7 @@ import ${superMapperClassPackage};
 import org.apache.ibatis.annotations.CacheNamespace;
 import org.apache.ibatis.annotations.Mapper;
 
-import com.supwisdom.framework.config.mybatis.MybatisCacheConfig;
+import pro.bzy.boot.framework.config.mybatis.MybatisCacheConfig;
 
 
 /**

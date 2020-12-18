@@ -11,7 +11,6 @@ import java.util.Map;
 import org.apache.ibatis.annotations.CacheNamespace;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
-import org.springframework.cache.annotation.CachePut;
 
 
 /**
@@ -26,7 +25,6 @@ import org.springframework.cache.annotation.CachePut;
 public interface UserRoleMapper extends BaseMapper<UserRole> {
 
     /** 查询每个角色对应得用户数量 */
-    @CachePut(value="com.supwisdom.framework.web.mapper.UserRoleMapper", key="userRolercache")
     @Select("select name roleName, sum(n) userNum" + 
             "  from (select r.name, CASE ur.user_id WHEN NULL THEN 0 ELSE 1 END n " + 
             "          from t_role r" + 

@@ -23,6 +23,14 @@ spring:
 #    host: 192.168.2.71
 #    port: 6379
 #    timeout: 3000
+  freemarker:
+    allow-request-override: false
+    cache: true
+    check-template-location: true
+    suffix: .html
+    charset: UTF-8
+    content-type: text/html; charset=utf-8
+    template-loader-path: /WEB-INF/page/
   mail:
     host: smtp.qq.com #发送邮件服务器
     username: 460736903@qq.com #发送邮件的邮箱地址
@@ -47,7 +55,7 @@ mybatis-plus:
   #配置
   configuration:
     #二级缓存
-    cache-enabled: false
+    cache-enabled: true
 
 #=============【系统变量】====================
 app:
@@ -56,36 +64,47 @@ app:
     script-name: 图灵屋
   #配置
   config: 
+    log: 
+      systemlog-archive-dictPath: /opt/logArchive/system/
     # 接口文档参数
     swagger2: 
       enable: true
       title: 接口文档
       desc: 接口文档描述
-      basePackage: pro.bzy
-      serverUrl: http://localhost:${server.port}
+      base-package: pro.bzy
+      server-url: http://localhost:${server.port}
     # 缓存配置变量
     cache:
-      # 当前使用的缓存组件
       use: ehcache
       ehcache:
-        maxElementsInMemory: 5000
-        overflowToDisk: false
+        max-elements-inMemory: 5000
+        overflow-to-disk: false
         eternal: false
-        timeToLiveSeconds: 0
-        timeToIdleSeconds: 600
+        time-to-live-seconds: 0
+        time-to-idle-seconds: 600
     # 定时器配置
     timer:
-      threadPoolSize: 8
-      threadPrefix: ScheduleTask-
+      thread-pool-size: 8
+      thread-prefix: ScheduleTask-
     # shiro权限认证
     shiro:
-      loginUrl: /login
-      successUrl: bbb
-      authenTimeout: 1800000
+      login-url: /login
+      success-url: bbb
+      authen-timeout: 1800000
+    jwt:
+      access-token-expire: 600 #单位s 时长10分钟
+      refresh-token-expire: 86400 #单位s 时长3天
     wechat:
       appid: wx8bd311e96b811193
       secret: 1c1c74780e6161dc47ce3aac544f0350
-      
+    #图片服务
+    image-server:
+      server: /imageServer
+      base-storage-path: /opt/${app.config.image-server.server}
+      user-avatar-image-path: /userAvatar/
+      juben-cover-image-path: /juben/covers/
+      juben-character-image-path: /juben/characters/
+      juben-bulletin-icon-image-path: /juben/icon/
       
     
 

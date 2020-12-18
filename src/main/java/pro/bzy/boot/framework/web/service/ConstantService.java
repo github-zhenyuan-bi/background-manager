@@ -1,5 +1,7 @@
 package pro.bzy.boot.framework.web.service;
 
+import java.util.List;
+
 import com.baomidou.mybatisplus.extension.service.IService;
 
 import pro.bzy.boot.framework.web.domain.entity.Constant;
@@ -12,4 +14,6 @@ import pro.bzy.boot.framework.web.domain.entity.Constant;
  */
 public interface ConstantService extends IService<Constant> {
 
+    /** 根据类别查询常量 */
+    List<Constant> listByType(String type);
 }

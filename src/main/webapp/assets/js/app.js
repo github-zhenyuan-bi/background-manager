@@ -4,8 +4,6 @@
  File: Main js
  */
 
-
-
 !function($) {
     "use strict";
 
@@ -36,15 +34,15 @@
             });
         });
     },
-    MainApp.prototype.initScrollbar = function () {
-        $('.slimscroll-noti').slimScroll({
-            height: '230px',
-            position: 'right',
-            size: "2px",
-            color: '#98a6ad',
-            wheelStep: 10
-        });
-    }
+//    MainApp.prototype.initScrollbar = function () {
+//        $('body').slimScroll({
+//            height: '230px',
+//            position: 'right',
+//            size: "2px",
+//            color: '#98a6ad',
+//            wheelStep: 10
+//        });
+//    }
     // === fo,llowing js will activate the menu in left side bar based on url ====
     MainApp.prototype.initMenuItem = function () {
         $(".navigation-menu a").each(function () {
@@ -74,7 +72,7 @@
     MainApp.prototype.init = function () {
         this.initNavbar();
         this.initLoader();
-        this.initScrollbar();
+        //this.initScrollbar();
         this.initMenuItem();
         this.initComponents();
         this.initToggleSearch();

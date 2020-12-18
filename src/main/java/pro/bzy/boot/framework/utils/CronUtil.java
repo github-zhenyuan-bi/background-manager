@@ -84,7 +84,7 @@ public class CronUtil implements MyUtil {
         ExceptionCheckUtil.isTrue(nexts > 0, "nexts must great than 0 : " + nexts);
         
         // 计算后nexts次执行时间
-        Date[] dates = new Date[nexts - 1];
+        Date[] dates = new Date[nexts];
         Date pDate = trigger.getStartTime();
         for (int i = 0; i < nexts; i++) {
             pDate = trigger.getFireTimeAfter(pDate);

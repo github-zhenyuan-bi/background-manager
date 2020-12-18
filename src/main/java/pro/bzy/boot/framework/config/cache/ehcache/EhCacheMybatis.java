@@ -2,8 +2,6 @@ package pro.bzy.boot.framework.config.cache.ehcache;
 
 import org.apache.ibatis.cache.Cache;
 
-import com.baomidou.mybatisplus.core.toolkit.StringPool;
-
 import lombok.extern.slf4j.Slf4j;
 import net.sf.ehcache.Element;
 import pro.bzy.boot.framework.utils.ExceptionCheckUtil;
@@ -35,7 +33,7 @@ public class EhCacheMybatis implements Cache{
     private void initCache() {
         if (cache == null) {
             EhCacheConfig ehCacheConfig = SpringContextUtil.getBean(EhCacheConfig.class);
-            String cacheName = id.substring(id.lastIndexOf(StringPool.DOT) + 1);
+            String cacheName = id;
             cache = ehCacheConfig.cacheRegister(cacheName);
         }
     }

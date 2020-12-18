@@ -50,5 +50,13 @@ function checkFileTypeImg(fileName) {
 	//判断是否是图片
 	return isAssetTypeAnImage(ext);
 }
-
+/**
+ * 重定向到登录页
+ * @param code
+ * @returns
+ */
+function redirectToLogin(code) {
+	if (code === 600)
+		window.location.href = "/login";
+}
 

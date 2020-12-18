@@ -9,6 +9,10 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import javax.validation.constraints.NotNull;
+
+import org.hibernate.validator.constraints.Length;
+
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
@@ -24,6 +28,7 @@ import lombok.NoArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 import pro.bzy.boot.framework.utils.CollectionUtil;
+import pro.bzy.boot.framework.web.annoations.FormValid;
 
 /**
  * 系统常量表 
@@ -65,20 +70,28 @@ public class Constant extends Model<Constant> {
     
     
     
+    @NotNull(message="常量类型不能为空", groups= {FormValid.class})
+    @Length(min=1, max=30, message="常量类型长度应在1-30个字符", groups = {FormValid.class})
     @ApiModelProperty(value = "常量类型", position = 10)
     private String constType;
     
     
     
+    @NotNull(message="常量key不能为空", groups= {FormValid.class})
+    @Length(min=1, max=30, message="常量key长度应在1-30个字符", groups = {FormValid.class})
     @ApiModelProperty(value = "常量key", position = 15)
     private String constKey;
     
     
     
+    @Length(max=1000, message="常量类型长度应在0-1000个字符", groups = {FormValid.class})
     @ApiModelProperty(value = "常量value", position = 20)
     private String constValue;
     
     
+    
+    @NotNull(message="常量说明不能为空", groups= {FormValid.class})
+    @Length(min=1, max=30, message="常量说明长度应在1-30个字符", groups = {FormValid.class})
     @ApiModelProperty(value = "常量说明", position = 23)
     private String descp;
     

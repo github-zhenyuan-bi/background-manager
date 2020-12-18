@@ -6,7 +6,7 @@
 	<#assign echartNo = 1 />
 </#if>
 <#if !echartId??>
-	<#assign echartId = 'base-piechart1-No' + echartNo />
+	<#assign echartId = 'base_piechart1_No' + echartNo />
 </#if>
 
 
@@ -30,8 +30,8 @@
 	valueField：请求数据 值 字段 未指定则直接拿去结果数据中的 res.data.legendData 和  res.data.seriesData
  -->
 <script type="text/javascript">
-$(function() {
-	<#if echartUrl??>
+<#if echartUrl??>
+	function load_${echartId }() {
 		$.${(echartMethod)!'get'}('${echartUrl}', function(res) {
 			var legendData = null, seriesData = null;
 			<#if nameField?? && valueField??>
@@ -50,12 +50,12 @@ $(function() {
 					legend_data: legendData,
 					series_data: seriesData
 				});
-			}, 400);
+			}, 666);
 		});
-		<#else>
-	</#if>
+	}
+	load_${echartId }();
 	
-});
+	<#else>
+</#if>
+	
 </script>
-
-<#assign echartId = 'base-piechart1-No' + (echartNo+1) />

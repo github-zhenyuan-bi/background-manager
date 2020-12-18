@@ -12,6 +12,7 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.extern.slf4j.Slf4j;
 import pro.bzy.boot.framework.utils.ExceptionCheckUtil;
+import pro.bzy.boot.framework.utils.PropertiesUtil;
 import pro.bzy.boot.framework.utils.SystemConstant;
 
 import org.apache.commons.codec.binary.Base64;
@@ -37,18 +38,20 @@ public class JwtUtil {
     private static final String defaultbase64EncodedSecretKey = "bzy-proj";
     private static final SignatureAlgorithm defaultsignatureAlgorithm = SignatureAlgorithm.HS256;
 
-    public JwtUtil() {
-        this(defaultbase64EncodedSecretKey, defaultsignatureAlgorithm);
-    }
-
     private final String base64EncodedSecretKey;
     private final SignatureAlgorithm signatureAlgorithm;
 
+    public static final JwtUtil BASE_UTIL = new JwtUtil();
+    
     public JwtUtil(String secretKey, SignatureAlgorithm signatureAlgorithm) {
         this.base64EncodedSecretKey = Base64.encodeBase64String(secretKey.getBytes());
         this.signatureAlgorithm = signatureAlgorithm;
     }
-
+    public JwtUtil() {
+        this(defaultbase64EncodedSecretKey, defaultsignatureAlgorithm);
+    }
+    
+    
     
     
     /*
@@ -71,7 +74,7 @@ public class JwtUtil {
                 .setSubject(iss)// 3. 签发人，也就是JWT是给谁的（逻辑上一般都是username或者userId）
                 .signWith(signatureAlgorithm, base64EncodedSecretKey);// 这个地方是生成jwt使用的算法和秘钥
         if (ttlMillis >= 0) {
-            long expMillis = nowMillis + ttlMillis;
+            long expMillis = nowMillis + (ttlMillis*1000);
             Date exp = new Date(expMillis);// 4. 过期时间，这个也是使用毫秒生成的，使用当前时间+前面传入的持续时间生成
             builder.setExpiration(exp);
         } else {
@@ -127,6 +130,22 @@ public class JwtUtil {
     
     
     /**
+     * 从claims中获取最基本必要的数据
+     * @param claims
+     * @return
+     */
+    public static Map<String, Object> getBaseStorageDatasFromClaims(Claims claims) {
+        Map<String, Object> claimsDatas = new HashMap<>(2);
+        claimsDatas.put(SystemConstant.JWT_LOGIN_FROMWHERE_KEY, claims.get(SystemConstant.JWT_LOGIN_FROMWHERE_KEY));
+        claimsDatas.put(SystemConstant.JWT_LOGIN_USERID_KEY, claims.get(SystemConstant.JWT_LOGIN_USERID_KEY));
+        claimsDatas.put(SystemConstant.JWT_LOGIN_USER, claims.get(SystemConstant.JWT_LOGIN_USER));
+        claimsDatas.put(SystemConstant.JWT_LOGIN_USER_IP_KEY, claims.get(SystemConstant.JWT_LOGIN_USER_IP_KEY));
+        return claimsDatas;
+    }
+    
+    
+    
+    /**
      * 使用过期的accessToken 和 refreshToken刷新 access_token
      * @param expiredToken 过期token
      * @param refreshToken 刷新token
@@ -153,12 +172,16 @@ public class JwtUtil {
         // 3. refreshToken合法后 使用refreshToken生成新的accessToken
         if (isRefreshTokenUsable) {
             Claims claims = util.decode(refreshToken);
-            Object orgSub = claims.get(SystemConstant.JWT_TOKEN_BASE_LOGIN_ISS_KEY);
-            return getToken(orgSub.toString(), SystemConstant.JWT_ACCESS_TOKEN_EXPIRE, null);
+            
+            return getToken(
+                    claims.getSubject(), 
+                    PropertiesUtil.getJwtTokenExpire(SystemConstant.JWT_ACCESS_TOKEN_EXPIRE_KEY_IN_YML), 
+                    getBaseStorageDatasFromClaims(claims));
         } else {
             throw new JwtException("使用refreshToken刷新access_token失败，freshToken不合法");
         }
     }
+    
     
     
     

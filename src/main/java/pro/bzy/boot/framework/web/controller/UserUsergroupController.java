@@ -11,6 +11,7 @@ import javax.annotation.Resource;
 import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 
 import java.util.List;
 
@@ -28,7 +29,7 @@ import com.github.xiaoymin.knife4j.annotations.ApiSupport;
  * @author zhenyuan.bi
  * @since 2020-10-06
  */
-@Api(tags = {"用户与用户组之间的关联"})
+@Api(tags = {"用户与用户组之间的关联"}, value="用户&用户组")
 @ApiSupport(order = 100)
 @RequestMapping("/framework/userUsergroup")
 @RestController
@@ -43,9 +44,7 @@ public class UserUsergroupController {
     
     
     
-    /**
-     * 查询数据列表
-     */
+    @ApiOperation(value="列表数据")
     @GetMapping("getList")
     public R<List<UserUsergroup>> getList(UserUsergroup queryBean) {
         List<UserUsergroup> userUsergroups = userUsergroupService.list(Wrappers.<UserUsergroup>lambdaQuery(queryBean));
@@ -54,9 +53,7 @@ public class UserUsergroupController {
     
     
     
-    /**
-     * 查询数据分页
-     */
+    @ApiOperation(value="分页数据")
     @GetMapping("getPage")
     public R<Page<UserUsergroup>> getPage(int pageNo, int pageSize, UserUsergroup queryBean) {
         Page<UserUsergroup> page = new Page<>(pageNo, pageSize);

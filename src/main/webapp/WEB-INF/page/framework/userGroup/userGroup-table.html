@@ -36,6 +36,8 @@
     			mySwal.loadHtml("添加用户组", $addUserGroup, {
     				preConfirm: function() {
     					var $userGroupForm = $("#swal2-content .userGroup-table-addUserGroup");
+    					var flag = $userGroupForm.parsley().validate();
+						if (!flag) return false;
     					return fetchPostSwalComfirm('/framework/usergroup/addRecord'
     							, {body: JSON.stringify($userGroupForm.serializeFormToJson())}
     							, function(res) {
@@ -57,6 +59,8 @@
     				},
     				preConfirm: function() {
     					var $userGroupForm = $("#swal2-content .userGroup-table-addUserGroup");
+    					var flag = $userGroupForm.parsley().validate();
+						if (!flag) return false;
     					return fetchPostSwalComfirm('/framework/usergroup/updateById?id=' + value
     							, {body: JSON.stringify($userGroupForm.serializeFormToJson())}
     							, function(res) {

@@ -46,9 +46,9 @@
 						$form.parsley();
 					},
 					preConfirm: function() {
-						$form.parsley().validate()
-						return false;
-						var _addUserForm = $("#swal2-content #user-table-addUser");
+						var flag = $form.parsley().validate();
+						if (!flag) return false;
+						var _addUserForm = $("#swal2-content .user-table-addUser");
 						return fetchPostSwalComfirm("/framework/user/addRecord", 
 								{
 									body: JSON.stringify(params = {
@@ -76,7 +76,12 @@
 						$.extend(dataObj, row);
 						$.extend(dataObj, row.userInfo);
 						for ( var key in dataObj) {
-							$(dom).find("#user-detail-" + key).text(dataObj[key]?dataObj[key]:"-");
+							var kd = dataObj[key]?dataObj[key]:"-";
+							if (key === "sex" && kd == 1)
+								kd = "男";
+							else if (key === "sex" && kd == 2)
+								kd = "女";
+							$(dom).find("#user-detail-" + key).text(kd);
 						}
 					}
 				});
@@ -98,7 +103,7 @@
 			 * 分配用户组
 			 */
 			allocateGroup: function($btn, value, row, index) {
-				mySwal.loadHtml("关联用户组", "/framework/userGroup/bgManage/system/form/userGroup-allocate?id="+value, {
+				mySwal.loadHtml("关联用户组", "/framework/userGroup/form/userGroup-allocate?id="+value, {
 					preConfirm: function() {
 						var selcDatas = $('#userGroup-allocate-table').bootstrapTable('getSelections');
 						var groupidArr = [];
@@ -145,10 +150,9 @@
 			{field: 'username',title: '用户名'},
 			{field: 'userInfo.realName',title: '真实姓名'},
 			{field: 'userInfo.sex',title: '性别', formatter: function(value, row, index) {
-				return value == 0
-					? '<i class="fa fa-mars" aria-hidden="true"></i>'
-					: '<i class="fa fa-venus" aria-hidden="true"></i>';
-				//return value == 0? '男' : '女';
+				if (value == 0) return '<i class="fa fa-mars" aria-hidden="true"></i>';
+				else if (value == 1) return '<i class="fa fa-venus" aria-hidden="true"></i>';
+				else return null;
 			}},
 			{field: 'gmtCreatetime', title: '创建时间'},
 			{field: 'isForbidden',title: '是否禁用', formatter: function(value, row, index) {

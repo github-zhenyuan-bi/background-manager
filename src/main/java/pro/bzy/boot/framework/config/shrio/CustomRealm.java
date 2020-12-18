@@ -29,7 +29,7 @@ import pro.bzy.boot.framework.web.service.RolePermissionService;
 import pro.bzy.boot.framework.web.service.UserRoleService;
 import pro.bzy.boot.framework.web.service.UserService;
 
-
+@Deprecated
 public class CustomRealm extends AuthorizingRealm {
 
     @Lazy @Autowired

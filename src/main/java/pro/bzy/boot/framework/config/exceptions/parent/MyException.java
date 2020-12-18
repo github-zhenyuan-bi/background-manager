@@ -7,5 +7,7 @@ package pro.bzy.boot.framework.config.exceptions.parent;
  */
 public interface MyException {
 
+    int getCode();
     
+    String getMsg();
 }

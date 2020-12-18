@@ -1,19 +1,17 @@
 <!DOCTYPE html>
 <html>
     <head>
+    	<#include "/template/common/html-title.html" />
         <meta charset="utf-8" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
-        <title>${(db_constants.system_management_title)!'后台管理'}</title>
-        <meta content="Admin Dashboard" name="description" />
-        <meta content="Themesbrand" name="author" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 
         <!-- App Icons -->
         <link rel="shortcut icon" href="/assets/images/favicon.ico">
 
         <!--Morris Chart CSS -->
-        <link rel="stylesheet" href="/assets/plugins/morris/morris.css">
+        <link rel="stylesheet" href="/assets/js/plugins/morris/morris.css">
 
         <!-- App css -->
         <link href="/assets/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
@@ -27,34 +25,10 @@
         <div id="preloader"><div id="status"><div class="spinner"></div></div></div>
 
         <div class="header-bg">
-            <!-- Navigation Bar-->
-            <header id="topnav">
-                <div class="topbar-main">
-                    <div class="container-fluid">
-
-                        <!-- LOGO模块 -->
-						<#include "/template/common/header/header-logo-template.html" />
-
-						<!-- 顶部右侧 个人功能模块 -->
-						<#include "/template/common/header/header-right-personal.html">
-
-                        <div class="clearfix"></div>
-                    </div> <!-- end container -->
-                </div>
-                <!-- end topbar-main -->
-
-				<!-- 后台管理 菜单模块 -->
-				<#include "/template/common/header/header-menu-template.html">
-                
-                
-                
-            </header>
-            <!-- End Navigation Bar-->
+            <!-- 页面头 -->
+			<#include "/template/common/header/header-template.html" />
 
             <div class="container-fluid">
-                <!-- Page-Title -->
-                <#include "/template/common/header/header-title-template.html">
-                <!-- end page title end breadcrumb -->
 
                 <div class="row">
                     <div class="col-12 mb-4">
@@ -337,15 +311,12 @@
         <script src="/assets/js/bootstrap.min.js"></script>
         <script src="/assets/js/modernizr.min.js"></script>
         <script src="/assets/js/waves.js"></script>
-        <script src="/assets/js/jquery.slimscroll.js"></script>
-        <script src="/assets/js/jquery.nicescroll.js"></script>
-        <script src="/assets/js/jquery.scrollTo.min.js"></script>
 
         <!--Morris Chart-->
-        <script src="/assets/plugins/morris/morris.min.js"></script>
-        <script src="/assets/plugins/raphael/raphael-min.js"></script>
+        <script src="/assets/js/plugins/morris/morris.min.js"></script>
+        <script src="/assets/js/plugins/raphael/raphael-min.js"></script>
 
-        <script src="/assets/pages/dashboard.js"></script>
+        <script src="/assets/js/dashboard.js"></script>
 
         <!-- App js -->
         <script src="/assets/js/app.js"></script>

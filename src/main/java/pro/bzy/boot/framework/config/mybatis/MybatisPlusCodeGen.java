@@ -34,8 +34,8 @@ public class MybatisPlusCodeGen {
 
     public static void main(String[] args) {
         //frameworkCodeGen();
-        //scriptCodeGen();
-        wxCodeGen();
+        scriptCodeGen();
+        //wxCodeGen();
     }
     
     public static void wxCodeGen() {
@@ -52,20 +52,21 @@ public class MybatisPlusCodeGen {
     
     public static void scriptCodeGen() {
         Map<String, String> db = PropertiesUtil.props;
-        String parentPackage = "com.supwisdom.script";
+        String parentPackage = "pro.bzy.boot.script";
         String viewPath = "";
         String module = "script";
         Map<String, Object> extraArgs = Maps.newHashMap();
         extraArgs.put("module", module);
         //String[] tables = {"SC_JUBEN", "SC_TAG", "SC_JUBEN_TAG"};
         //String[] tables = {"SC_JUBEN_CHARACTER"};
-        String[] tables = {"T_USER"};
+        //String[] tables = {"T_USER"};
+        String[] tables = {"SC_BULLETIN_TEMPLATE", "SC_BULLETIN", "SC_BULLETIN_TIMER_TASK"};
         codeGen(db, parentPackage, viewPath, module, extraArgs, tables);
     }
     
     public static void frameworkCodeGen() {
         Map<String, String> db = PropertiesUtil.props;
-        String parentPackage = "com.supwisdom.framework.web";
+        String parentPackage = "pro.bzy.boot.framework.web";
         String viewPath = "";
         String module = "framework";
         Map<String, Object> extraArgs = Maps.newHashMap();
@@ -75,7 +76,8 @@ public class MybatisPlusCodeGen {
                             "T_PERMISSION", "T_MENU", "T_TIME_TASK"};*/
         //String[] tables = {"T_CONSTANT"};
         //String[] tables = {"T_TIMER_TASK"};
-        String[] tables = {"T_USERGROUP", "T_USER_USERGROUP"};
+        //String[] tables = {"T_USERGROUP", "T_USER_USERGROUP"};
+        String[] tables = {"T_TIMER_TASK_LOG"};
         codeGen(db, parentPackage, viewPath, module, extraArgs, tables);
     }
     
@@ -101,10 +103,10 @@ public class MybatisPlusCodeGen {
         // 数据源配置
         mpg.setDataSource(
                 new DataSourceConfig()
-                    .setUrl("jdbc:mysql://47.97.65.29:3306/script?useUnicode=true&characterEncoding=utf8")
+                    .setUrl("jdbc:mysql://47.114.142.152:3506/script?useUnicode=true&characterEncoding=utf8&useSSL=false")
                     .setDriverName("com.mysql.jdbc.Driver")
                     .setUsername("root")
-                    .setPassword("bzy123456"));
+                    .setPassword("AliMysql123456"));
 //                    .setUrl(db.get("spring.datasource.url").toString())
 //                    .setDriverName(db.get("spring.datasource.driverClassName").toString())
 //                    .setUsername(db.get("spring.datasource.username").toString())

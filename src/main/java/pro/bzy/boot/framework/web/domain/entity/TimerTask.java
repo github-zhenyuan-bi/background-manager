@@ -65,7 +65,7 @@ public class TimerTask extends Model<TimerTask> {
     
     @ApiModelProperty(value = "任务类型", position = 15)
     @TableField("TASK_TYPE")
-    private Integer taskType;
+    private String taskType;
     
     
     
@@ -92,6 +92,9 @@ public class TimerTask extends Model<TimerTask> {
     private String methodname;
     
     
+    
+    @ApiModelProperty(value = "执行模式 1指定日期 2周期", position = 40)
+    private Integer execMode;
     
 
     @Override

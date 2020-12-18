@@ -7,6 +7,7 @@
     
     <!-- 日志文件目录 开发环境基本都是windows选一个文件夹存放生成的日志文件 -->
     <property name="LOG_DICTIONARY" value="/opt/log" />
+    <property name="PATTERN" value="%-12(%d{yyyy-MM-dd HH:mm:ss}) |-%highlight(%-5level) [%22thread] %45logger{40} [%4L] -| %cyan(%msg) %n" />
     
     <!-- 生成info级别和其上等级的日志文件 在上一步骤的文件夹下创建子目录  -->
     <property name="DEV_FILE_PATH_INFO" value="${LOG_DICTIONARY}/info/log.log" />
@@ -24,7 +25,7 @@
 	<!-- 控制台打印 info级别 -->
 	<appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
-            <pattern>${CONSOLE_LOG_PATTERN}</pattern>
+            <pattern>${PATTERN}</pattern>
             <charset>UTF-8</charset>
         </encoder>
     </appender>

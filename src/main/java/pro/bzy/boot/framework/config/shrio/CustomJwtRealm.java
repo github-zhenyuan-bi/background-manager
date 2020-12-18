@@ -7,6 +7,7 @@ import org.apache.shiro.authc.SimpleAuthenticationInfo;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
+import org.springframework.util.StringUtils;
 
 import lombok.extern.slf4j.Slf4j;
 import pro.bzy.boot.framework.config.jwt.JwtToken;
@@ -15,6 +16,9 @@ import pro.bzy.boot.framework.utils.SystemConstant;
 
 @Slf4j
 public class CustomJwtRealm extends AuthorizingRealm{
+    
+
+
     /*
      * 多重写一个support
      * 标识这个Realm是专门用来验证JwtToken
@@ -26,28 +30,33 @@ public class CustomJwtRealm extends AuthorizingRealm{
         return token instanceof JwtToken;
     }
 
+    
+    
     //授权
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
+        System.err.println(principals);
+        System.err.println("授权");
         return null;
     }
 
+    
+    
     //认证
     //这个token就是从过滤器中传入的jwtToken
     @Override
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) throws AuthenticationException {
 
-        String jwt = (String) token.getPrincipal();
-        if (jwt == null) {
+        String access_token = (String) token.getPrincipal();
+        if (!StringUtils.hasText(access_token)) {
             throw new NullPointerException("jwtToken认证失败, 原因： jwtToken为空");
         }
         // 判断
         JwtUtil jwtUtil = new JwtUtil();
-        //jwtUtil.isVerify(jwt);
-        //下面是验证这个user是否是真实存在的
-        String username = (String) jwtUtil.decode(jwt).get(SystemConstant.JWT_TOKEN_BASE_LOGIN_ISS_KEY);//判断数据库中username是否存在
-        log.info("用户【{}】使用token访问", username);
-        return new SimpleAuthenticationInfo(jwt, jwt, "CustomJwtRealm");
+        String username = (String) jwtUtil.decode(access_token).getOrDefault(SystemConstant.JWT_TOKEN_BASE_LOGIN_ISS_KEY, "").toString();
+        String fromwhere = jwtUtil.decode(access_token).getOrDefault(SystemConstant.JWT_LOGIN_FROMWHERE_KEY, "").toString();
+        log.info("【{}】用户【{}】使用token访问", fromwhere, username);
+        return new SimpleAuthenticationInfo(access_token, access_token, "CustomJwtRealm");
         //这里返回的是类似账号密码的东西，但是jwtToken都是jwt字符串。还需要一个该Realm的类名
 
     }

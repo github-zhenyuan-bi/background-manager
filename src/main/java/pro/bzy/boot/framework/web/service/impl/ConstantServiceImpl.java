@@ -4,8 +4,11 @@ import pro.bzy.boot.framework.web.domain.entity.Constant;
 import pro.bzy.boot.framework.web.mapper.ConstantMapper;
 import pro.bzy.boot.framework.web.service.ConstantService;
 
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 import javax.annotation.Resource;
 
@@ -20,5 +23,12 @@ public class ConstantServiceImpl extends ServiceImpl<ConstantMapper, Constant> i
 
     @Resource
     private ConstantMapper constantMapper;
+
+    
+    
+    @Override
+    public List<Constant> listByType(String type) {
+        return list(Wrappers.<Constant>lambdaQuery().eq(Constant::getConstType, type));
+    }
 
 }

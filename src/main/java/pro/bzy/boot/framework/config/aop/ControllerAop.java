@@ -48,7 +48,7 @@ public class ControllerAop extends MyAbstractAop {
         try {
             result = joinPoint.proceed();
         } catch (Throwable e) {
-            log.error(e.getMessage(), e);
+            log.error(e.getMessage());
             throw e;
         }
         if (log.isDebugEnabled())

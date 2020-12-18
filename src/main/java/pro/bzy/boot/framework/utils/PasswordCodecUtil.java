@@ -13,7 +13,7 @@ import pro.bzy.boot.framework.web.domain.entity.User;
  */
 public class PasswordCodecUtil implements MyUtil {
 
-    private static final String CODE_BASE = "pwd";
+    private static final String CODE_BASE = "zhe_shi_yi_ge_fei_chang_nan_de_mi_ma_+-*/";
     
     /**
      * 对密码进行二次加密
@@ -27,5 +27,10 @@ public class PasswordCodecUtil implements MyUtil {
     
     public final static String sha1Password(String username, String orgPasswod) {
         return DigestUtils.sha1Hex(username + orgPasswod + CODE_BASE);
+    }
+    
+    
+    public static void main(String[] args) {
+        System.out.println(sha1Password("jubenAdmin", "5188d6b3d9f3883a5da741c747cc2e34"));
     }
 }
