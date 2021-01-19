@@ -1,5 +1,6 @@
 package pro.bzy.boot.thirdpart.wechat.miniprogram.service.impl;
 
+import pro.bzy.boot.framework.utils.DateUtil;
 import pro.bzy.boot.thirdpart.wechat.miniprogram.domain.entity.WxMiniprogramLog;
 import pro.bzy.boot.thirdpart.wechat.miniprogram.mapper.WxMiniprogramLogMapper;
 import pro.bzy.boot.thirdpart.wechat.miniprogram.service.WxMiniprogramLogService;
@@ -29,6 +30,7 @@ public class WxMiniprogramLogServiceImpl extends ServiceImpl<WxMiniprogramLogMap
         save(WxMiniprogramLog.builder()
                 .openid(openid)
                 .sessionKey(session_key)
+                .logTime(DateUtil.getNow())
                 .logType(logType).build());
     }
 

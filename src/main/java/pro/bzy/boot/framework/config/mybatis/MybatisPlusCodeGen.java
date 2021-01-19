@@ -34,8 +34,8 @@ public class MybatisPlusCodeGen {
 
     public static void main(String[] args) {
         //frameworkCodeGen();
-        scriptCodeGen();
-        //wxCodeGen();
+        //scriptCodeGen();
+        wxCodeGen();
     }
     
     public static void wxCodeGen() {
@@ -46,7 +46,13 @@ public class MybatisPlusCodeGen {
         Map<String, Object> extraArgs = Maps.newHashMap();
         extraArgs.put("module", module);
         //String[] tables = {"WX_USERINFO"};
-        String[] tables = {"WX_MINIPROGRAM_LOG"};
+        //String[] tables = {"WX_MINIPROGRAM_LOG"};
+        //String[] tables = {"V_WX_JUBEN_BROWSE_RECORD"};
+        String[] tables = {
+                "WX_MINIPROGRAM_SETTING_INDEXIMG", 
+                "WX_MINIPROGRAM_SETTING_SERVERMODULE",
+                "WX_MINIPROGRAM_SETTING_COOPERATION", 
+                "WX_MINIPROGRAM_SETTING_COOPERATIONS_CONTENT"};
         codeGen(db, parentPackage, viewPath, module, extraArgs, tables);
     }
     
@@ -60,7 +66,10 @@ public class MybatisPlusCodeGen {
         //String[] tables = {"SC_JUBEN", "SC_TAG", "SC_JUBEN_TAG"};
         //String[] tables = {"SC_JUBEN_CHARACTER"};
         //String[] tables = {"T_USER"};
-        String[] tables = {"SC_BULLETIN_TEMPLATE", "SC_BULLETIN", "SC_BULLETIN_TIMER_TASK"};
+        //String[] tables = {"SC_BULLETIN_TEMPLATE", "SC_BULLETIN", "SC_BULLETIN_TIMER_TASK"};
+        //String[] tables = {"V_BULLETIN_TIMER_TASK_DETAIL"};
+        //String[] tables = {"SC_JUBEN_BROWSE_LOG"};
+        String[] tables = {"V_WX_JUBEN_BROWSE_RECORD"};
         codeGen(db, parentPackage, viewPath, module, extraArgs, tables);
     }
     
@@ -103,7 +112,7 @@ public class MybatisPlusCodeGen {
         // 数据源配置
         mpg.setDataSource(
                 new DataSourceConfig()
-                    .setUrl("jdbc:mysql://47.114.142.152:3506/script?useUnicode=true&characterEncoding=utf8&useSSL=false")
+                    .setUrl("jdbc:mysql://47.114.142.152:3506/script_dev?useUnicode=true&characterEncoding=utf8&useSSL=false")
                     .setDriverName("com.mysql.jdbc.Driver")
                     .setUsername("root")
                     .setPassword("AliMysql123456"));

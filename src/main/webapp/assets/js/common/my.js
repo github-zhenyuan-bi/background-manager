@@ -60,3 +60,61 @@ function redirectToLogin(code) {
 		window.location.href = "/login";
 }
 
+/** 
+ * 正则表达式提取字符串中的内容为数组
+ * */
+function getMatchedStrs(str) {
+	if (!str)
+		return null;
+    var reg = /\{\{(.+?)\}\}/
+    var reg_g = /\{\{(.+?)\}\}/g
+    var result = str.match(reg_g)
+    var list = [];
+    if (result && result.length > 0) 
+        for (var i = 0; i < result.length; i++) {
+            var item = result[i];
+            list.push(item.match(reg)[1])
+        }
+    return list;
+}
+
+
+
+/**
+ * 右侧侧边栏
+ *  */
+var $bgcover = $(".bg-cover");	
+var $bgcBox = $(".bgc-box");	
+var _coverWidth = $bgcover.width();
+var _boxWidth = $bgcBox.width();
+$bgcBox.css("right", '-' + (_boxWidth+10) + 'px');
+
+$(".open-r-tb").click(function(e) {
+	openRightToolBar();
+});
+function openRightToolBar() {
+	$bgcBox.animate({ 
+	    right: 0
+	  }, 400);
+	$bgcover.animate({ 
+	    right: 0
+	  }, 10);
+}
+
+$(".close-r-tb").click(function(e) {
+	closeRightToolBar();
+});
+function closeRightToolBar() {
+	$bgcover.animate({ 
+	    right: '-' + _coverWidth + 'px'
+	  }, 10);
+	$bgcBox.animate({ 
+	    right: '-' + (_boxWidth+10) + 'px'
+	  }, 400);
+}
+
+
+$(window).resize(function(){
+	_coverWidth = $bgcover.width();
+	_boxWidth = $bgcBox.width();
+});

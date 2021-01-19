@@ -3,7 +3,12 @@ package pro.bzy.boot.script.domain.entity;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.util.Date;
+
+import javax.validation.constraints.NotNull;
+
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
@@ -18,6 +23,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
+import pro.bzy.boot.framework.web.annoations.FormValid;
 
 /**
  *  
@@ -59,6 +65,7 @@ public class BulletinTimerTask extends Model<BulletinTimerTask> {
     
     
     
+    @NotNull(message="定时任务的模板选择不能为空", groups= {FormValid.class})
     @ApiModelProperty(value = "模板id", position = 10)
     private String templateId;
     
@@ -69,11 +76,13 @@ public class BulletinTimerTask extends Model<BulletinTimerTask> {
     
     
     
+    @NotNull(message="定时任务的推送方式不能为空", groups= {FormValid.class})
     @ApiModelProperty(value = "推送方式 1 定时推送 2 周期推送", position = 20)
     private String sendMode;
     
     
     
+    @JsonFormat(locale="zh", timezone="GMT+8", pattern="yyyy-MM-dd HH:mm")
     @ApiModelProperty(value = "定时推送 -- 时间", position = 25)
     private Date sendTime;
     

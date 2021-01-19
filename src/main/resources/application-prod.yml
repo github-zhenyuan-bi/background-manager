@@ -94,6 +94,7 @@ app:
     jwt:
       access-token-expire: 600 #单位s 时长10分钟
       refresh-token-expire: 86400 #单位s 时长3天
+    #微信小程序
     wechat:
       appid: wx8bd311e96b811193
       secret: 1c1c74780e6161dc47ce3aac544f0350
@@ -105,6 +106,8 @@ app:
       juben-cover-image-path: /juben/covers/
       juben-character-image-path: /juben/characters/
       juben-bulletin-icon-image-path: /juben/icon/
+      wx-miniprogram-index-image-path: /wx/miniprogram/index/swiper/
+      wx-miniprogram-server-module-icon-path: /wx/miniprogram/server/
+      wx-miniprogram-cooperation-icon-path: /wx/miniprogram/cooperation/
       
     
-

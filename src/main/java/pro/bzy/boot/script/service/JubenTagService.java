@@ -4,6 +4,7 @@ import pro.bzy.boot.script.domain.entity.JubenTag;
 import pro.bzy.boot.script.domain.entity.Tag;
 
 import java.util.List;
+import java.util.Map;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -17,6 +18,10 @@ public interface JubenTagService extends IService<JubenTag> {
 
     /** 使用剧本ID查询关联的标签 */
     List<Tag> getTagsByJuben(String jubenId);
+    
+    
+    /** 查询当前jubens与标签的全部关联关系 打包成以jubenid分组的数据结果 */
+    Map<String, List<JubenTag>> getJubenTagsGroupByJubenId(List<String> jubenIds);
     
     
     /** 重新绑定剧本个标签的关系 */

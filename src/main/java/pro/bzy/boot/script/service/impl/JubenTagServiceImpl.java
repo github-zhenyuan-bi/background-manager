@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import javax.annotation.Resource;
@@ -61,6 +62,17 @@ public class JubenTagServiceImpl extends ServiceImpl<JubenTagMapper, JubenTag> i
         // 2. 重新绑定关联关系
         if (!CollectionUtil.isEmpty(jubenTags))
             saveBatch(jubenTags);
+    }
+
+
+
+    @Override
+    @Transactional(readOnly=true)
+    public Map<String, List<JubenTag>> getJubenTagsGroupByJubenId(List<String> jubenIds) {
+        List<JubenTag> jubenTags = list(
+                Wrappers.<JubenTag>lambdaQuery().in(JubenTag::getJubenId, jubenIds));
+        Map<String, List<JubenTag>> groupedJubenTags = CollectionUtil.groupBy(jubenTags, jt -> jt.getJubenId());
+        return groupedJubenTags;
     }
 
 }

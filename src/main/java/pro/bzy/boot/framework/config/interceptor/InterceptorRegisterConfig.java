@@ -23,7 +23,10 @@ public class InterceptorRegisterConfig implements WebMvcConfigurer{
     
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        String[] baseExcludePathPatterns = new String[] {"/static/**", "/public/**", "/css/**", "/images/**", "/js/**", "/assets/**"};
+        String[] baseExcludePathPatterns = new String[] {
+                "/static/**", "/public/**", "/css/**", 
+                "/images/**", "/js/**", "/assets/**"
+        };
         
         // 最基础拦截器
         registry.addInterceptor(new BaseInterceptor(LogMapper, sonstantService, ymlBean))

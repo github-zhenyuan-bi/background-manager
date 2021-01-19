@@ -41,7 +41,7 @@ public class UploadController extends MyAbstractController {
     
     
     /**
-     * 剧本任务图
+     * 剧本人物图
      * @param img
      * @return
      * @throws Exception
@@ -52,6 +52,30 @@ public class UploadController extends MyAbstractController {
         //return uploadJubenImg(img, ScriptConstant.JUBEN_UPLOAD_CHARACTER_IMG_PATH);
     }
     
+    
+    /**
+     * 微信小程序服务模块icon
+     * @param img
+     * @return
+     * @throws Exception
+     */
+    @PostMapping("wxMiniprogramServerIcon")
+    public @ResponseBody R<Object> wxMiniprogramServerIcon(MultipartFile img) throws Exception {
+        return uploadJubenImg(img, ymlBean.getConfig().getImageServer().getWxMiniprogramServerModuleIconPath(), true);
+    }
+    
+    
+    
+    /**
+     * 微信小程序合作模块icon
+     * @param img
+     * @return
+     * @throws Exception
+     */
+    @PostMapping("wxMiniprogramCooperationIcon")
+    public @ResponseBody R<Object> wxMiniprogramCooperationIcon(MultipartFile img) throws Exception {
+        return uploadJubenImg(img, ymlBean.getConfig().getImageServer().getWxMiniprogramCooperationIconPath(), true);
+    }
     
     
     /**
@@ -103,7 +127,7 @@ public class UploadController extends MyAbstractController {
                 if (thumbnailImg.exists())
                     thumbnailImg.delete();
             }
-            throw new Exception("上传剧本封面图片失败，原因：" + e.getMessage());
+            throw new Exception("上传图片失败，原因：" + e.getMessage());
         }
     }
 }

@@ -35,14 +35,14 @@
             <div class="container-fluid">
 
                 <div class="row">
-                    <div class="col-12">
-                        <div class="card m-b-20">
+                
+                    <div class="col-lg-4">
+                    	<div class="card m-b-20">
                             <div class="card-body">  
-                            	<a id="temp-sett" class="mt-0 header-title" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="true" aria-controls="collapseExample">
-                            		#通知公告模板配置  <i class="fa fa-caret-down" aria-hidden="true"></i></a>
-                            	
-                            	<div class="row collapse m-b-30" id="collapseExample">
-                            		<div class="col-md-5 offset-md-1">
+								<h4 id="template-form-target" class="mt-0 header-title">#模板展示</h4>
+								
+								<div class="row">
+	                           		<div class="col-md-12">
 	                            		<#include "./bulletin-template-add.html">
 	                            		<div class="row">
 	                            			<div class="col-md-4">
@@ -54,27 +54,32 @@
 	                            		</div>
 	                            		
 	                            	</div>
-									<div class="col-md-4 offset-md-1">
+	                           	</div>
+	                           	
+	                           	<hr>
+	                           	
+	                           	<div class="row">
+	                           		<div class="col-md-12">
 										<div class="pd-tb-20">
 											<h6>---示例---</h6>
 											<div class="row">
 												<div id="top-target"></div>
 												<div class="col-12 pd-tb-10 d-flex flex-row border-bottom opc-7">
 													<div class="m-l-10 bg-grey box-wh-40"></div>
-													<div class="flex-full pd-lr-15">
+													<div class="flex-full pd-lr-15 m-l-10 ">
 														<div class="d-flex flex-row m-b-5">
 															<div class="bf-b font-14">示例模板标题3</div>
-															<div class="flex-full text-right font-8 font-color-g">2020-12-12</div>
+															<div class="flex-full text-right font-8 font-color-g text-truncate">2020-12-12 19:23:45</div>
 														</div>
 														<div class="font-14">示例模板内容示例模板内容</div>
 													</div>
 												</div>
 												<div class="col-12 pd-tb-10 d-flex flex-row border-bottom opc-7">
 													<div class="m-l-10 bg-grey box-wh-40 "></div>
-													<div class="flex-full pd-lr-15">
+													<div class="flex-full pd-lr-15 m-l-10">
 														<div class="d-flex flex-row m-b-5">
 															<div class="bf-b font-14">示例模板标题2</div>
-															<div class="flex-full text-right font-8 font-color-g">2020-12-12</div>
+															<div class="flex-full text-right font-8 font-color-g text-truncate">2020-12-12 19:23:45</div>
 														</div>
 														<div class="font-14">示例模板内容示例模板内容</div>
 													</div>
@@ -85,20 +90,20 @@
 														<img id="temp-iconPath" src="" class="invisible box-wh-40 ">
 														<span id="temp-titleExtend" class="badge badge-danger">副</span>
 													</div>
-													<div class="flex-full pd-lr-15">
+													<div class="flex-full pd-lr-15 m-l-10">
 														<div class="d-flex flex-row m-b-5">
 															<div class="bf-b font-14"><span id="temp-title">输入标题</span></div>
-															<div class="flex-full text-right font-8 font-color-g">2020-12-12</div>
+															<div class="flex-full text-right font-8 font-color-g text-truncate">2020-12-12 19:23:45</div>
 														</div>
 														<div class="font-14" id="temp-content">请输入通知公告内容</div>
 													</div>
 												</div>
 												<div class="col-12 pd-tb-10 d-flex flex-row border-bottom opc-7">
 													<div class="m-l-10 bg-grey pos-r box-wh-40 "><span class="badge badge-danger">副</span></div>
-													<div class="flex-full pd-lr-15">
+													<div class="flex-full pd-lr-15 m-l-10">
 														<div class="d-flex flex-row m-b-5">
 															<div class="bf-b font-14">示例模板标题1</div>
-															<div class="flex-full text-right font-8 font-color-g">2020-12-12</div>
+															<div class="flex-full text-right font-8 font-color-g text-truncate">2020-12-12 19:23:45</div>
 														</div>
 														<div class="font-14">示例模板内容示例模板内容</div>
 													</div>
@@ -106,14 +111,19 @@
 											</div>
 										</div>
 	                            	</div>
-                            	</div>
-                            	
-                            	
-                            	
-                            	<div class="m-t-30 m-b-30"></div>
-								<h4 class="mt-0 header-title">#模板展示</h4>
+	                           	</div>
+	                           	
+	                           	
+							</div>
+                        </div>
+                    </div>
+                    
+                    
+                    <div class="col-lg-8">
+                        <div class="card m-b-20">
+                            <div class="card-body">  
+								<h4 class="mt-0 header-title">#模板列表</h4>
 								
-								<h3 class="text-center w-100 m-b-20">通知公告模板</h3>
 								<table id= "bulletin-table"></table>
 							</div>
                         </div>
@@ -229,7 +239,6 @@
 				$("#bull-isFixedTop").val(row.isFixedTop? '1' : '0');
 				// 内容
 				$("#bull-content").val(row.content? row.content : "");
-				
 				refreshExample(row);
 			}
 			
@@ -291,7 +300,8 @@
 							mySwal.alertForRes(res, {
 								text: "编辑通知公告模板成功",
 								onOpen: function() {
-									$("#bull-id").val(res.data);
+									if (!_formData.id)
+										$("#bull-id").val(res.data);
 									$bulletinTable.bootstrapTable('refresh');
 								}
 							});
@@ -308,8 +318,18 @@
 					'click .tb-op': function(e, value, row, index) {
 						var $btn = $(e.currentTarget);
 						var event = $btn.data("event");
+						e.preventDefault();
 						//var dd = $("#user-table").bootstrapTable('getData')
 						operateScriptBulletinEvents[event]? operateScriptBulletinEvents[event]($btn, value, row, index) : "";
+					},
+					edit: function($btn, value, row, index) {
+						initForm(row);
+						$("html, body").animate({
+						      scrollTop: ($("#template-form-target").offset().top - 30) + "px"
+						}, {
+						      duration: 300,
+						      easing: "linear"
+						});
 					},
 					remove: function($btn, value, row, index) {
 						mySwal.delConfirm({
@@ -334,11 +354,11 @@
 					{field: 'iconPath',title: '图标', formatter: function(value, row, index) {
 						return '<img src="'+value+'" class="box-wh-40 ">';
 					}},
-					{field: 'title', title: '标题'},
+					{field: 'title', width: 120, title: '标题'},
 					{field: 'titleExtend', title: '标签', formatter: function(value, row, index) {
 						return '<span class="badge badge-danger">'+value+'</span>';
 					}},
-					{field: 'content', title: '通知内容'},
+					{field: 'content', width: 300, title: '通知内容'},
 					{field: 'theme',title: '主题类型', formatter: function(value, row, index) {
 						return value;
 					}},
@@ -346,18 +366,12 @@
 						return value? '置顶' : '非置顶';
 					}},
 					{field: 'id',title: '操作', width: 120, events: operateScriptBulletinEvents, formatter: function(value, row, index) {
-						return '<a class="tb-op remove" data-event="remove" title="删除" href="javascript:void(0);"><i class="fa fa-trash-o"></i></a>';
+						return  '<a class="tb-op edit" data-event="edit" title="编辑" href="javascript:void(0);"><i class="fa fa-pencil"></i></a>' + 
+								'<a class="tb-op remove" data-event="remove" title="删除" href="javascript:void(0);"><i class="fa fa-trash-o"></i></a>';
 					}}
 				],
 				onClickRow:function (row,$element) {
 					initForm(row);
-					$("#collapseExample").collapse('show')
-					$("html, body").animate({
-					      scrollTop: $("#temp-sett").offset().top + "px"
-					}, {
-					      duration: 300,
-					      easing: "linear"
-					});
                 },
 				// 加载完成方法
 				onLoadSuccess: function (data) {

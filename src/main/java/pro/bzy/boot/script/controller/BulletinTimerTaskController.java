@@ -86,8 +86,8 @@ public class BulletinTimerTaskController {
     public R<String> deleteById(final String id) {
         ExceptionCheckUtil.hasLength(id, "ID 不能为空");
         
-        boolean flag = bulletinTimerTaskService.removeById(id);
-        return R.ofSuccess("删除结果：" + (flag? "删除成功" : "删除失败"));
+        bulletinTimerTaskService.removeTimerTaskThenCancelFromScheduling(id);
+        return R.ofSuccess("删除成功");
     }
     
     
@@ -105,22 +105,37 @@ public class BulletinTimerTaskController {
     
     @ApiOperation(value="插入一条新数据")
     @PostMapping("addRecord")
-    public R<String> addRecord(@Validated(value= {FormValid.class}) @RequestBody BulletinTimerTask bulletinTimerTask, BindingResult bindingResult) {
+    public R<String> addRecord(
+            @Validated(value= {FormValid.class}) 
+            @RequestBody BulletinTimerTask bulletinTimerTask, BindingResult bindingResult) {
         if (StringUtils.isEmpty(bulletinTimerTask.getId()))
             bulletinTimerTask.setId(null);
         
-        boolean flag = bulletinTimerTaskService.save(bulletinTimerTask);
-        return R.ofSuccess(flag? "添加成功，ID:" + bulletinTimerTask.getId() : "添加失败");
+        bulletinTimerTaskService.saveBulletinTimerTaskThenRegisterScheduling(bulletinTimerTask);
+        return R.ofSuccess("成功");
     }
     
     
     
     @ApiOperation(value="ID更新数据")
     @PostMapping("updateById")
-    public R<String> updateById(@Validated(value= {FormValid.class}) @RequestBody BulletinTimerTask updateBean, BindingResult bindingResult) {
+    public R<String> updateById(
+            @Validated(value= {FormValid.class}) 
+            @RequestBody BulletinTimerTask updateBean, BindingResult bindingResult) {
         ExceptionCheckUtil.hasLength(updateBean.getId(), "ID 不能为空");
         
-        boolean flag = bulletinTimerTaskService.updateById(updateBean);
-        return R.ofSuccess(flag? "更新成功" : "更新失败");
+        bulletinTimerTaskService.updateBulletinTimerTaskThenUpdateScheduling(updateBean);
+        return R.ofSuccess("更新成功");
+    }
+    
+    
+    
+    @ApiOperation(value="启动|暂停定时推送任务")
+    @PostMapping("startOrStop")
+    public R<String> startOrStop(BulletinTimerTask btt, Boolean startOrStop) {
+        ExceptionCheckUtil.hasLength(btt.getId(), "ID 不能为空");
+        
+        bulletinTimerTaskService.startOrStopTimerTask(btt, startOrStop);
+        return R.ofSuccess("更新成功");
     }
 }

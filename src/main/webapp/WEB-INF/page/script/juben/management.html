@@ -249,9 +249,9 @@
 					{title: '#', width: 50, formatter: function (value, row, index) {return '<strong><i>'+(index+1)+'</i></strong>';}},
 					{field: 'coverImg', title: '封面', formatter: function(value, row, index) {
 						if (value) {
-							var pIndex = value.lastIndexOf('.');
-							var ysimgurl = value.substr(0, pIndex) + '-thumbnail' + value.substr(pIndex);
-							return '<img style="width: auto; height: 50px;" src="'+ysimgurl+'"></img>'
+							/* var pIndex = value.lastIndexOf('.');
+							var ysimgurl = value.substr(0, pIndex) + '-thumbnail' + value.substr(pIndex); */
+							return '<img style="width: auto; height: 80px;" src="'+value+'"></img>'
 						}
 					}},
 					{field: 'name', title: '名称', class: 'mytb-col strong'},

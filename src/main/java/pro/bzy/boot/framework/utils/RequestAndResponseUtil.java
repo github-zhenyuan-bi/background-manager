@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.util.StringUtils;
+import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
@@ -57,7 +58,7 @@ public class RequestAndResponseUtil implements MyUtil {
      * @param request
      */
     public final static Map<String, String> getCookiesFromRequest(ServletRequest servletRequest) {
-        log.debug("正在从request中获取cookie内容");
+        //log.debug("正在从request中获取cookie内容");
         // 从request中拿去全部的cookies数据
         HttpServletRequest httpRequest = (HttpServletRequest) servletRequest;
         Cookie[] cookies = httpRequest.getCookies();
@@ -235,7 +236,10 @@ public class RequestAndResponseUtil implements MyUtil {
     
     
     public static HttpServletRequest getRequest() {
-        return ((ServletRequestAttributes)RequestContextHolder.getRequestAttributes()).getRequest();
+        RequestAttributes ra = RequestContextHolder.getRequestAttributes();
+        if (ra != null)
+            return ((ServletRequestAttributes) ra).getRequest();
+        return null;
     }
     
     
@@ -253,5 +257,11 @@ public class RequestAndResponseUtil implements MyUtil {
         @SuppressWarnings("unchecked")
         Map<String, Object> datas = (Map<String, Object>) jwttokenDatas;
         return datas;
+    }
+    
+    
+    
+    public static Map<String, Object> getJwttokenStorageDatasFromRequest() {
+        return getJwttokenStorageDatasFromRequest(getRequest());
     }
 }

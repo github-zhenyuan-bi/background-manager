@@ -14,6 +14,8 @@ public class ImageServer {
     /** 用户头像照片存储文件夹路径 */
     private String userAvatarImagePath;
     
+    
+    
     /** 剧本封面图片路径 */
     private String jubenCoverImagePath;
     
@@ -22,6 +24,17 @@ public class ImageServer {
     
     /** 剧本通知图标 */
     private String jubenBulletinIconImagePath;
+    
+    
+    
+    /** 微信小程序首页轮播图存储路径 */
+    private String wxMiniprogramIndexImagePath;
+    
+    /** 微信小程序服务模块icon存储路径 */
+    private String wxMiniprogramServerModuleIconPath;
+    
+    /** 微信小程序合作模块icon存储路径 */
+    private String wxMiniprogramCooperationIconPath;
     
     
     

@@ -2,6 +2,7 @@ package pro.bzy.boot.script.controller;
 
 import pro.bzy.boot.script.domain.entity.Tag;
 import pro.bzy.boot.script.mapper.TagMapper;
+import pro.bzy.boot.script.service.JubenTagService;
 import pro.bzy.boot.script.service.TagService;
 
 import pro.bzy.boot.framework.web.domain.bean.R;
@@ -12,6 +13,7 @@ import javax.annotation.Resource;
 import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 
 import java.util.Arrays;
 import java.util.List;
@@ -47,7 +49,8 @@ public class TagController {
     
     @Resource
     private TagService tagService;
-    
+    @Resource
+    private JubenTagService jubenTagService;
     
     
     /**
@@ -142,5 +145,18 @@ public class TagController {
         
         boolean flag = tagService.updateById(updateBean);
         return R.ofSuccess(flag? "更新成功" : "更新失败");
+    }
+    
+    
+    
+    
+    /**
+     * 查询数据分页
+     */
+    @ApiOperation(value="开放接口-剧本id查询对应的标签")
+    @GetMapping("public/getTagsByJubenId")
+    public R<List<Tag>> getTagsByJubenId(String jubenId) {
+        List<Tag> tags = jubenTagService.getTagsByJuben(jubenId);
+        return R.ofSuccess(tags);
     }
 }

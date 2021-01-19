@@ -4,6 +4,9 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
 import java.util.Date;
+
+import javax.validation.constraints.NotNull;
+
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
@@ -15,9 +18,9 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Builder;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
+import pro.bzy.boot.framework.web.annoations.FormValid;
 
 /**
  *  
@@ -29,7 +32,6 @@ import lombok.experimental.Accessors;
  
 @Data
 @Builder
-@NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
@@ -52,6 +54,22 @@ public class Bulletin extends Model<Bulletin> {
 	
     private static final long serialVersionUID = 1L;
     
+    public Bulletin() {}
+    /**
+     * 使用模板构造一个通知对象
+     * @param template
+     */
+    public Bulletin(BulletinTemplate template) {
+        this.templateId = template.getId();
+        this.iconPath = template.getIconPath();
+        this.title    = template.getTitle();
+        this.titleExtend = template.getTitleExtend();
+        this.isFixedTop  = template.getIsFixedTop();
+        this.theme    = template.getTheme();
+    }
+    
+    
+    
     
     @ApiModelProperty(value = "id", position = 5)
     @TableId(value = "id", type = IdType.ASSIGN_UUID)
@@ -59,6 +77,7 @@ public class Bulletin extends Model<Bulletin> {
     
     
     
+    @NotNull(message="通知推送必须使用模板", groups= {FormValid.class})
     @ApiModelProperty(value = "使用模板ID", position = 10)
     private String templateId;
     

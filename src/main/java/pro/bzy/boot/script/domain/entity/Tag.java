@@ -62,6 +62,10 @@ public class Tag extends Model<Tag> {
     private String name;
     
     
+    @ApiModelProperty(value = "标签样式-颜色", position = 10)
+    @TableField("CSS_COLOR")
+    private String cssColor;
+    
     
     @TableField(exist=false)
     private Boolean jubenHas;

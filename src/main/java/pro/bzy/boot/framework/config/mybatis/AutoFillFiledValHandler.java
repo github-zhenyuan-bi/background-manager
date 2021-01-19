@@ -21,10 +21,13 @@ public class AutoFillFiledValHandler implements MetaObjectHandler {
     
     private Object getUserId() {
         HttpServletRequest request = RequestAndResponseUtil.getRequest();
-        Map<String, Object> jwtTokenStorageDatas = RequestAndResponseUtil.getJwttokenStorageDatasFromRequest(request);
-        Object userId = jwtTokenStorageDatas.get(SystemConstant.JWT_LOGIN_USERID_KEY);
-        Objects.requireNonNull(userId, "执行数据操作时未查询到操作人ID");
-        return userId;
+        if (request != null) {
+            Map<String, Object> jwtTokenStorageDatas = RequestAndResponseUtil.getJwttokenStorageDatasFromRequest(request);
+            Object userId = jwtTokenStorageDatas.get(SystemConstant.JWT_LOGIN_USERID_KEY);
+            Objects.requireNonNull(userId, "执行数据操作时未查询到操作人ID");
+            return userId;
+        }
+        return null;
     }
     
     

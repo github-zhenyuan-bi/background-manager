@@ -60,6 +60,12 @@ public class DateUtil implements MyUtil {
     
     
     
+    public final static Date getDate(long time) {
+        return new Date(time);
+    }
+    
+    
+    
     /** 
      * 获得当前年份
      * @return

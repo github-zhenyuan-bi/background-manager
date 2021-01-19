@@ -7,22 +7,18 @@ spring:
       max-file-size: 8Mb
       max-request-size: 10Mb
   #开发工具
-  devtools:
-    restart:
-      #热部署生效 
-      enabled: true
+#  devtools:
+#    restart:
+#      #热部署生效 
+#      enabled: true
       #设置重启的目录
-      additional-paths: src/main/java
+#      additional-paths: src/main/java
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource
     url: jdbc:mysql://47.114.142.152:3506/script_dev?useUnicode=true&characterEncoding=utf8&useSSL=false
     driverClassName: com.mysql.jdbc.Driver
     username: root
     password: AliMysql123456
-#    url: jdbc:oracle:thin:@192.168.2.75:1521:orcl 
-#    driverClassName: oracle.jdbc.OracleDriver
-#    username: summary
-#    password: summary
 #  redis:
 #    host: 192.168.2.71
 #    port: 6379
@@ -114,6 +110,9 @@ app:
       juben-cover-image-path: /juben/covers/
       juben-character-image-path: /juben/characters/
       juben-bulletin-icon-image-path: /juben/icon/
+      wx-miniprogram-index-image-path: /wx/miniprogram/index/swiper/
+      wx-miniprogram-server-module-icon-path: /wx/miniprogram/server/
+      wx-miniprogram-cooperation-icon-path: /wx/miniprogram/cooperation/
       
     
 

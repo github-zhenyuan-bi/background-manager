@@ -5,17 +5,21 @@ import pro.bzy.boot.script.domain.entity.JubenTag;
 import pro.bzy.boot.script.mapper.JubenMapper;
 import pro.bzy.boot.script.service.JubenService;
 import pro.bzy.boot.script.service.JubenTagService;
+import pro.bzy.boot.script.service.WxJubenBrowseRecordService;
 import pro.bzy.boot.framework.web.domain.bean.R;
 import pro.bzy.boot.framework.utils.ExceptionCheckUtil;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
@@ -51,7 +55,8 @@ public class JubenController {
     private JubenService jubenService;
     @Resource
     private JubenTagService jubenTagService;
-    
+    @Resource
+    private WxJubenBrowseRecordService wxJubenBrowseRecordService;
     
     /**
      * 使用id查询数据
@@ -160,5 +165,40 @@ public class JubenController {
             @RequestBody List<JubenTag> jubenTags) {
         jubenTagService.rebindTagRelationship(jubenId, jubenTags);
         return R.ofSuccess("更新成功");
+    }
+    
+    
+    
+    
+    
+    @ApiOperation(value="开放接口-查询热门剧本")
+    @GetMapping("public/getHotJubens")
+    public R<Page<Map<String, Object>>> getHotJubens(int pageNo, int pageSize, Juben queryBean) {
+        return R.ofSuccess(wxJubenBrowseRecordService.listTopBrowseJuben(pageNo, pageSize));
+    }
+    
+    
+    @ApiOperation(value="开放接口-查询上新剧本")
+    @GetMapping("public/getNewJubens")
+    public R<Page<Juben>> getNewJubens(int pageNo, int pageSize, Juben queryBean) {
+        Page<Juben> page = new Page<>(pageNo, pageSize);
+        jubenService.page(page, Wrappers.<Juben>lambdaQuery(queryBean)
+                .orderByDesc(Juben::getGmtCreatetime));
+        return R.ofSuccess(page);
+    }
+    
+    
+    @ApiOperation(value="开放接口-id查询剧本")
+    @GetMapping("public/getById")
+    public R<Juben> queryJubenById(final String id) {
+        ExceptionCheckUtil.hasLength(id, "ID 不能为空");
+        return R.ofSuccess(jubenService.getById(id));
+    }
+    
+    @ApiOperation(value="开放接口-查询剧本分页列表")
+    @GetMapping("public/getJubenDatas")
+    public R<Page<Juben>> getJubenDatas(int pageNo, int pageSize, HttpServletRequest request) {
+        Page<Juben> page = jubenService.getJuebnPageDataList(pageNo, pageSize, request);
+        return R.ofSuccess(page);
     }
 }

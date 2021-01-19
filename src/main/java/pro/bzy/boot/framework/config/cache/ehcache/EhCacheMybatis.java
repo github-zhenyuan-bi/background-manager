@@ -17,6 +17,8 @@ public class EhCacheMybatis implements Cache{
     private net.sf.ehcache.Cache cache;
     
     
+    private Object lock = new Object();
+    
     
     /** 
      * constructor 
@@ -32,9 +34,13 @@ public class EhCacheMybatis implements Cache{
     
     private void initCache() {
         if (cache == null) {
-            EhCacheConfig ehCacheConfig = SpringContextUtil.getBean(EhCacheConfig.class);
-            String cacheName = id;
-            cache = ehCacheConfig.cacheRegister(cacheName);
+            synchronized (lock) {
+                if (cache == null) {
+                    EhCacheConfig ehCacheConfig = SpringContextUtil.getBean(EhCacheConfig.class);
+                    String cacheName = id;
+                    cache = ehCacheConfig.cacheRegister(cacheName);  
+                }
+            }
         }
     }
     

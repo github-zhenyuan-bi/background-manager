@@ -7,6 +7,7 @@ import org.springframework.scheduling.support.CronTrigger;
 import org.springframework.stereotype.Component;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.Date;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ScheduledFuture;
@@ -29,22 +30,38 @@ public class SchedulingRunnableTaskRegistrar implements DisposableBean {
 
 
     
+    
     /**
-     * 新增定时任务
+     * 新增延时任务
+     * @param runnable
+     * @param datetime
+     */
+    public void addSchedulingTask(SchedulingRunnable runnable, Date datetime) {
+        addSchedulingTask(runnable, taskScheduler.schedule(runnable, datetime));
+    }
+    
+    
+    
+    /**
+     * 新增周期任务
      * @param runnable
      * @param cronExpression
      */
     public void addSchedulingTask(SchedulingRunnable runnable, String cronExpression) {
+        addSchedulingTask(runnable, taskScheduler.schedule(runnable, new CronTrigger(cronExpression)));
+    }
+    
+    
+    
+    private void addSchedulingTask(SchedulingRunnable runnable, ScheduledFuture<?> sf) {
         log.info("准备向定时任务池中添加新定时任务【{}】", runnable.getName());
         if (scheduledTasks.containsKey(runnable)) {
             log.warn("存在同名定时任务【{}】，现在移除旧任务", runnable.getName());
             removeSchdulingTask(runnable);
         }
-        scheduledTasks.put(runnable, 
-                taskScheduler.schedule(runnable, new CronTrigger(cronExpression)));
+        scheduledTasks.put(runnable, sf);
         log.info("定时任务【{}】添加成功", runnable.getName());
     }
-    
 
     
     

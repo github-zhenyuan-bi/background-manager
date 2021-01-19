@@ -11,4 +11,10 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface BulletinService extends IService<Bulletin> {
 
+    /** 推送通知公告 */
+    void sendBulletin(Bulletin updateBean);
+    
+    
+    /** 通知公告置顶操作 */
+    boolean fixedTopOperation(String bulletinId, boolean isFixedTop);
 }

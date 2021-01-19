@@ -6,7 +6,6 @@ import org.springframework.stereotype.Component;
 
 import pro.bzy.boot.framework.config.exceptions.MySchedulingException;
 import pro.bzy.boot.framework.config.schedule.SchedulingFunction;
-import pro.bzy.boot.framework.web.domain.entity.TimerTask;
 import pro.bzy.boot.script.service.JubenCharacterService;
 import pro.bzy.boot.script.service.JubenService;
 
@@ -21,7 +20,7 @@ public class ClearUploadImageFunction implements SchedulingFunction {
     
     
     @Override
-    public Object exec(TimerTask task) throws MySchedulingException {
+    public Object exec(Object task) throws MySchedulingException {
         try {
             // 1. 清理上传但未使用的剧本封面照片
             int count1 = jubenService.clearUploadCoverImg();

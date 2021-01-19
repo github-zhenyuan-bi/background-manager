@@ -103,15 +103,35 @@
 							preConfirm: function() {
 								var $scriptForm = $("#swal2-content .jubenTag-table-addTag");
 								// 表单验证
-								/* var formValidRes = $scriptForm.parsley().validate();
+								var formValidRes = $scriptForm.parsley().validate();
 								if (!formValidRes) 
-									return false; */
+									return false;
 								// 表单提交
 								return fetchPostSwalComfirm("/script/tag/addRecord", {
 											body: JSON.stringify($scriptForm.serializeFormToJson())
 										}, function(res) {
 											mySwal.alertForRes(res, {
 												text: "增加标签成功",
+												onOpen: function() {_tagTable.bootstrapTable('refresh');}
+											});
+										});
+							}
+						});
+					},
+					edit: function($btn, value, row, index) {
+						mySwal.loadHtml("编辑标签", '/script/juben/eidtTag?id=' + value, {
+							preConfirm: function() {
+								var $scriptForm = $("#swal2-content .jubenTag-table-addTag");
+								// 表单验证
+								var formValidRes = $scriptForm.parsley().validate();
+								if (!formValidRes) 
+									return false;
+								// 表单提交
+								return fetchPostSwalComfirm("/script/tag/updateById", {
+											body: JSON.stringify($scriptForm.serializeFormToJson())
+										}, function(res) {
+											mySwal.alertForRes(res, {
+												text: "编辑标签成功",
 												onOpen: function() {_tagTable.bootstrapTable('refresh');}
 											});
 										});
@@ -143,6 +163,9 @@
 				columns: [
 					{title: '#', width: 50, formatter: function (value, row, index) {return '<strong><i>'+(index+1)+'</i></strong>';}},
 					{field: 'name', title: '标签名'},
+					{field: 'cssColor', title: '标签颜色', formatter: function(value, row, index) {
+						return '<span style="color: '+value+'">'+value+'</span>';
+					}},
 					{field: 'id',title: '操作', width: 220, events: operateScriptEvents, formatter: function(value, row, index) {
 						return '<a class="tb-op edit" data-event="edit" title="编辑标签" href="javascript:void(0);"><i class="fa fa-pencil"></i></a>' +
 							   '<a class="tb-op remove" data-event="remove" title="删除" href="javascript:void(0);"><i class="fa fa-trash-o"></i></a>';

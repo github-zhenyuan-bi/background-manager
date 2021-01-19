@@ -75,7 +75,9 @@ public class BulletinController {
     @GetMapping("getPage")
     public R<Page<Bulletin>> getPage(int pageNo, int pageSize, Bulletin queryBean) {
         Page<Bulletin> page = new Page<>(pageNo, pageSize);
-        bulletinService.page(page, Wrappers.<Bulletin>lambdaQuery(queryBean));
+        bulletinService.page(page, Wrappers.<Bulletin>lambdaQuery(queryBean)
+                .orderByDesc(Bulletin::getIsFixedTop)
+                .orderByDesc(Bulletin::getSendTime));
         return R.ofSuccess(page);
     }
     
@@ -105,22 +107,48 @@ public class BulletinController {
     
     @ApiOperation(value="插入一条新数据")
     @PostMapping("addRecord")
-    public R<String> addRecord(@Validated(value= {FormValid.class}) @RequestBody Bulletin bulletin, BindingResult bindingResult) {
+    public R<String> addRecord(
+            @Validated(value= {FormValid.class}) 
+            @RequestBody Bulletin bulletin, BindingResult bindingResult) {
         if (StringUtils.isEmpty(bulletin.getId()))
             bulletin.setId(null);
         
-        boolean flag = bulletinService.save(bulletin);
-        return R.ofSuccess(flag? "添加成功，ID:" + bulletin.getId() : "添加失败");
+        bulletinService.sendBulletin(bulletin);
+        return R.ofSuccess("推送成功");
     }
     
     
     
     @ApiOperation(value="ID更新数据")
     @PostMapping("updateById")
-    public R<String> updateById(@Validated(value= {FormValid.class}) @RequestBody Bulletin updateBean, BindingResult bindingResult) {
+    public R<String> updateById(Bulletin updateBean) {
         ExceptionCheckUtil.hasLength(updateBean.getId(), "ID 不能为空");
         
         boolean flag = bulletinService.updateById(updateBean);
         return R.ofSuccess(flag? "更新成功" : "更新失败");
+    }
+    
+    
+    
+    @ApiOperation(value="通知公告置顶操作")
+    @PostMapping("updateFixedTopStatus")
+    public R<String> updateFixedTopStatus(String bulletinId, Boolean isFixedTop) {
+        ExceptionCheckUtil.hasLength(bulletinId, "ID 不能为空");
+        
+        boolean flag = bulletinService.fixedTopOperation(bulletinId, isFixedTop);
+        return R.ofSuccess(flag? "已置顶" : "取消置顶");
+    }
+    
+    
+    
+    
+    @ApiOperation(value="开放接口-查询通知公告分页数据")
+    @GetMapping("public/getPageBulletins")
+    public R<Page<Bulletin>> getPageBulletins(int pageNo, int pageSize, Bulletin queryBean) {
+        Page<Bulletin> page = new Page<>(pageNo, pageSize);
+        bulletinService.page(page, Wrappers.<Bulletin>lambdaQuery(queryBean)
+                .orderByDesc(Bulletin::getIsFixedTop)
+                .orderByDesc(Bulletin::getSendTime));
+        return R.ofSuccess(page);
     }
 }

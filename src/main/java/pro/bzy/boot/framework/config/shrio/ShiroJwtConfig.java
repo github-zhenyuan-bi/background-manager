@@ -88,20 +88,22 @@ public class ShiroJwtConfig implements MyShiroConfig{
         Map<String, String> filterRuleMap = new LinkedHashMap<>();
         // 静态资源
         filterRuleMap.put("/assets/**", "anon");
+        filterRuleMap.put("/images/**", "anon");
         filterRuleMap.put("/webjars/**", "anon");
         filterRuleMap.put("/error/**", "anon");
         filterRuleMap.put("/404**", "anon");
         filterRuleMap.put("/500**", "anon");
         filterRuleMap.put("/**/favicon.ico", "anon");
-        
-        
-        filterRuleMap.put("/script/juben/showpage", "anon");
+        filterRuleMap.put("/imageServer/**", "anon");
         
         // 登陆注册
         filterRuleMap.put("/", "anon");
         filterRuleMap.put("/login**", "anon");
         filterRuleMap.put("/register**", "anon");
         filterRuleMap.put("/logout", "logout");
+        
+        // 剧本相关接口
+        filterRuleMap.put("/**/public/**", "anon");
         
         filterRuleMap.put("/**", "jwt");
         shiroFilter.setFilterChainDefinitionMap(filterRuleMap);

@@ -3,7 +3,7 @@
     <head>
         <meta charset="utf-8" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui", shrink-to-fit=no">
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 
 		<title>通知公告</title>
@@ -35,12 +35,46 @@
             <div class="container-fluid">
 
                 <div class="row">
+                    <div class="col-6">
+                        <div class="card m-b-20">
+                            <div class="card-body">  
+								<a class="mt-0 header-title text-primary"
+									data-toggle="collapse" data-target=".multi-collapse" 
+									aria-expanded="false" aria-controls="multiCollapseExample1 multiCollapseExample2">#定时推送</a>
+								
+								<div class="collapse multi-collapse" id="multiCollapseExample1">
+									<table id="bulletin-table3" data-toolbar="#bulletin-table3-toolbar"></table>
+								</div>
+							</div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-6">
+                        <div class="card m-b-20">
+                            <div class="card-body">  
+								<a class="mt-0 header-title text-primary" 
+									data-toggle="collapse" data-target=".multi-collapse" 
+									aria-expanded="false" aria-controls="multiCollapseExample1 multiCollapseExample2">#周期推送</a>
+									
+								<div class="collapse multi-collapse" id="multiCollapseExample2">
+									<table id="bulletin-table4" data-toolbar="#bulletin-table4-toolbar"></table>
+								</div>
+							</div>
+                        </div>
+                    </div>
+                </div>
+                
+                
+                <div class="row">
                     <div class="col-12">
                         <div class="card m-b-20">
                             <div class="card-body">  
-                            	
-								<h4 class="mt-0 header-title">#通知公告</h4>
+								<h4 class="mt-0 header-title">#已推送</h4>
+								<div id="bulletin-table2-toolbar">
+									<button class="btn btn-primary w-md waves-effect waves-light open-r-tb" type="button">发送通知</button>
+								</div>
 								
+								<table id="bulletin-table2" data-toolbar="#bulletin-table2-toolbar"></table>
 							</div>
                         </div>
                     </div>
@@ -55,7 +89,24 @@
 		<#include "/template/common/footer-template.html">
 
 
+		
+		<!-- 右侧侧边栏 -->
+		<div class="bg-cover row no-gutters">
+			<div class="col-10 col-md-6 col-lg-4 bgc-box" >
+				<div class="w-100 h-100 pd-20">
+					<#include "./bulletin-add.html"/>
+					
+					<div class="m-t-30 text-center">
+						<button class="btn btn-primary w-md" type="button" id="send-bulletin">推送</button>
+						<button class="btn btn-secondary w-md  close-r-tb" type="button">取消</button>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		
 
+		
         <!-- js模块  -->
         <#include "/template/js/jquery-plugins-js.html" />
         <#include "/template/js/bootstrap-propers-js.html" />
@@ -70,9 +121,472 @@
 		
 		<!-- App js -->
         <script src="/assets/js/app.js"></script>
-        
+        	
 		<script type="text/javascript">
-		
+			// 表单
+			var $bulletinForm = $("#bulletin-form");
+			// 模板选择框对象
+			var $tempSelect = $bulletinForm.find("#templateId");
+			// 模板示例dom
+			var $tempDom = $("#temp-dom");
+			// 变量填写容器
+			var $varContainer = $("#var-container");
+			
+			// 变量填写框缓存
+			var varDomCache = {};
+			// 变量填充的content缓存
+			var tempContentCache = null;
+			
+			$("#bulletin-table2-toolbar button").click(function(e) {
+				$bulletinForm.find("#timer-task-id").val('');
+				$("#send-bulletin").html("推送");
+				formInit();
+			});
+			
+			
+			/** ======================================
+		      	模板选择事件 
+			=========================================*/
+			$tempSelect.change(function(e){
+				var _this = $(this);
+				// 模板展示
+				var _content = showTemplateExample(_this.val());
+				// 内容变量提取{{xxx}}
+				buildVarForm($varContainer, _this.val(), _content);
+			}); 
+			
+			function showTemplateExample(templateId) {
+				var _temp = $("#bulletin-temp-"+templateId);
+				var _fixedTop = _temp.data("ft");
+				var _content = _temp.find(".temp-content").html();
+				tempContentCache = _content;
+				// 模板展示
+				$tempDom.empty();
+				$tempDom.html(_temp.children().clone());
+				// 置顶展示
+				if (_fixedTop == '1') {
+					$tempDom.addClass("bg-grey-1");
+					$tempDom.insertAfter("#top-target");
+				} else {
+					$tempDom.removeClass("bg-grey-1");
+					$tempDom.insertAfter("#org-target");
+				}
+				return _content
+			}
+			
+			
+			/** ======================================
+		      	构建变量框
+			=========================================*/
+			function buildVarForm($container, _templateId, _content) {
+				var cachedFormVarDom = varDomCache[_templateId];
+				if (cachedFormVarDom && !$.isEmptyObject(cachedFormVarDom)) {
+					$container.append(cachedFormVarDom);
+				} else {
+					var _listVar = getMatchedStrs(_content);
+					$container.empty();
+					if (_listVar) {
+						var formVarDom = '';
+						for (var i = 0; i < _listVar.length; i++) {
+							const elem = _listVar[i];
+							formVarDom += buildVarFormItem(elem);
+						}
+						$container.append(formVarDom);
+						varDomCache[_templateId] = formVarDom;
+					}
+				}
+			}
+			function buildVarFormItem(varName) {
+				return '<div class="form-group row">' + 
+						    '<label for="example-text-input" class="col-sm-2 col-form-label">'+varName+'</label>' + 
+						    '<div class="col-sm-10">' + 
+						        '<input class="form-control" type="text" oninput="varChange(this)" name="'+varName+'" placeholder="输入'+varName+'值填充模板变量" autocomplete="off"' + 
+						        		'data-parsley-required="true" data-parsley-required-message="'+varName+'不可为空"' + 
+						        		'data-parsley-trigger="focusout">' + 
+						    '</div>' + 
+						'</div>';
+			}
+			
+			
+			/** ======================================
+		      	变量框输入事件
+			=========================================*/
+			function varChange(dom) {
+				var _varForm = $(dom).parents("form");
+				var _varContainer = _varForm.find(".var-container");
+				var _varInputs = _varContainer.find("input");
+				var _contentDom = _varForm.find(".temp-content");
+				var resContent = tempContentCache;
+				
+				_varInputs.each(function() {
+					var _this = $(this);
+					var val = _this.val();
+					if (val) {
+						resContent = resContent.replace("{{"+_this.attr("name")+"}}", _this.val());
+					}
+				});
+				_contentDom.html(resContent);
+			}
+			
+			
+			/** ======================================
+		      	表单初始化
+			=========================================*/
+			function formInit() {
+				// id重置
+				$bulletinForm.find("#timer-task-id").val('');
+				// 模板选择重置
+				$tempSelect.find("option:eq(0)").attr("selected","true");
+				// 变量输入框重置
+				$varContainer.empty();
+				// 通知示例重置
+				$tempDom.html($("#default-temp-dom").children().clone());
+				// 通知方式选择重置
+				$bulletinForm.find("#sender option:eq(0)").attr("selected","true");
+				// 定制 周期 输入框隐藏
+				$timerDom.addClass("d-none");
+				$periodDom.addClass("d-none");
+			}
+			
+			
+			/** ======================================
+		      	推送通知按钮点击事件
+			=========================================*/
+			$("#send-bulletin").click(function(e) {
+				var flag = $bulletinForm.parsley().validate();
+				if (!flag) return false;
+				
+				var sendMode = $bulletinForm.find("#sender").val();
+				var __id = $bulletinForm.find("#timer-task-id").val();
+				var _formData = {
+						id: __id,
+						templateId: $tempSelect.val(),
+						content: $tempDom.find(".temp-content").html(),
+						sender: sendMode,
+						sendMode: sendMode
+				}
+				
+				var url = "/script/bulletin/addRecord";
+				if (sendMode == 1 || sendMode == 2) {
+					url = "/script/bulletinTimerTask/addRecord";
+					if (__id)
+						url = "/script/bulletinTimerTask/updateById";
+					if (sendMode == 1) {
+						var _time = $timerDom.find("input").val();
+						_time = _time.replace("T", " ");
+						_formData.sendTime = _time;
+					} else
+						_formData.sendCron = $periodDom.find("select").val();
+				}
+				fetchPostSwalComfirm(url
+						, {
+							body: JSON.stringify(_formData)
+						}, function(res) {
+							mySwal.alertForRes(res, {
+								text: "成功",
+								onOpen: function() {
+									// 表单初始化
+									formInit();
+									// 关闭右侧侧边栏
+									closeRightToolBar();
+									// 已推送表格刷新
+									$bulletinTable.bootstrapTable('refresh');
+									// 定时推送表格刷新
+									if (sendMode == 1)
+										$bulletinTable3.bootstrapTable('refresh');
+									else
+										$bulletinTable4.bootstrapTable('refresh');
+								}
+							});
+						});
+			});
+			
+			var $timerDom = $("#timer-dom");
+			var $periodDom = $("#period-dom");
+			$("#sender").change(function(e) {
+				var _this = $(this);
+				var _val  = _this.val();
+				
+				sendModeChange(_val);
+			});
+			function sendModeChange(_val, timerVal, periodVal) {
+				if (_val == 1) {
+					$timerDom.removeClass("d-none");
+					$periodDom.addClass("d-none");
+				} else if (_val == 2) {
+					$timerDom.addClass("d-none");
+					$periodDom.removeClass("d-none");
+				} else {
+					$timerDom.addClass("d-none");
+					$periodDom.addClass("d-none");
+				}
+				if (timerVal)
+					$timerDom.find("input").val(timerVal);
+				if (periodVal)
+					$periodDom.find("select").val(periodVal);
+			}
+			
+			
+			/** ======================================
+		      	已推送通知事件
+			=========================================*/
+			window.operateScriptBulletinEvents2 = {
+					// e: 事件对象  value: 单元格绑定的字段值  row: 当前行对象  index: 行编号
+					'click .tb-op': function(e, value, row, index) {
+						var $btn = $(e.currentTarget);
+						var event = $btn.data("event");
+						//var dd = $("#user-table").bootstrapTable('getData')
+						operateScriptBulletinEvents2[event]? operateScriptBulletinEvents2[event]($btn, value, row, index) : "";
+					},
+					remove: function($btn, value, row, index) {
+						mySwal.delConfirm({
+							// 删除请求
+							url: "/script/bulletin/deleteById?id="+value,
+							// 删除成功后的回调方法
+							afterConfirm: function(res) {
+								$bulletinTable.bootstrapTable('refresh');
+							}
+						});
+					},
+					edit: function($btn, value, row, index) {
+						var url = "/script/bulletin/content/form/bulletin-content-eidt" + 
+								  "?id=" + row.id + 
+								  "&templateId=" + row.templateId;
+						return mySwal.formHtml("修改公告内容", url, {
+							width: 600,
+							onOpen: function(dom) {
+								var $ceForm = $(dom).find(".bulletin-content-edit-form");
+								var _templateContent = $ceForm.find("#edit-content-temp").html();
+								var _varsContainer = $ceForm.find("#template-vars-container");
+								var _templateId = _varsContainer.data("tid");
+								tempContentCache = _templateContent;
+								buildVarForm(_varsContainer, _templateId, _templateContent);
+							},
+		    				preConfirm: function() {
+		    					var _form = $("#swal2-content .bulletin-content-edit-form");
+		    					var _flag = _form.parsley().validate();
+		    					if (!_flag) return false;
+		    					
+		    					var _formContent = _form.find("#edit-content-temp").html();
+		    					return fetchPostSwalComfirm('/script/bulletin/updateById?id=' + row.id + "&content=" + _formContent
+		    							, {}
+		    							, function(res) {
+		    								mySwal.alertForRes(res, {
+		    									text: "修改公告内容成功",
+		    									onOpen: function() {$bulletinTable.bootstrapTable('refresh');}
+		    								});
+		    							});
+		    				}
+		    			});
+					},
+					fixedTopOp: function($btn, value, row, index) {
+						var isFixedUp = row.isFixedTop? '取消置顶' : '置顶';
+						return mySwal.confirm({
+							title: '通知公告置顶操作',
+							text:  '置顶后该条公告会会固定在列表最上端，否则按照默认推送时间排序。',
+							confirmButtonText: isFixedUp,
+							icon: iconArr[1],
+							confirmButtonColor: '#007bbb',
+							preConfirm: function() {
+								var url = "/script/bulletin/updateFixedTopStatus?bulletinId="+row.id+"&isFixedTop="+!row.isFixedTop;
+								fetchPost(url, {}, function(res) {
+									$bulletinTable.bootstrapTable('refresh');
+									mySwal.success(isFixedUp + '成功');
+								});
+							}
+						});
+					}
+			}
+			/** ======================================
+			       表格加载 
+			=========================================*/
+			var $bulletinTable = $("#bulletin-table2");
+			myBsTable.pageTable($bulletinTable, {
+				url: '/script/bulletin/getPage',
+				// 刷新按钮
+				columns: [
+					{title: '#', width: 50, formatter: function (value, row, index) {return '<strong><i>'+(index+1)+'</i></strong>';}},
+					{field: 'iconPath',title: '图标', formatter: function(value, row, index) {
+						return '<img src="'+value+'" class="box-wh-40 ">';
+					}},
+					{field: 'title', width: 120, title: '标题'},
+					{field: 'titleExtend', title: '标签', formatter: function(value, row, index) {
+						return '<span class="badge badge-danger">'+value+'</span>';
+					}},
+					{field: 'content', width: 400, title: '通知内容'},
+					{field: 'theme',title: '主题类型', formatter: function(value, row, index) {
+						return value;
+					}},
+					{field: 'isFixedTop',title: '是否置顶', formatter: function(value, row, index) {
+						return value? '置顶' : '-';
+					}},
+					{field: 'sendTime', title: '推送时间'},
+					{field: 'id',title: '操作', width: 120, events: operateScriptBulletinEvents2, formatter: function(value, row, index) {
+						var fixedTopIcon = row.isFixedTop? "fa-window-minimize" : "fa-deaf";
+						return  '<a class="tb-op edit" data-event="edit" title="编辑" href="javascript:void(0);"><i class="fa fa-pencil"></i></a>' + 
+								'<a class="tb-op fixedTopOp" data-event="fixedTopOp" title="置顶操作" href="javascript:void(0);"><i class="fa '+fixedTopIcon+'"></i></a>' + 
+								'<a class="tb-op remove" data-event="remove" title="删除" href="javascript:void(0);"><i class="fa fa-trash-o"></i></a>';
+					}}
+				],
+				onClickRow:function (row,$element) {
+	            },
+				// 加载完成方法
+				onLoadSuccess: function (data) {
+					
+				},
+			});
+			
+			
+			
+			/** ======================================
+		      	周期推送通知事件
+			=========================================*/
+			window.operateScriptBulletinEvents3 = {
+				// e: 事件对象  value: 单元格绑定的字段值  row: 当前行对象  index: 行编号
+				'click .tb-op': function(e, value, row, index) {
+					var $btn = $(e.currentTarget);
+					var event = $btn.data("event");
+					//var dd = $("#user-table").bootstrapTable('getData')
+					operateScriptBulletinEvents3[event]? operateScriptBulletinEvents3[event]($btn, value, row, index) : "";
+				},
+				edit: function($btn, value, row, index) {
+					// 模板选择重置
+					$bulletinForm.find("#timer-task-id").val(row.id);
+					$tempSelect.val(row.templateId);
+					var _content = showTemplateExample(row.templateId);
+					buildVarForm($varContainer, row.templateId, _content);
+					var sendModeVal = 0;
+					if (row.sendMode=='周期推送') sendModeVal = 2;
+					if (row.sendMode=='延时推送') sendModeVal = 1;
+					$bulletinForm.find("#sender").val(sendModeVal);
+					sendModeChange(sendModeVal, null, row.sendCron);
+					$("#send-bulletin").html("修改延时任务");
+					openRightToolBar();
+				},
+				remove: function($btn, value, row, index) {
+					mySwal.delConfirm({
+						// 删除请求
+						url: "/script/bulletinTimerTask/deleteById?id="+value,
+						// 删除成功后的回调方法
+						afterConfirm: function(res) {
+							$bulletinTable3.bootstrapTable('refresh');
+						}
+					});
+				}
+			}
+			var $bulletinTable3 = $("#bulletin-table3");
+			myBsTable.pageTable($bulletinTable3, {
+				url: '/script/bulletinTimerTaskDetail/getDelayPage',
+				// 刷新按钮
+				columns: [
+					{field: 'title', title: '标题'},
+					{field: 'sendTime', width: 130, title: '预定推送时间'},
+					{field: 'sendResult', title: '推送结果', formatter: function(value, row, index) {
+						return value? '<span class="text-muted">'+value+'</span>' : '等待推送';
+					}},
+					{field: 'id',title: '操作', width: 120, events: operateScriptBulletinEvents3, formatter: function(value, row, index) {
+						return 	'<a class="tb-op edit" data-event="edit" title="修改" href="javascript:void(0);"><i class="fa fa-pencil"></i></a>' +
+								'<a class="tb-op remove" data-event="remove" title="删除" href="javascript:void(0);"><i class="fa fa-trash-o"></i></a>';
+					}}
+				],
+				pageSize: 5,
+				onClickRow:function (row,$element) {
+	            },
+				// 加载完成方法
+				onLoadSuccess: function (data) {
+					
+				},
+			});
+			
+			
+			
+			/** ======================================
+		      	周期推送通知事件
+			=========================================*/
+			window.operateScriptBulletinEvents4 = {
+				// e: 事件对象  value: 单元格绑定的字段值  row: 当前行对象  index: 行编号
+				'click .tb-op': function(e, value, row, index) {
+					var $btn = $(e.currentTarget);
+					var event = $btn.data("event");
+					//var dd = $("#user-table").bootstrapTable('getData')
+					operateScriptBulletinEvents4[event]? operateScriptBulletinEvents4[event]($btn, value, row, index) : "";
+				},
+				viewHistory: function($btn, value, row, index) {
+					
+				},
+				edit: function($btn, value, row, index) {
+					console.log(row)
+					// 模板选择重置
+					$bulletinForm.find("#timer-task-id").val(row.id);
+					$tempSelect.val(row.templateId);
+					var _content = showTemplateExample(row.templateId);
+					buildVarForm($varContainer, row.templateId, _content);
+					var sendModeVal = 0;
+					if (row.sendMode=='周期推送') sendModeVal = 2;
+					if (row.sendMode=='延时推送') sendModeVal = 1;
+					$bulletinForm.find("#sender").val(sendModeVal);
+					sendModeChange(sendModeVal, null, row.sendCron);
+					$("#send-bulletin").html("修改周期任务");
+					openRightToolBar();
+				},
+				startOrStop: function($btn, value, row, index) {
+					var bolStartOrStop = row.taskEnbale == '开启';
+					var startOrStop = bolStartOrStop? '暂停任务' : '启动任务';
+					return mySwal.confirm({
+						title: '周期推送任务启动/暂停',
+						text:  '任务暂停后将不会再下一次推送时间到达时进行推送，直到重新启动任务',
+						confirmButtonText: startOrStop,
+						icon: iconArr[1],
+						confirmButtonColor: '#007bbb',
+						preConfirm: function() {
+							var url = "/script/bulletinTimerTask/startOrStop?id="+value+"&startOrStop="+!bolStartOrStop;
+							fetchPost(url, {}, function(res) {
+								$bulletinTable4.bootstrapTable('refresh');
+								mySwal.success(startOrStop + '成功');
+							});
+						}
+					});
+				},
+				remove: function($btn, value, row, index) {
+					mySwal.delConfirm({
+						// 删除请求
+						url: "/script/bulletinTimerTask/deleteById?id="+value,
+						// 删除成功后的回调方法
+						afterConfirm: function(res) {
+							$bulletinTable4.bootstrapTable('refresh');
+						}
+					});
+				}
+			}
+			var $bulletinTable4 = $("#bulletin-table4");
+			myBsTable.pageTable($bulletinTable4, {
+				url: '/script/bulletinTimerTaskDetail/getPeriodPage',
+				// 刷新按钮
+				columns: [
+					{field: 'title', title: '标题'},
+					{field: 'nextTimeForCron', width: 130, title: '下次推送时间'},
+					{field: 'sendCount', title: '已推送次数', events: operateScriptBulletinEvents4, formatter: function(value, row, index) {
+						return '<a class="tb-op viewHistory" data-event="viewHistory" title="查看历史推送" href="javascript:void(0);">'+value+'</a>';
+					}},
+					{field: 'taskEnbale',  title: '状态'},
+					{field: 'id',title: '操作', width: 120, events: operateScriptBulletinEvents4, formatter: function(value, row, index) {
+						return  '<a class="tb-op edit" data-event="edit" title="修改" href="javascript:void(0);"><i class="fa fa-pencil"></i></a>' +
+								(row.taskEnbale == '开启'
+										? '<a class="tb-op startOrStop" data-event="startOrStop" title="终止任务" href="javascript:void(0);"><i class="fa fa-ban"></i></a>'
+										: '<a class="tb-op startOrStop" data-event="startOrStop" title="开启任务" href="javascript:void(0);"><i class="fa fa-play"></i></a>'
+								) +
+								'<a class="tb-op remove" data-event="remove" title="删除" href="javascript:void(0);"><i class="fa fa-trash-o"></i></a>';
+					}}
+				],
+				pageSize: 5,
+				onClickRow:function (row,$element) {
+	            },
+				// 加载完成方法
+				onLoadSuccess: function (data) {
+					
+				},
+			});
+			
 		</script>
     </body>
 </html>

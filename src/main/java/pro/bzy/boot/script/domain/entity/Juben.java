@@ -5,6 +5,8 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
 import java.util.Date;
+import java.util.List;
+
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.baomidou.mybatisplus.annotation.FieldFill;
@@ -161,6 +163,12 @@ public class Juben extends Model<Juben> {
     @TableField(value = "DELETED", fill = FieldFill.INSERT)
     private Integer deleted;
 
+    
+    /** 关联的标签列表 */
+    @TableField(exist=false)
+    private List<Tag> tags;
+    
+    
     @Override
     protected Serializable pkVal() {
         return this.id;

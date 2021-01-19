@@ -2,6 +2,9 @@ package pro.bzy.boot.script.service;
 
 import pro.bzy.boot.script.domain.entity.Juben;
 
+import javax.servlet.http.HttpServletRequest;
+
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 /**
@@ -18,5 +21,9 @@ public interface JubenService extends IService<Juben> {
     
     /** 清理上传剧本封面的图片 */
     int clearUploadCoverImg();
+    
+    
+    /** 查询剧本分页列表 */
+    Page<Juben> getJuebnPageDataList(int pageNo, int pageSize, HttpServletRequest request);
     
 }

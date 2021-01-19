@@ -130,7 +130,7 @@ public class JwtFilter extends AccessControlFilter {
     private void checkUserIp(String access_token, HttpServletRequest httpRequest) {
         String cur_ip = RequestAndResponseUtil.getIpAddress(httpRequest);
         Object access_token_ip = JwtUtil.BASE_UTIL.decode(access_token).get(SystemConstant.JWT_LOGIN_USER_IP_KEY);
-        if (!cur_ip.equals(access_token_ip)) {
+        if (access_token_ip != null && !cur_ip.equals(access_token_ip)) {
             throw new JwtException("access_token校验异常，原因：ip异常，异地使用");
         }
     }

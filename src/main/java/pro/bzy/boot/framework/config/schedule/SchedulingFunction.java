@@ -2,7 +2,6 @@ package pro.bzy.boot.framework.config.schedule;
 
 import pro.bzy.boot.framework.config.exceptions.MySchedulingException;
 import pro.bzy.boot.framework.config.schedule.annoations.SchedulingFunctionAnnoation;
-import pro.bzy.boot.framework.web.domain.entity.TimerTask;
 
 /**
  * 
@@ -21,10 +20,10 @@ public interface SchedulingFunction {
     
     
     /**
-     * 定时任务执行方法 任何重写该方法的都应添加注解
+     * 定时任务执行方法 需要对定时任务进行切面日志处理的 需要添加该注解
      * @throws MySchedulingException
      */
     @SchedulingFunctionAnnoation
-    Object exec(TimerTask task) throws MySchedulingException;
+    Object exec(Object task) throws MySchedulingException;
     
 }

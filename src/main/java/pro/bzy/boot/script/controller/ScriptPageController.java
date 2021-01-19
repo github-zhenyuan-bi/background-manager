@@ -21,9 +21,11 @@ import pro.bzy.boot.framework.web.controller.parent.MyAbstractController;
 import pro.bzy.boot.framework.web.domain.entity.Constant;
 import pro.bzy.boot.framework.web.service.ConstantService;
 import pro.bzy.boot.framework.web.service.MenuService;
+import pro.bzy.boot.script.domain.entity.Bulletin;
 import pro.bzy.boot.script.domain.entity.BulletinTemplate;
 import pro.bzy.boot.script.domain.entity.JubenCharacter;
 import pro.bzy.boot.script.domain.entity.Tag;
+import pro.bzy.boot.script.service.BulletinService;
 import pro.bzy.boot.script.service.BulletinTemplateService;
 import pro.bzy.boot.script.service.JubenCharacterService;
 import pro.bzy.boot.script.service.JubenService;
@@ -48,6 +50,8 @@ public class ScriptPageController extends MyAbstractController {
     @Resource
     private JubenTagService jubenTagService;
     
+    @Resource
+    private BulletinService bulletinService;
     @Resource
     private BulletinTemplateService bulletinTemplateService;
     
@@ -124,6 +128,15 @@ public class ScriptPageController extends MyAbstractController {
     
     
     
+    @ApiOperation(value="剧本管理表单-编辑标签")
+    @GetMapping("juben/eidtTag")
+    public String eidtTag(String id, HttpServletRequest request, Map<String, Object> model) {
+        model.put("tag", tagService.getById(id));
+        return "/script/juben/tag-add";
+    }
+    
+    
+    
     
     @ApiOperation(value="后台主页面")
     @GetMapping("business/show")
@@ -146,15 +159,26 @@ public class ScriptPageController extends MyAbstractController {
     
     
     
-    @ApiOperation(value="剧本公告页面")
-    @GetMapping("bulletin/{pagename}")
-    public String bulletinPage(@PathVariable("pagename") String pagename,
-            HttpServletRequest request, Map<String, Object> model) {
+    @ApiOperation(value="剧本公告模板配置页面")
+    @GetMapping("bulletin/bulletin-template")
+    public String bulletinTemplatePage(HttpServletRequest request, Map<String, Object> model) {
         prepareMenuData(request, model, menuService);
         List<Constant> themeList = constantService
                 .listByType(ScriptConstant.BULLETIN_THEME_CONSTANT_KEY);
         model.put("themeList", themeList);
-        return "/script/bulletin/" + pagename;
+        return "/script/bulletin/bulletin-template";
+    }
+    
+    @ApiOperation(value="剧本公告推送页面")
+    @GetMapping("bulletin/bulletin")
+    public String bulletinSendPage(HttpServletRequest request, Map<String, Object> model) {
+        prepareMenuData(request, model, menuService);
+        List<Constant> themeList = constantService
+                .listByType(ScriptConstant.BULLETIN_THEME_CONSTANT_KEY);
+        List<BulletinTemplate> bullTemps = bulletinTemplateService.list();
+        model.put("bullTemps", bullTemps);
+        model.put("themeList", themeList);
+        return "/script/bulletin/bulletin";
     }
     
     /*@ApiOperation(value="剧本公告模板配置页面")
@@ -172,7 +196,7 @@ public class ScriptPageController extends MyAbstractController {
     @GetMapping("bulletin/setting/form/{pageName}")
     public String bulletinFormPage(@PathVariable("pageName") String pageName,
             HttpServletRequest request, Map<String, Object> model) {
-        Object id = request.getParameter("id");
+        Object id = request.getParameter("id"); 
         if (!StringUtils.isEmpty(id)) {
             model.put("bullSett", bulletinTemplateService.getById(id.toString()));
         }
@@ -182,6 +206,19 @@ public class ScriptPageController extends MyAbstractController {
                 .list(Wrappers.<BulletinTemplate>lambdaQuery().orderByDesc(BulletinTemplate::getGmtCreatetime));
         model.put("templateList", templateList);
         model.put("themeList", themeList);
+        return "/script/bulletin/" + pageName;
+    }
+    
+    
+    
+    @ApiOperation(value="剧本公告内容修改页")
+    @GetMapping("bulletin/content/form/{pageName}")
+    public String bulletinContentEditFormPage(@PathVariable("pageName") String pageName, Bulletin bulletin,
+            HttpServletRequest request, Map<String, Object> model) {
+        if (!StringUtils.isEmpty(bulletin.getId()))
+            model.put("curBulletin", bulletinService.getById(bulletin.getId()));
+        if (!StringUtils.isEmpty(bulletin.getTemplateId()))
+            model.put("curTemplate", bulletinTemplateService.getById(bulletin.getTemplateId()));
         return "/script/bulletin/" + pageName;
     }
 }

@@ -16,7 +16,7 @@ import pro.bzy.boot.framework.web.service.TimerTaskService;
 
 
 @Configuration
-public class schedulingRunnableStartOnAppRun implements ApplicationRunner{
+public class SchedulingRunnableStartOnAppRun implements ApplicationRunner{
 
     @Resource
     private TimerTaskService timerTaskService;

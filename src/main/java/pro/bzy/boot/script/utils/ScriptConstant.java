@@ -14,4 +14,19 @@ public interface ScriptConstant {
     
     
     String BULLETIN_THEME_CONSTANT_KEY = "script_bulletin_theme";
+    
+    
+    String BULLETIN_SENDWAY_SHOUDONG = "1";
+    String BULLETIN_SENDWAY_XITONG = "2";
+    
+    
+    String BULLETIN_SEND_MODE_DELAY_CODE = "1";
+    String BULLETIN_SEND_MODE_PERIOD_CODE = "2";
+    String BULLETIN_SEND_MODE_DELAY = "延时推送";
+    String BULLETIN_SEND_MODE_PERIOD = "周期推送";
+    
+    String BULLETIN_TIMING_TASK_NAME1 = "延时通知任务-";
+    String BULLETIN_TIMING_TASK_NAME2 = "周期通知任务-";
+    
+    
 }

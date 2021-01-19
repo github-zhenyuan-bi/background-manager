@@ -1,5 +1,6 @@
 package pro.bzy.boot.framework.config.interceptor;
 
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -10,6 +11,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import pro.bzy.boot.framework.config.interceptor.parent.MyAbstractInterceptor;
 import pro.bzy.boot.framework.config.yml.YmlBean;
+import pro.bzy.boot.framework.utils.CollectionUtil;
 import pro.bzy.boot.framework.utils.SystemConstant;
 import pro.bzy.boot.framework.web.domain.entity.Constant;
 import pro.bzy.boot.framework.web.mapper.LogMapper;
@@ -72,7 +74,10 @@ public class BaseInterceptor extends MyAbstractInterceptor implements HandlerInt
             // yml页面常量配置
             model.put("yml_constants", ymlBean.getPageConstant());
             // 数据库常量配置
-            model.put("db_constants", Constant.toMap(constantService.list()));
+            List<Constant> constants = constantService.list();
+            Map<String, List<Constant>> ConstGroupByType = CollectionUtil.groupBy(constants, ct -> ct.getConstType());
+            model.put("db_constants_groups", ConstGroupByType);
+            model.put("db_constants", Constant.toMap(constants));
             // jwttoken获取基本数据
             model.put(SystemConstant.JWT_BASESTORAGE_DATAS_KEY, request.getAttribute(SystemConstant.JWT_BASESTORAGE_DATAS_KEY));
         }

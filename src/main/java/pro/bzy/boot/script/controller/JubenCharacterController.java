@@ -12,6 +12,7 @@ import javax.annotation.Resource;
 import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 
 import java.util.Arrays;
 import java.util.List;
@@ -150,5 +151,19 @@ public class JubenCharacterController {
         
         boolean flag = jubenCharacterService.updateById(updateBean);
         return R.ofSuccess(flag? "更新成功" : "更新失败");
+    }
+    
+    
+    
+    
+    @ApiOperation(value="开放接口-剧本id查询人物数据")
+    @GetMapping("public/getCharactersByJubenId")
+    public R<List<JubenCharacter>> getCharactersByJubenId(String jubenId) {
+        ExceptionCheckUtil.hasLength(jubenId, "剧本ID不能为空");
+        
+        List<JubenCharacter> jubenCharacters = jubenCharacterService.list(
+                Wrappers.<JubenCharacter>lambdaQuery()
+                    .eq(JubenCharacter::getJubenId, jubenId));
+        return R.ofSuccess(jubenCharacters);
     }
 }

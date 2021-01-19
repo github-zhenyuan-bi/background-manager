@@ -1,7 +1,8 @@
 function handleAjaxFail(err) {
+	console.log(err)
 	var errInfoJson = err.responseJSON;
 	// token认证异常 跳转登录页重新认证
-	if (errInfoJson.code === 600) {
+	if (errInfoJson && errInfoJson.code === 600) {
 		
 		window.location.href = "/login";
 	}

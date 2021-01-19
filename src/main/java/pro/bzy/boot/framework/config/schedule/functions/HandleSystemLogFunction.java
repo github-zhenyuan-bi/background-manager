@@ -35,8 +35,12 @@ public class HandleSystemLogFunction implements SchedulingFunction {
     @Override
     @SchedulingFunctionAnnoation
     @Transactional(rollbackFor= {Exception.class})
-    public Object exec(TimerTask task) throws MySchedulingException {
+    public Object exec(Object obj) throws MySchedulingException {
         try {
+            TimerTask task = null;
+            if (obj instanceof TimerTask)
+                task = (TimerTask) obj;
+            
             Date lastTaskExecDate = null;
             // 0. 获取最后一次执行的日志
             TimerTaskLog lastTaskLog = timerTaskLogService.getTaskLastExecuteLog(task);
