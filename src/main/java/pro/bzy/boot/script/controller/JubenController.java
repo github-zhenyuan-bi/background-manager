@@ -174,7 +174,7 @@ public class JubenController {
     @ApiOperation(value="开放接口-查询热门剧本")
     @GetMapping("public/getHotJubens")
     public R<Page<Map<String, Object>>> getHotJubens(int pageNo, int pageSize, Juben queryBean) {
-        return R.ofSuccess(wxJubenBrowseRecordService.listTopBrowseJuben(pageNo, pageSize));
+        return R.ofSuccess(wxJubenBrowseRecordService.listTopBrowseJubens(pageNo, pageSize));
     }
     
     

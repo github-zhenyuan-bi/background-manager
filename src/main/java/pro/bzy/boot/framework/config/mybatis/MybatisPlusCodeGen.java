@@ -34,8 +34,8 @@ public class MybatisPlusCodeGen {
 
     public static void main(String[] args) {
         //frameworkCodeGen();
-        //scriptCodeGen();
-        wxCodeGen();
+        scriptCodeGen();
+        //wxCodeGen();
     }
     
     public static void wxCodeGen() {
@@ -49,6 +49,7 @@ public class MybatisPlusCodeGen {
         //String[] tables = {"WX_MINIPROGRAM_LOG"};
         //String[] tables = {"V_WX_JUBEN_BROWSE_RECORD"};
         String[] tables = {
+                "V_WX_JUBEN_BROWSE_RECORD",
                 "WX_MINIPROGRAM_SETTING_INDEXIMG", 
                 "WX_MINIPROGRAM_SETTING_SERVERMODULE",
                 "WX_MINIPROGRAM_SETTING_COOPERATION", 

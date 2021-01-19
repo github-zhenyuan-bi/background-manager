@@ -162,7 +162,9 @@
 				url: '/script/tag/getPage',
 				columns: [
 					{title: '#', width: 50, formatter: function (value, row, index) {return '<strong><i>'+(index+1)+'</i></strong>';}},
-					{field: 'name', title: '标签名'},
+					{field: 'name', title: '标签名', formatter: function(value, row, index) {
+						return '<div style="color: '+row.cssColor+';border: 1px solid '+row.cssColor+';display: inline;padding: 2px 10px;border-radius: 15px;">'+value+'</div>';
+					}},
 					{field: 'cssColor', title: '标签颜色', formatter: function(value, row, index) {
 						return '<span style="color: '+value+'">'+value+'</span>';
 					}},
