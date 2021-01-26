@@ -41,25 +41,28 @@
 .bg-grey {background-color: #cecece}
 .bg-grey-1 {background-color: #ececec}
 .bg-grey-tbh {background-color: #eaeaea;}
+
+
 .bg-cover {
   width: 100vw;
-  height: 100%;
-  position: absolute;
-  background-color: rgba(0, 0, 0, 0.3);
+  height: 100vh;
   top: 0;
-  right: -100vw;
   z-index: 9999;
+  background-color: rgba(0, 0, 0, 0.5);
 }
-.bg-cover .bgc-box{
+.bgc-box{
     height: 100vh;
+    min-width: 100px;
+    top: 0;
+    z-index: 99999;
     background-color: #fff;
-    position: fixed;
-    right: -600px;
     box-shadow: -1px 0px 15px 1px #767676;
     border-top-left-radius: 20px;
     border-bottom-left-radius: 20px;
 }
-
+.bgc-box-content::-webkit-scrollbar{
+	display: none;
+}
 
 .pos-r {position: relative;}
 .pos-r * {position: absolute;}

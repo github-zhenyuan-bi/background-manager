@@ -16,11 +16,13 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import java.io.File;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -98,9 +100,29 @@ public class JubenServiceImpl extends ServiceImpl<JubenMapper, Juben> implements
 
     @Override
     public Page<Juben> getJuebnPageDataList(int pageNo, int pageSize, HttpServletRequest request) {
+        String gamerCounts = request.getParameter("gamerCount");
+        String tagIds = request.getParameter("tagIds");
+        String typeCodes = request.getParameter("jubenType");
+        String gameTimes = request.getParameter("gameTime");
+        String jubenOrder = request.getParameter("jubenOrder");
+        String keyword = request.getParameter("keyword");
+
+        // 0. 标签条件过滤
+        List<JubenTag> tagFilter = null;
+        if (!StringUtils.isEmpty(tagIds)) {
+            tagFilter = jubenTagService.list(Wrappers.<JubenTag>lambdaQuery()
+                    .in(JubenTag::getTagId, Arrays.asList(tagIds.split(","))));
+        }
+        
         // 1. 查询分页列表剧本
         Page<Juben> page = new Page<>(pageNo, pageSize);
-        page(page, Wrappers.<Juben>lambdaQuery());
+        page(page, Wrappers.<Juben>query()
+                .in(CollectionUtil.isNotEmpty(tagFilter), "id", CollectionUtil.map(tagFilter, tag -> tag.getJubenId()))
+                .in(!StringUtils.isEmpty(gameTimes), "GAME_TIME", Arrays.asList(gameTimes.split(",")))
+                .in(!StringUtils.isEmpty(gamerCounts), "(GAMER_MALE_COUNT+GAMER_FEMALE_COUNT)", Arrays.asList(gamerCounts.split(",")))
+                .in(!StringUtils.isEmpty(typeCodes), "JB_TYPE", Arrays.asList(typeCodes.split(",")))
+                .likeRight(!StringUtils.isEmpty(keyword), "name", keyword)
+                .orderBy(!StringUtils.isEmpty(jubenOrder), "asc".equals(jubenOrder), "GMT_CREATETIME"));
         List<Juben> jubens = page.getRecords();
         
         if (CollectionUtil.isNotEmpty(jubens)) {
@@ -121,6 +143,32 @@ public class JubenServiceImpl extends ServiceImpl<JubenMapper, Juben> implements
             });
         }
         return page;
+    }
+
+
+
+    @Override
+    public Map<String, Integer> getMinAndMaxGamerCountOfJuben() {
+        Map<String, Object> minAndMaxGamerCount = getMap(Wrappers.<Juben>query()
+                .select("MAX((gamer_male_count + gamer_female_count)) as maxGamerCount",
+                        "MIN((gamer_male_count + gamer_female_count)) as minGamerCount"));
+        
+        Object min = minAndMaxGamerCount.getOrDefault("minGamerCount", 0);
+        Object max = minAndMaxGamerCount.getOrDefault("maxGamerCount", 0);
+        
+        Map<String, Integer> res = Maps.newHashMapWithExpectedSize(2);
+        res.put("minGamerCount", Integer.parseInt(min.toString()));
+        res.put("maxGamerCount", Integer.parseInt(max.toString()));
+        return res;
+    }
+
+
+
+    @Override
+    public List<Object> getAllGameTime() {
+        return listObjs(Wrappers.<Juben>query()
+                    .select("distinct game_time as gameTime")
+                    .orderByAsc("game_time"));
     }
 
 

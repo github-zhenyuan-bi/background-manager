@@ -1,0 +1,137 @@
+<form id="bulletin-form" style="width: 400px;">
+	<input id="timer-task-id" type="hidden" name="id">
+	
+	<div class="form-group row">
+	    <label for="example-text-input" class="col-sm-2 col-md-3 col-form-label">选择模板</label>
+	    <div class="col-sm-10 col-md-9">
+	        <select id="templateId" class="form-control" name="templateId" 
+	        		data-parsley-required="true" data-parsley-required-message="必须选择模板"
+			        data-parsley-trigger="focusout">
+			    <option value="">--请选择模板--</option>
+			 	<#if bullTemps??>
+			 		<#list bullTemps as temp>
+			 			<option value="${(temp.id)!}">${(temp.title)!}</option>
+			 		</#list>
+			 	</#if>
+		    </select>
+	    </div>
+	</div>
+    
+    <div class="form-group row m-t-20">
+		<div id="top-target"></div>
+		<div class="col-12 pd-tb-10 d-flex flex-row border-bottom opc-7">
+			<div class="m-l-10 bg-grey box-wh-40"></div>
+			<div class="flex-full pd-lr-15 m-l-10 ">
+				<div class="d-flex flex-row m-b-5">
+					<div class="bf-b font-14">示例模板标题3</div>
+					<div class="flex-full text-right font-8 font-color-g text-truncate">2020-12-12 19:23:45</div>
+				</div>
+				<div class="font-14">示例模板内容示例模板内容</div>
+			</div>
+		</div>
+		<div class="col-12 pd-tb-10 d-flex flex-row border-bottom opc-7">
+			<div class="m-l-10 bg-grey box-wh-40 "></div>
+			<div class="flex-full pd-lr-15 m-l-10">
+				<div class="d-flex flex-row m-b-5">
+					<div class="bf-b font-14">示例模板标题2</div>
+					<div class="flex-full text-right font-8 font-color-g text-truncate">2020-12-12 19:23:45</div>
+				</div>
+				<div class="font-14">示例模板内容示例模板内容</div>
+			</div>
+		</div>
+		<div id="org-target"></div>
+		<div id="temp-dom" class="col-12 pd-tb-10 d-flex flex-row border-bottom">
+			<div id="temp-icon-bg" class="m-l-10 bg-grey pos-r box-wh-40 ">
+				<img id="temp-iconPath" src="" class="invisible box-wh-40 ">
+				<span id="temp-titleExtend" class="badge badge-danger">副</span>
+			</div>
+			<div class="flex-full pd-lr-15 m-l-10">
+				<div class="d-flex flex-row m-b-5">
+					<div class="bf-b font-14"><span id="temp-title">输入标题</span></div>
+					<div class="flex-full text-right font-8 font-color-g text-truncate">2020-12-12 19:23:45</div>
+				</div>
+				<div class="font-14" id="temp-content">请输入通知公告内容</div>
+			</div>
+		</div>
+		<div class="col-12 pd-tb-10 d-flex flex-row border-bottom opc-7">
+			<div class="m-l-10 bg-grey pos-r box-wh-40 "><span class="badge badge-danger">副</span></div>
+			<div class="flex-full pd-lr-15 m-l-10">
+				<div class="d-flex flex-row m-b-5">
+					<div class="bf-b font-14">示例模板标题1</div>
+					<div class="flex-full text-right font-8 font-color-g text-truncate">2020-12-12 19:23:45</div>
+				</div>
+				<div class="font-14">示例模板内容示例模板内容</div>
+			</div>
+		</div>
+	</div>
+	
+	
+	
+	<div id="var-container" class="var-container m-t-20"></div>
+	
+	<div class="form-group row m-t-20">
+	    <label class="col-sm-2 col-md-3 col-form-label">推送方式</label>
+	    <div class="col-sm-10 col-md-9">
+	        <select class="form-control" id="sender" name="sender">
+			 	<option value="0">即时推送</option>
+			 	<option value="1">定时推送</option>
+			 	<option value="2">周期推送</option>
+		    </select>
+	    </div>
+	</div>
+	
+    <div id="timer-dom" class="form-group row d-none">
+	    <label class="col-sm-2 col-md-3 col-form-label">定时推送</label>
+	    <div class="col-sm-10 col-md-9">
+	        <input class="form-control" type="datetime-local" />
+	    </div>
+	</div>
+	<div id="period-dom" class="form-group row d-none">
+	    <label class="col-sm-2 col-md-3 col-form-label">周期推送</label>
+	    <div class="col-sm-10 col-md-9">
+	        <select id="templateId" class="form-control" name="templateId">
+			 	<#if db_constants_groups.schedule_cron??>
+			 		<#list db_constants_groups.schedule_cron as cron>
+			 			<option value="${(cron.constValue)!}">${(cron.descp)!}</option>
+			 		</#list>
+			 		<#else>
+			 			<option value="0">无</option>
+			 	</#if>
+		    </select>
+	    </div>
+	</div>
+</form>
+
+
+<div class="d-none">
+	<#if bullTemps??>
+ 		<#list bullTemps as temp>
+ 			<div id="bulletin-temp-${(temp.id)!}" data-ft="${temp.isFixedTop?string('1', '0')}" class="col-12 pd-tb-10 d-flex flex-row border-bottom opc-7">
+ 				<div class="m-l-10 pos-r box-wh-40 ">
+					<img src="${(temp.iconPath)! }" class="box-wh-40 ">
+					<span class="badge badge-danger">${(temp.titleExtend)! }</span>
+				</div>
+				<div class="flex-full pd-lr-15 m-l-10">
+					<div class="d-flex flex-row m-b-5">
+						<div class="bf-b font-14"><span>${(temp.title)! }</span></div>
+						<div class="flex-full text-right font-8 font-color-g text-truncate">${(temp.gmtCreatetime?date)! }</div>
+					</div>
+					<div class="font-14 temp-content">${(temp.content)! }</div>
+				</div>
+ 			</div>
+ 		</#list>
+ 	</#if>
+ 	<div id="default-temp-dom">
+ 		<div class="m-l-10 bg-grey pos-r box-wh-40 ">
+			<img src="" class="invisible box-wh-40 ">
+			<span class="badge badge-danger">副</span>
+		</div>
+		<div class="flex-full pd-lr-15 m-l-10">
+			<div class="d-flex flex-row m-b-5">
+				<div class="bf-b font-14"><span>输入标题</span></div>
+				<div class="flex-full text-right font-8 font-color-g text-truncate">2020-12-12 19:23:45</div>
+			</div>
+			<div class="font-14 temp-content">请输入通知公告内容</div>
+		</div>
+ 	</div>
+</div>

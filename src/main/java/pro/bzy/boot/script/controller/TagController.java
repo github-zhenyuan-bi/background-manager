@@ -150,13 +150,18 @@ public class TagController {
     
     
     
-    /**
-     * 查询数据分页
-     */
+    
     @ApiOperation(value="开放接口-剧本id查询对应的标签")
     @GetMapping("public/getTagsByJubenId")
     public R<List<Tag>> getTagsByJubenId(String jubenId) {
         List<Tag> tags = jubenTagService.getTagsByJuben(jubenId);
         return R.ofSuccess(tags);
+    }
+    
+    
+    @ApiOperation(value="开放接口-查询全部标签")
+    @GetMapping("public/getAllTags")
+    public R<List<Tag>> getAllTags() {
+        return R.ofSuccess(tagService.list());
     }
 }

@@ -201,4 +201,18 @@ public class JubenController {
         Page<Juben> page = jubenService.getJuebnPageDataList(pageNo, pageSize, request);
         return R.ofSuccess(page);
     }
+    
+    
+    @ApiOperation(value="开放接口-查询剧本人数上下限")
+    @GetMapping("public/getMinAndMaxGamerCountOfJuben")
+    public R<Object> getMinAndMaxGamerCountOfJuben() {
+        return R.ofSuccess(jubenService.getMinAndMaxGamerCountOfJuben());
+    }
+    
+    
+    @ApiOperation(value="开放接口-查询剧本时长")
+    @GetMapping("public/getAllGameTime")
+    public R<Object> getAllGameTime() {
+        return R.ofSuccess(jubenService.getAllGameTime());
+    }
 }

@@ -17,7 +17,12 @@ public class EhCacheMybatis implements Cache{
     private net.sf.ehcache.Cache cache;
     
     
+    /** 对象生成时加锁 --> 防止多个线程同时访问数据库后的缓存导致生成ID相同Cache */
     private Object lock = new Object();
+    
+    /** 缓存时加锁 防止重复缓存 */
+    //private Lock readCacheValueLock = new ReentrantLock();
+    
     
     
     /** 
@@ -32,6 +37,9 @@ public class EhCacheMybatis implements Cache{
     
     
     
+    /**
+     * 初始化自身的缓存cache
+     */
     private void initCache() {
         if (cache == null) {
             synchronized (lock) {
@@ -39,6 +47,7 @@ public class EhCacheMybatis implements Cache{
                     EhCacheConfig ehCacheConfig = SpringContextUtil.getBean(EhCacheConfig.class);
                     String cacheName = id;
                     cache = ehCacheConfig.cacheRegister(cacheName);  
+                    log.info("缓存对象 {} 初始化成功", id);
                 }
             }
         }

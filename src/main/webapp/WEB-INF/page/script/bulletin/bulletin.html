@@ -71,7 +71,7 @@
                             <div class="card-body">  
 								<h4 class="mt-0 header-title">#已推送</h4>
 								<div id="bulletin-table2-toolbar">
-									<button class="btn btn-primary w-md waves-effect waves-light open-r-tb" type="button">发送通知</button>
+									<button id="sendBullet" class="btn btn-primary w-md waves-effect waves-light" type="button">发送通知</button>
 								</div>
 								
 								<table id="bulletin-table2" data-toolbar="#bulletin-table2-toolbar"></table>
@@ -91,19 +91,7 @@
 
 		
 		<!-- 右侧侧边栏 -->
-		<div class="bg-cover row no-gutters">
-			<div class="col-10 col-md-6 col-lg-4 bgc-box" >
-				<div class="w-100 h-100 pd-20">
-					<#include "./bulletin-add.html"/>
-					
-					<div class="m-t-30 text-center">
-						<button class="btn btn-primary w-md" type="button" id="send-bulletin">推送</button>
-						<button class="btn btn-secondary w-md  close-r-tb" type="button">取消</button>
-					</div>
-				</div>
-			</div>
-		</div>
-		
+		<#include "./bulletin-add.html"/>
 		
 
 		
@@ -121,7 +109,8 @@
 		
 		<!-- App js -->
         <script src="/assets/js/app.js"></script>
-        	
+        <script src="/assets/js/plugins/sidebar/sidebar.js"></script>
+
 		<script type="text/javascript">
 			// 表单
 			var $bulletinForm = $("#bulletin-form");
@@ -137,10 +126,21 @@
 			// 变量填充的content缓存
 			var tempContentCache = null;
 			
-			$("#bulletin-table2-toolbar button").click(function(e) {
-				$bulletinForm.find("#timer-task-id").val('');
-				$("#send-bulletin").html("推送");
+			$("#bulletin-table2-toolbar button#sendBullet").click(function(e) {
 				formInit();
+				$sideBar.show();
+			});
+			
+			
+			// 侧边栏
+			var $sideBar = $.SideBar.init({
+				title: "通知公告推送",
+				contentDom: $("#bulletin-form"),
+				confirmBtnAction: sendBtnClickFunc,
+				cancelBtnAction: function(dom) {
+					$sideBar.hide();
+					formInit();
+				}
 			});
 			
 			
@@ -198,8 +198,8 @@
 			}
 			function buildVarFormItem(varName) {
 				return '<div class="form-group row">' + 
-						    '<label for="example-text-input" class="col-sm-2 col-form-label">'+varName+'</label>' + 
-						    '<div class="col-sm-10">' + 
+						    '<label for="example-text-input" class="col-sm-2 col-md-3 col-form-label">'+varName+'</label>' + 
+						    '<div class="col-sm-10 col-md-9">' + 
 						        '<input class="form-control" type="text" oninput="varChange(this)" name="'+varName+'" placeholder="输入'+varName+'值填充模板变量" autocomplete="off"' + 
 						        		'data-parsley-required="true" data-parsley-required-message="'+varName+'不可为空"' + 
 						        		'data-parsley-trigger="focusout">' + 
@@ -213,8 +213,7 @@
 			=========================================*/
 			function varChange(dom) {
 				var _varForm = $(dom).parents("form");
-				var _varContainer = _varForm.find(".var-container");
-				var _varInputs = _varContainer.find("input");
+				var _varInputs = $varContainer.find("input");
 				var _contentDom = _varForm.find(".temp-content");
 				var resContent = tempContentCache;
 				
@@ -236,13 +235,13 @@
 				// id重置
 				$bulletinForm.find("#timer-task-id").val('');
 				// 模板选择重置
-				$tempSelect.find("option:eq(0)").attr("selected","true");
+				$tempSelect.val("");
 				// 变量输入框重置
 				$varContainer.empty();
 				// 通知示例重置
 				$tempDom.html($("#default-temp-dom").children().clone());
 				// 通知方式选择重置
-				$bulletinForm.find("#sender option:eq(0)").attr("selected","true");
+				$bulletinForm.find("#sender").val("0"); 
 				// 定制 周期 输入框隐藏
 				$timerDom.addClass("d-none");
 				$periodDom.addClass("d-none");
@@ -252,7 +251,8 @@
 			/** ======================================
 		      	推送通知按钮点击事件
 			=========================================*/
-			$("#send-bulletin").click(function(e) {
+			function sendBtnClickFunc(dom, e) {
+				e.preventDefault();
 				var flag = $bulletinForm.parsley().validate();
 				if (!flag) return false;
 				
@@ -288,7 +288,7 @@
 									// 表单初始化
 									formInit();
 									// 关闭右侧侧边栏
-									closeRightToolBar();
+									$sideBar.hide();
 									// 已推送表格刷新
 									$bulletinTable.bootstrapTable('refresh');
 									// 定时推送表格刷新
@@ -299,7 +299,8 @@
 								}
 							});
 						});
-			});
+			};
+			
 			
 			var $timerDom = $("#timer-dom");
 			var $periodDom = $("#period-dom");
