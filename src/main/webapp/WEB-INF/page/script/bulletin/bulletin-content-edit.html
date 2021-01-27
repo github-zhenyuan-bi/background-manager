@@ -1,0 +1,19 @@
+<form class="bulletin-content-edit-form">
+	
+	<div class="form-group row">
+	    <label class="col-form-label">当前内容</label>
+	    <div class="col">
+	        <div>${(curBulletin.content)! }</div>
+	    </div>
+	</div>
+	
+	<div id="edit-content-temp" class="form-group row">
+	    <label class="col-form-label">模板</label>
+	    <div class="col">
+	        <div>${(curTemplate.content)! }</div>
+	    </div>
+	</div>
+	
+	<div id="template-vars-container" data-tid="${(curTemplate.id)! }" class="form-group row">
+	</div>
+</form>

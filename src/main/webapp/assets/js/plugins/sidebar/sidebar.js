@@ -47,7 +47,7 @@
     SideBar.prototype.content = null,
     SideBar.prototype.initContent = function () {
     	const __this = this;
-    	__this.content = $('<div style="padding: 10px 0" class="flex-grow-1" style="overflow-y: scroll; "></div>');
+    	__this.content = $('<div style="padding: 10px 0;overflow-y: scroll;overflow-x: none;" class="noScrollBar"></div>');
     	if (OPTION.contentUrl && OPTION.contentUrl != "")
     		$.get(contentUrl).done(res=>{__this.content.append(res);}).fail(err=>{console.log(err)});
     	else if (OPTION.contentDom)
@@ -61,7 +61,7 @@
     SideBar.prototype.initButton = function () {
     	var __this = this;
     	var showBtn = OPTION.showButton? '' : 'invisible';
-    	var $btnWrapper = $('<div style="padding: 5px 0;" class="bgc-box-btns d-flex justify-content-around '+showBtn+'"></div>');
+    	var $btnWrapper = $('<div style="padding: 5px 0; bottom: 0;" class="bgc-box-btns d-flex justify-content-around position-relative '+showBtn+'"></div>');
     	this.$confirmBtn = $('<button class="btn '+OPTION.confirmBtnColor+' w-md" type="button" style="'+OPTION.confirmBtnStyle+'">'+OPTION.confirmBtnText+'</button>')
     	this.$cancelBtn  = $('<button class="btn '+OPTION.cancelBtnColor+' w-md" type="button" style="'+OPTION.cancelBtnStyle+'">'+OPTION.cancelBtnText+'</button>');
     	if (OPTION.confirmBtnAction && $.type(OPTION.confirmBtnAction) === "function")

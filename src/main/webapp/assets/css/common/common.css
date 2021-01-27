@@ -60,7 +60,7 @@
     border-top-left-radius: 20px;
     border-bottom-left-radius: 20px;
 }
-.bgc-box-content::-webkit-scrollbar{
+.noScrollBar::-webkit-scrollbar {
 	display: none;
 }
 
