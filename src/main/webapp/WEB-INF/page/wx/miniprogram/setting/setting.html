@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui", shrink-to-fit=no">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+		<title>小程序配置</title>
+        <!-- App Icons -->
+        <link rel="shortcut icon" href="/assets/images/favicon.ico">
+
+        <!-- App css -->
+        <#include "/template/css/bootstrap-css.html" />
+        <#include "/template/css/bootstrap-table-css.html" />
+        
+        <#include "/template/css/font-awesome-css.html" />
+        
+		<#include "/template/css/my-css.html" />
+		
+		<style type="text/css">
+			#swipper-imgs-wrapper {
+				min-height: 200px;
+			    border: .5px dashed #b8b7b7;
+			    padding: 10px;
+			}
+			#swipper-imgs-wrapper h2{
+				text-align: center;
+			    line-height: 200px;
+			    color: #b8b4b4;
+			    letter-spacing: 8px;
+		    }
+		</style>
+    </head>
+
+
+    <body>
+
+        <!-- Loader -->
+        <div id="preloader"><div id="status"><div class="spinner"></div></div></div>
+		
+		<!-- 页面头 -->
+		<div class="header-bg">
+			<#include "/template/common/header/header-template.html" />
+        </div>
+        
+        <div class="wrapper">
+            <div class="container-fluid">
+
+                
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card m-b-20">
+                            <div class="card-body">  
+								<h4 class="mt-0 header-title">#首页轮播图</h4>
+								<div id="swipper-imgs-wrapper" style="position: relative;">
+									<!-- <h2>暂无轮播图</h2> -->
+								</div>
+								<div class="text-center">
+									<button id="upload-swipper-btn" class="btn btn-primary w-md waves-effect waves-light m-t-20" type="button">添加轮播图</button>
+								</div>
+							</div>
+                        </div>
+                    </div>
+                </div>
+
+            </div> <!-- end container -->
+        </div>
+        <!-- end wrapper -->
+
+
+		<!-- 后台管理公共底部 -->
+		<#include "/template/common/footer-template.html">
+
+
+		
+
+		
+        <!-- js模块  -->
+        <#include "/template/js/jquery-plugins-js.html" />
+        <#include "/template/js/bootstrap-propers-js.html" />
+        <#include "/template/js/bootstrap-js.html" />
+        
+		<#include "/template/js/my-js.html" />
+
+        <#include "/template/js/bootstrap-table-js.html" />
+		<#include "/template/js/bootstrap-sweet-alert-js.html" />
+		
+		<#include "/template/js/md5-and-parsley.html" />
+		
+		<#include "/template/js/cropperPicture-js.html" />
+		<#include "/template/js/dragBox-js.html" />
+		
+		<!-- App js -->
+        <script src="/assets/js/app.js?v=${(db_constants.Style_and_Script_version)!'1.0'}"></script>
+        <script src="/assets/js/plugins/dragBox/dragBox.js?v=${(db_constants.Style_and_Script_version)!'1.0'}"></script>
+        
+        
+		<script type="text/javascript">
+		  $.CropAvatar.init({
+		        trigger: "#upload-swipper-btn",
+		        preview: ".avatar-preview",
+		        imgInputName: 'img',
+		        // 裁剪框 可设定固定宽高比 如 16/9 或者正方形 1 或者任意裁剪 null
+		        aspectRatio: null,
+		        // 提交方法 formData 表单数据对象 obj当前裁剪对象
+		        submit: function(fromData, obj) {
+		        	__jqAjax({
+			            url: "/upload/wxIndexSwipperImg",
+			            type: "POST",
+			            data: fromData,
+			            processData : false,
+			            contentType : false,
+			            dataType : 'json',
+			            success : function (res) {
+			            	if (res.code === 200) { 
+			            		obj.cropDone();
+			            	} else {
+			            		obj.alert("上传失败，原因：" + res.msg);
+			            	}
+			            }    
+			        });
+		        }
+	      });
+		  
+		  
+		  var dragBox = $.DragBox.initDragImgs({
+				// 拖拽盒子容器
+				container: '#swipper-imgs-wrapper',
+				// 排列方式 row column  默认row 可不写
+				direction: 'row',
+				// 图片大小 宽默认150px 可不写
+				width: '150px',
+				// 图片大小 高默认150px 可不写
+				height: '150px',
+				// 图片数据 
+				datas: [
+					{name: '2', imgurl: '/imageServer/wx/miniprogram/index/swiper/微信图片_20210122145827-d52290b1-e07a-4461-814a-a1f8c3706576.jpg'},
+					{name: '4', imgurl: '/imageServer/wx/miniprogram/index/swiper/微信图片_20210122145827-d52290b1-e07a-4461-814a-a1f8c3706576.jpg'},
+					{name: '3', imgurl: '/imageServer/wx/miniprogram/index/swiper/微信图片_20210122145827-d52290b1-e07a-4461-814a-a1f8c3706576.jpg'},
+					{name: '2', imgurl: '/imageServer/wx/miniprogram/index/swiper/微信图片_20210122145827-d52290b1-e07a-4461-814a-a1f8c3706576.jpg'},
+					{name: '1', imgurl: '/imageServer/wx/miniprogram/index/swiper/微信图片_20210122145827-d52290b1-e07a-4461-814a-a1f8c3706576.jpg'},
+					{name: 's', imgurl: '/imageServer/wx/miniprogram/index/swiper/微信图片_20210122145827-d52290b1-e07a-4461-814a-a1f8c3706576.jpg'},
+					{name: 'g', imgurl: '/imageServer/wx/miniprogram/index/swiper/微信图片_20210122145827-d52290b1-e07a-4461-814a-a1f8c3706576.jpg'},
+					{name: 'gx', imgurl: '/imageServer/wx/miniprogram/index/swiper/微信图片_20210122145827-d52290b1-e07a-4461-814a-a1f8c3706576.jpg'},
+				],
+				// 数据中图片地址所在字段 默认url 可不写
+				imgUrlField: 'imgurl',
+				// 图片点击事件
+				doubleClickImgAction: function(data) {
+					console.log("双击事件： 数据" + JSON.stringify(data));
+				},
+				// 关闭按钮点击事件
+				closeAction: function(data) {
+					console.log("关闭事件： 数据" + JSON.stringify(data));
+				},
+				// 移动盒子事件
+				moveAction: function(fromIndex, toIndex, option) {
+					console.log("移动 从位置【"+fromIndex+"】移动到【"+toIndex+"】");
+				},
+		  });
+		
+		</script>
+    </body>
+</html>

@@ -9,6 +9,7 @@ import pro.bzy.boot.framework.web.annoations.FormValid;
 import pro.bzy.boot.framework.utils.ExceptionCheckUtil;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.web.bind.annotation.RestController;
 
@@ -17,6 +18,7 @@ import io.swagger.annotations.ApiOperation;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
@@ -38,7 +40,7 @@ import com.github.xiaoymin.knife4j.annotations.ApiSupport;
  * @author zhenyuan.bi
  * @since 2021-01-19
  */
-@Api(tags = {""})
+@Api(tags = {"微信首页轮播图"})
 @ApiSupport(order = 100)
 @RequestMapping("/wx/wxMiniprogramSettingIndeximg")
 @RestController
@@ -122,5 +124,19 @@ public class WxMiniprogramSettingIndeximgController {
         
         boolean flag = wxMiniprogramSettingIndeximgService.updateById(updateBean);
         return R.ofSuccess(flag? "更新成功" : "更新失败");
+    }
+    
+    
+    
+    
+    @ApiOperation(value="新增一个首页轮播图")
+    @PostMapping("saveAfterUpload")
+    public R<Object> saveAfterUpload(HttpServletRequest request) {
+        Object data = request.getAttribute("uploadedImg");
+        if (Objects.nonNull(data))
+            wxMiniprogramSettingIndeximgService.addIndexSwipperImg(data.toString());
+        else
+            throw new RuntimeException("获取轮播图片上传地址失败， 无法保存入库");
+        return R.ofSuccess("新增图片成功");
     }
 }

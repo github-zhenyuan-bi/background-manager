@@ -3,6 +3,9 @@ package pro.bzy.boot.script.controller;
 import java.awt.Image;
 import java.io.File;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
@@ -11,11 +14,17 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.github.xiaoymin.knife4j.annotations.ApiSupport;
+
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import pro.bzy.boot.framework.config.yml.YmlBean;
 import pro.bzy.boot.framework.utils.FileUtil;
 import pro.bzy.boot.framework.web.controller.parent.MyAbstractController;
 import pro.bzy.boot.framework.web.domain.bean.R;
 
+@Api(tags = {"上传"})
+@ApiSupport(order = 100)
 @Controller
 @RequestMapping("upload")
 public class UploadController extends MyAbstractController {
@@ -26,12 +35,7 @@ public class UploadController extends MyAbstractController {
     
     
     
-    /**
-     * 剧本封面图
-     * @param img
-     * @return
-     * @throws Exception
-     */
+    @ApiOperation(value="剧本封面图")
     @PostMapping("jubenCoverImg")
     public @ResponseBody R<Object> jubenCoverImg(MultipartFile img) throws Exception {
         return uploadJubenImg(img, ymlBean.getConfig().getImageServer().getJubenCoverImagePath(), true);
@@ -40,12 +44,8 @@ public class UploadController extends MyAbstractController {
     
     
     
-    /**
-     * 剧本人物图
-     * @param img
-     * @return
-     * @throws Exception
-     */
+    
+    @ApiOperation(value="剧本人物图")
     @PostMapping("jubenCharacterImg")
     public @ResponseBody R<Object> jubenCharacterImg(MultipartFile img) throws Exception {
         return uploadJubenImg(img, ymlBean.getConfig().getImageServer().getJubenCharacterImagePath(), true);
@@ -53,12 +53,22 @@ public class UploadController extends MyAbstractController {
     }
     
     
-    /**
-     * 微信小程序服务模块icon
-     * @param img
-     * @return
-     * @throws Exception
-     */
+    
+    
+    @ApiOperation(value="微信小程序轮播大图")
+    @PostMapping("wxIndexSwipperImg")
+    public void wxIndexSwipperImg(MultipartFile img, 
+            HttpServletRequest request, HttpServletResponse response) throws Exception {
+        R<Object> uploadedImg = uploadJubenImg(img, ymlBean.getConfig().getImageServer().getWxMiniprogramIndexImagePath(), false);
+        request.setAttribute("uploadedImg", uploadedImg.getData());
+        request.getRequestDispatcher("/wx/wxMiniprogramSettingIndeximg/saveAfterUpload").forward(request, response);
+        //return uploadJubenImg(img, ScriptConstant.JUBEN_UPLOAD_CHARACTER_IMG_PATH);
+    }
+    
+    
+    
+    
+    @ApiOperation(value="微信小程序服务模块icon")
     @PostMapping("wxMiniprogramServerIcon")
     public @ResponseBody R<Object> wxMiniprogramServerIcon(MultipartFile img) throws Exception {
         return uploadJubenImg(img, ymlBean.getConfig().getImageServer().getWxMiniprogramServerModuleIconPath(), true);
@@ -66,24 +76,17 @@ public class UploadController extends MyAbstractController {
     
     
     
-    /**
-     * 微信小程序合作模块icon
-     * @param img
-     * @return
-     * @throws Exception
-     */
+    
+    @ApiOperation(value="微信小程序合作模块icon")
     @PostMapping("wxMiniprogramCooperationIcon")
     public @ResponseBody R<Object> wxMiniprogramCooperationIcon(MultipartFile img) throws Exception {
         return uploadJubenImg(img, ymlBean.getConfig().getImageServer().getWxMiniprogramCooperationIconPath(), true);
     }
     
     
-    /**
-     * 通知公告图
-     * @param img
-     * @return
-     * @throws Exception
-     */
+    
+    
+    @ApiOperation(value="通知公告图")
     @PostMapping("bulletinIconImg")
     public @ResponseBody R<Object> bulletinIconImg(MultipartFile img) throws Exception {
         return uploadJubenImg(img, ymlBean.getConfig().getImageServer().getJubenBulletinIconImagePath(), false);

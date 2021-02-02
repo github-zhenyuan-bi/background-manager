@@ -11,4 +11,10 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface WxMiniprogramSettingIndeximgService extends IService<WxMiniprogramSettingIndeximg> {
 
+    /** 增加首页轮播图 */
+    String addIndexSwipperImg(String imgUrl);
+    
+    
+    //void updateSort();
+    //
 }
