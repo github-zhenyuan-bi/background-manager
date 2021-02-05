@@ -40,7 +40,7 @@ import com.github.xiaoymin.knife4j.annotations.ApiSupport;
  * @author zhenyuan.bi
  * @since 2021-01-19
  */
-@Api(tags = {"微信首页轮播图"})
+@Api(tags = {"微信首页轮播图"}, value="微信首页轮播图")
 @ApiSupport(order = 100)
 @RequestMapping("/wx/wxMiniprogramSettingIndeximg")
 @RestController
@@ -67,7 +67,9 @@ public class WxMiniprogramSettingIndeximgController {
     @ApiOperation(value="查询数据列表")
     @GetMapping("getList")
     public R<List<WxMiniprogramSettingIndeximg>> getList(WxMiniprogramSettingIndeximg queryBean) {
-        List<WxMiniprogramSettingIndeximg> wxMiniprogramSettingIndeximgs = wxMiniprogramSettingIndeximgService.list(Wrappers.<WxMiniprogramSettingIndeximg>lambdaQuery(queryBean));
+        List<WxMiniprogramSettingIndeximg> wxMiniprogramSettingIndeximgs = wxMiniprogramSettingIndeximgService.list(
+                Wrappers.<WxMiniprogramSettingIndeximg>lambdaQuery(queryBean)
+                    .orderByAsc(WxMiniprogramSettingIndeximg::getSort));
         return R.ofSuccess(wxMiniprogramSettingIndeximgs);
     }
     
@@ -133,10 +135,20 @@ public class WxMiniprogramSettingIndeximgController {
     @PostMapping("saveAfterUpload")
     public R<Object> saveAfterUpload(HttpServletRequest request) {
         Object data = request.getAttribute("uploadedImg");
+        WxMiniprogramSettingIndeximg savedBean;
         if (Objects.nonNull(data))
-            wxMiniprogramSettingIndeximgService.addIndexSwipperImg(data.toString());
+            savedBean = wxMiniprogramSettingIndeximgService.addIndexSwipperImg(data.toString());
         else
             throw new RuntimeException("获取轮播图片上传地址失败， 无法保存入库");
-        return R.ofSuccess("新增图片成功");
+        return R.ofSuccess(savedBean);
+    }
+    
+    
+    
+    @ApiOperation(value="调整图像顺序")
+    @PostMapping("adjustImageSort")
+    public R<Object> adjustImageSort(int fromIndex, int toIndex) {
+        wxMiniprogramSettingIndeximgService.adjustImageSort(fromIndex, toIndex);
+        return R.ofSuccess("顺序调整成功");
     }
 }

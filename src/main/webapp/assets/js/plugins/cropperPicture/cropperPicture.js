@@ -10,12 +10,12 @@
     var fileLabel = option.fileLabel? option.fileLabel : '选择本地图片';
     var sumitBtnText = option.sumitBtnText? option.sumitBtnText : '上传';
     var imgInputName = option.imgInputName? option.imgInputName : 'img';
-    return '<div class="container" id="crop-avatar">' +
+    return '<div class="container" id="'+option.id+'">' +
               '<!-- Cropping modal -->' +
               '<div class="modal fade" id="avatar-modal" aria-hidden="true" aria-labelledby="avatar-modal-label" role="dialog" tabindex="-1">' +
                 '<div class="modal-dialog modal-lg">' +
                   '<div class="modal-content">' +
-                    '<form class="avatar-form" action="https://www.jq22.com/demo/cropper-master20160830/examples/crop-avatar/crop.php" enctype="multipart/form-data" method="post">' +
+                    '<form class="avatar-form" action="" enctype="multipart/form-data" method="post">' +
                       '<div class="modal-header">' +
                         '<h4 class="modal-title" id="avatar-modal-label" style="margin-top: 0">'+title+'</h4>' +
                         '<button class="close" data-dismiss="modal" type="button">×</button>' +
@@ -88,7 +88,50 @@
   //                       【构造对象】
   // ============================================================
   function CropAvatar() {
-    
+	  this.$container = null;
+      this.option = null;
+      this.$avatarView  = null;
+      this.$avatar      = null;
+      this.$avatarModal = null;
+      this.$loading     = null;
+      this.$avatarForm  = null;
+      this.$avatarUpload = null;
+      this.$avatarSrc   = null;
+      this.$avatarData  = null;
+      this.$avatarInput = null;
+      this.$avatarSave  = null;
+      this.$avatarBtns  = null;
+      this.$avatarWrapper = null;
+      this.$avatarPreview = null;
+      this.support.datauri = null;
+      
+      // ============================================================
+      //                       【监听器】
+      // ============================================================
+      this.addListener = function (option) {
+        this.$avatarView.on('click', $.proxy(this.click, this));
+        this.$avatarInput.on('change', $.proxy(this.change, this));
+        this.$avatarForm.on('submit', $.proxy(this.submit, this));
+        this.$avatarBtns.on('click', $.proxy(this.rotate, this));
+      };
+      // ============================================================
+      //                       【提交事件】
+      // ============================================================
+      this.submit = function () {
+        if (this.option.submit) {
+          this.option.submit(new FormData(this.$avatarForm[0]), this);
+          return false;
+        } else {
+          if (!this.$avatarSrc.val() && !this.$avatarInput.val()) {
+            return false;
+          }
+
+          if (this.support.formData) {
+            this.ajaxUpload();
+            return false;
+          }
+        }
+      };
   }
 
 
@@ -109,7 +152,7 @@
     // ============================================================
     init: function (option) {
       $("body").append(buildAvatarModal(option));
-      this.$container = $("#crop-avatar");
+      this.$container = $("#" + option.id);
       this.option = option;
 
       this.$avatarView  = $(this.option.trigger);
@@ -140,15 +183,6 @@
       return this;
     },
 
-    // ============================================================
-    //                       【监听器】
-    // ============================================================
-    addListener: function (option) {
-      this.$avatarView.on('click', $.proxy(this.click, this));
-      this.$avatarInput.on('change', $.proxy(this.change, this));
-      this.$avatarForm.on('submit', $.proxy(this.submit, this));
-      this.$avatarBtns.on('click', $.proxy(this.rotate, this));
-    },
 
     // ============================================================
     //                       【提示】
@@ -266,24 +300,6 @@
       }
     },
 
-    // ============================================================
-    //                       【提交时间】
-    // ============================================================
-    submit: function () {
-      if (this.option.submit) {
-        this.option.submit(new FormData(this.$avatarForm[0]), this);
-        return false;
-      } else {
-        if (!this.$avatarSrc.val() && !this.$avatarInput.val()) {
-          return false;
-        }
-
-        if (this.support.formData) {
-          this.ajaxUpload();
-          return false;
-        }
-      }
-    },
 
     rotate: function (e) {
       var data;
@@ -433,5 +449,9 @@
 
 
   $.CropAvatar = new CropAvatar, $.CropAvatar.Constructor = CropAvatar;
-
+  $.CropAvatarBuilder = function(option) {
+	  var ca = new CropAvatar();
+	  ca.init(option);
+	  return ca;
+  }
 }(window.jQuery);

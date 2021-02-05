@@ -20,7 +20,6 @@
 		
 		<style type="text/css">
 			#swipper-imgs-wrapper {
-				min-height: 200px;
 			    border: .5px dashed #b8b7b7;
 			    padding: 10px;
 			}
@@ -63,6 +62,45 @@
                         </div>
                     </div>
                 </div>
+                
+                <div class="row">
+                    <div class="col-4">
+                        <div class="card m-b-20">
+                            <div class="card-body"> 
+                             1
+                            1
+                            1
+                            1
+                            1
+                            1
+							</div>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="card m-b-20">
+                            <div class="card-body"> 
+                             1
+                            1
+                            1
+                            1
+                            1
+                            1
+							</div>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="card m-b-20">
+                            <div class="card-body"> 
+                            1
+                            1
+                            1
+                            1
+                            1
+                            1
+							</div>
+                        </div>
+                    </div>
+                </div>
 
             </div> <!-- end container -->
         </div>
@@ -97,7 +135,10 @@
         
         
 		<script type="text/javascript">
-		  $.CropAvatar.init({
+		  var dragBox = null;
+		
+		  $.CropAvatarBuilder({
+			  	id: "swiper-img-upload",
 		        trigger: "#upload-swipper-btn",
 		        preview: ".avatar-preview",
 		        imgInputName: 'img',
@@ -115,6 +156,10 @@
 			            success : function (res) {
 			            	if (res.code === 200) { 
 			            		obj.cropDone();
+			            		mySwal.success('上传图片成功').then((result) => {
+					    			if (dragBox) 
+					    				dragBox.add(res.data);
+					    		});
 			            	} else {
 			            		obj.alert("上传失败，原因：" + res.msg);
 			            	}
@@ -122,43 +167,47 @@
 			        });
 		        }
 	      });
-		  
-		  
-		  var dragBox = $.DragBox.initDragImgs({
-				// 拖拽盒子容器
-				container: '#swipper-imgs-wrapper',
-				// 排列方式 row column  默认row 可不写
-				direction: 'row',
-				// 图片大小 宽默认150px 可不写
-				width: '150px',
-				// 图片大小 高默认150px 可不写
-				height: '150px',
-				// 图片数据 
-				datas: [
-					{name: '2', imgurl: '/imageServer/wx/miniprogram/index/swiper/微信图片_20210122145827-d52290b1-e07a-4461-814a-a1f8c3706576.jpg'},
-					{name: '4', imgurl: '/imageServer/wx/miniprogram/index/swiper/微信图片_20210122145827-d52290b1-e07a-4461-814a-a1f8c3706576.jpg'},
-					{name: '3', imgurl: '/imageServer/wx/miniprogram/index/swiper/微信图片_20210122145827-d52290b1-e07a-4461-814a-a1f8c3706576.jpg'},
-					{name: '2', imgurl: '/imageServer/wx/miniprogram/index/swiper/微信图片_20210122145827-d52290b1-e07a-4461-814a-a1f8c3706576.jpg'},
-					{name: '1', imgurl: '/imageServer/wx/miniprogram/index/swiper/微信图片_20210122145827-d52290b1-e07a-4461-814a-a1f8c3706576.jpg'},
-					{name: 's', imgurl: '/imageServer/wx/miniprogram/index/swiper/微信图片_20210122145827-d52290b1-e07a-4461-814a-a1f8c3706576.jpg'},
-					{name: 'g', imgurl: '/imageServer/wx/miniprogram/index/swiper/微信图片_20210122145827-d52290b1-e07a-4461-814a-a1f8c3706576.jpg'},
-					{name: 'gx', imgurl: '/imageServer/wx/miniprogram/index/swiper/微信图片_20210122145827-d52290b1-e07a-4461-814a-a1f8c3706576.jpg'},
-				],
-				// 数据中图片地址所在字段 默认url 可不写
-				imgUrlField: 'imgurl',
-				// 图片点击事件
-				doubleClickImgAction: function(data) {
-					console.log("双击事件： 数据" + JSON.stringify(data));
-				},
-				// 关闭按钮点击事件
-				closeAction: function(data) {
-					console.log("关闭事件： 数据" + JSON.stringify(data));
-				},
-				// 移动盒子事件
-				moveAction: function(fromIndex, toIndex, option) {
-					console.log("移动 从位置【"+fromIndex+"】移动到【"+toIndex+"】");
-				},
+		  __jqGet("/wx/wxMiniprogramSettingIndeximg/getList").done(res => {
+			  if (res.code == 200) {
+				  dragBox = $.DragBoxBuilder({
+						// 拖拽盒子容器
+						container: '#swipper-imgs-wrapper',
+						// 排列方式 row column  默认row 可不写
+						direction: 'row',
+						// 图片大小 宽默认150px 可不写
+						width: '160px',
+						// 图片大小 高默认150px 可不写
+						height: '90px',
+						// 图片数据 
+						datas: res.data,
+						// 数据中图片地址所在字段 默认url 可不写
+						imgUrlField: 'siwperImgUrl',
+						// 图片点击事件
+						doubleClickImgAction: function(data) {
+							console.log("双击事件： 数据" + JSON.stringify(data));
+						},
+						// 关闭按钮点击事件
+						closeAction: function(data) {
+							mySwal.delConfirm({
+								// 删除请求
+								url: "/wx/wxMiniprogramSettingIndeximg/deleteById?id="+data.id,
+								// 删除成功后的回调方法
+								afterConfirm: function(res) {
+									dragBox.remove(data);
+								}
+							});
+						},
+						// 移动盒子事件
+						moveAction: function(fromIndex, toIndex) {
+							console.log("移动 从位置【"+fromIndex+"】移动到【"+toIndex+"】");
+							__jqPost("/wx/wxMiniprogramSettingIndeximg/adjustImageSort", {fromIndex: fromIndex, toIndex: toIndex}).done(res => {
+								console.log(res)
+							})
+						},
+				  });
+			  }
 		  });
+		  
 		
 		</script>
     </body>
