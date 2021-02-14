@@ -5,81 +5,93 @@
   var console = window.console || { log: function () {} };
 
 
-  function buildAvatarModal(option) {
-    var title = option.title? option.title : '图片上传';
-    var fileLabel = option.fileLabel? option.fileLabel : '选择本地图片';
-    var sumitBtnText = option.sumitBtnText? option.sumitBtnText : '上传';
-    var imgInputName = option.imgInputName? option.imgInputName : 'img';
-    return '<div class="container" id="'+option.id+'">' +
-              '<!-- Cropping modal -->' +
-              '<div class="modal fade" id="avatar-modal" aria-hidden="true" aria-labelledby="avatar-modal-label" role="dialog" tabindex="-1">' +
-                '<div class="modal-dialog modal-lg">' +
-                  '<div class="modal-content">' +
-                    '<form class="avatar-form" action="" enctype="multipart/form-data" method="post">' +
-                      '<div class="modal-header">' +
-                        '<h4 class="modal-title" id="avatar-modal-label" style="margin-top: 0">'+title+'</h4>' +
-                        '<button class="close" data-dismiss="modal" type="button">×</button>' +
-                      '</div>' +
-                      '<div class="modal-body">' +
-                        '<div class="avatar-body">' +
-
-                          '<!-- Upload image and data -->' +
-                          '<div class="avatar-upload">' +
-                            '<input class="avatar-src" name="avatar_src" type="hidden">' +
-                            '<input class="avatar-data" name="avatar_data" type="hidden">' +
-                            '<div class="form-group">' +
-	                          '<label for="avatarInput">'+fileLabel+'</label>' +
-	                          '<input type="file" class="form-control-file avatar-input" id="avatarInput" name="'+imgInputName+'">' +
+  	/*=================================================*/
+  	/*         【构建图片上传裁剪模态框dom】                         */
+  	/*=================================================*/
+  	function buildAvatarModal(option) {
+  		if (!option.id)
+  			throw "必须指定图片裁剪组件的唯一id属性";
+  		
+  		var $existedModal = $("#"+option.id);
+  		if ($existedModal.length > 0) {
+  			$existedModal.remove();
+  		}
+  			
+	    var title = option.title? option.title : '图片上传';
+	    var fileLabel = option.fileLabel? option.fileLabel : '选择本地图片';
+	    var sumitBtnText = option.sumitBtnText? option.sumitBtnText : '上传';
+	    var imgInputName = option.imgInputName? option.imgInputName : 'img';
+    
+	    return '<div class="container" id="'+option.id+'">' +
+	              '<!-- Cropping modal -->' +
+	              '<div class="modal fade avatar-modal" style="z-index: 9999999;" aria-hidden="true" aria-labelledby="avatar-modal-label" role="dialog" tabindex="-1">' +
+	                '<div class="modal-dialog modal-lg">' +
+	                  '<div class="modal-content">' +
+	                    '<form class="avatar-form" action="" enctype="multipart/form-data" method="post">' +
+	                      '<div class="modal-header">' +
+	                        '<h4 class="modal-title" id="avatar-modal-label" style="margin-top: 0">'+title+'</h4>' +
+	                        '<button class="close" data-dismiss="modal" type="button">×</button>' +
+	                      '</div>' +
+	                      '<div class="modal-body">' +
+	                        '<div class="avatar-body">' +
+	
+	                          '<!-- Upload image and data -->' +
+	                          '<div class="avatar-upload">' +
+	                            '<input class="avatar-src" name="avatar_src" type="hidden">' +
+	                            '<input class="avatar-data" name="avatar_data" type="hidden">' +
+	                            '<div class="form-group">' +
+		                          '<label for="avatarInput">'+fileLabel+'</label>' +
+		                          '<input type="file" class="form-control-file avatar-input" name="'+imgInputName+'">' +
+		                        '</div>' +
+	                            //'<label for="avatarInput">'+fileLabel+'</label>' +
+	                            //'<input class="avatar-input btn btn-link" id="avatarInput" name="avatar_file" type="file">' +
+	                          '</div>' +
+	
+	                          '<!-- Crop and preview -->' +
+	                          '<div class="row">' +
+	                            '<div class="col-md-9">' +
+	                              '<div class="avatar-wrapper"></div>' +
+	                            '</div>' +
+	                            '<div class="col-md-3">' +
+	                              '<div class="avatar-preview preview-lg"></div>' +
+	                              '<div class="avatar-preview preview-md"></div>' +
+	                              '<div class="avatar-preview preview-sm"></div>' +
+	                            '</div>' +
+	                          '</div>' +
+	
+	                          '<div class="row avatar-btns">' +
+	                            '<!-- <div class="col-md-9">' +
+	                              '<div class="btn-group">' +
+	                                '<button class="btn btn-primary" data-method="rotate" data-option="-90" type="button" title="Rotate -90 degrees">Rotate Left</button>' +
+	                                '<button class="btn btn-primary" data-method="rotate" data-option="-15" type="button">-15deg</button>' +
+	                                '<button class="btn btn-primary" data-method="rotate" data-option="-30" type="button">-30deg</button>' +
+	                                '<button class="btn btn-primary" data-method="rotate" data-option="-45" type="button">-45deg</button>' +
+	                              '</div>' +
+	                              '<div class="btn-group">' +
+	                                '<button class="btn btn-primary" data-method="rotate" data-option="90" type="button" title="Rotate 90 degrees">Rotate Right</button>' +
+	                                '<button class="btn btn-primary" data-method="rotate" data-option="15" type="button">15deg</button>' +
+	                                '<button class="btn btn-primary" data-method="rotate" data-option="30" type="button">30deg</button>' +
+	                                '<button class="btn btn-primary" data-method="rotate" data-option="45" type="button">45deg</button>' +
+	                              '</div>' +
+	                            '</div> -->' +
+	                            '<div class="col">' +
+	                              '<button class="btn btn-primary btn-block avatar-save" type="submit">'+sumitBtnText+'</button>' +
+	                            '</div>' +
+	                          '</div>' +
 	                        '</div>' +
-                            //'<label for="avatarInput">'+fileLabel+'</label>' +
-                            //'<input class="avatar-input btn btn-link" id="avatarInput" name="avatar_file" type="file">' +
-                          '</div>' +
-
-                          '<!-- Crop and preview -->' +
-                          '<div class="row">' +
-                            '<div class="col-md-9">' +
-                              '<div class="avatar-wrapper"></div>' +
-                            '</div>' +
-                            '<div class="col-md-3">' +
-                              '<div class="avatar-preview preview-lg"></div>' +
-                              '<div class="avatar-preview preview-md"></div>' +
-                              '<div class="avatar-preview preview-sm"></div>' +
-                            '</div>' +
-                          '</div>' +
-
-                          '<div class="row avatar-btns">' +
-                            '<!-- <div class="col-md-9">' +
-                              '<div class="btn-group">' +
-                                '<button class="btn btn-primary" data-method="rotate" data-option="-90" type="button" title="Rotate -90 degrees">Rotate Left</button>' +
-                                '<button class="btn btn-primary" data-method="rotate" data-option="-15" type="button">-15deg</button>' +
-                                '<button class="btn btn-primary" data-method="rotate" data-option="-30" type="button">-30deg</button>' +
-                                '<button class="btn btn-primary" data-method="rotate" data-option="-45" type="button">-45deg</button>' +
-                              '</div>' +
-                              '<div class="btn-group">' +
-                                '<button class="btn btn-primary" data-method="rotate" data-option="90" type="button" title="Rotate 90 degrees">Rotate Right</button>' +
-                                '<button class="btn btn-primary" data-method="rotate" data-option="15" type="button">15deg</button>' +
-                                '<button class="btn btn-primary" data-method="rotate" data-option="30" type="button">30deg</button>' +
-                                '<button class="btn btn-primary" data-method="rotate" data-option="45" type="button">45deg</button>' +
-                              '</div>' +
-                            '</div> -->' +
-                            '<div class="col">' +
-                              '<button class="btn btn-primary btn-block avatar-save" type="submit">'+sumitBtnText+'</button>' +
-                            '</div>' +
-                          '</div>' +
-                        '</div>' +
-                      '</div>' +
-                      '<!-- <div class="modal-footer">' +
-                        '<button class="btn btn-default" data-dismiss="modal" type="button">Close</button>' +
-                      '</div> -->' +
-                    '</form>' +
-                  '</div>' +
-                '</div>' +
-              '</div><!-- /.modal -->' +
-
-              '<!-- Loading state -->' +
-              '<div class="loading" aria-label="Loading" role="img" tabindex="-1"></div>' +
-            '</div>';
-  }
+	                      '</div>' +
+	                      '<!-- <div class="modal-footer">' +
+	                        '<button class="btn btn-default" data-dismiss="modal" type="button">Close</button>' +
+	                      '</div> -->' +
+	                    '</form>' +
+	                  '</div>' +
+	                '</div>' +
+	              '</div><!-- /.modal -->' +
+	
+	              '<!-- Loading state -->' +
+	              '<div class="loading" aria-label="Loading" role="img" tabindex="-1"></div>' +
+	            '</div>';
+	  }
   
 
 
@@ -152,12 +164,13 @@
     // ============================================================
     init: function (option) {
       $("body").append(buildAvatarModal(option));
+      
       this.$container = $("#" + option.id);
       this.option = option;
 
       this.$avatarView  = $(this.option.trigger);
       this.$avatar      = this.$avatarView.find('img');
-      this.$avatarModal = this.$container.find('#avatar-modal');
+      this.$avatarModal = this.$container.find('.avatar-modal');
       this.$loading     = this.$container.find('.loading');
 
       this.$avatarForm  = this.$avatarModal.find('.avatar-form');
@@ -176,6 +189,8 @@
       if (!this.support.formData) {
         this.initIframe();
       }
+      if (option.dragEnable)
+    	  dragEnable(this.$container.find('.modal-dialog')[0])
 
       this.initTooltip();
       this.initModal();

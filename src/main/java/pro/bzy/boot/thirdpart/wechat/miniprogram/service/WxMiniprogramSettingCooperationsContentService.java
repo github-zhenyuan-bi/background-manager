@@ -1,6 +1,9 @@
 package pro.bzy.boot.thirdpart.wechat.miniprogram.service;
 
 import pro.bzy.boot.thirdpart.wechat.miniprogram.domain.entity.WxMiniprogramSettingCooperationsContent;
+
+import java.util.List;
+
 import com.baomidou.mybatisplus.extension.service.IService;
 
 /**
@@ -11,4 +14,9 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface WxMiniprogramSettingCooperationsContentService extends IService<WxMiniprogramSettingCooperationsContent> {
 
+    
+    /** 处理合作内容数据 返回内容列表 */
+    List<WxMiniprogramSettingCooperationsContent> handleCoopContents(String ctKeys, String ctValues, String isSubtitles);
+    
+    
 }

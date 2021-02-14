@@ -1,6 +1,8 @@
 package pro.bzy.boot.thirdpart.wechat.miniprogram.service;
 
 import pro.bzy.boot.thirdpart.wechat.miniprogram.domain.entity.WxMiniprogramSettingCooperation;
+
+
 import com.baomidou.mybatisplus.extension.service.IService;
 
 /**
@@ -11,4 +13,10 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface WxMiniprogramSettingCooperationService extends IService<WxMiniprogramSettingCooperation> {
 
+    /** 增加一个合作模块 与其 内容 */
+    void addCoop(WxMiniprogramSettingCooperation coop, String ctKeys, String ctValues, String isSubtitles);
+    
+    
+    /** 更新一个合作模块 与其 内容 */
+    void updateCoop(WxMiniprogramSettingCooperation coop, String ctKeys, String ctValues, String isSubtitles);
 }

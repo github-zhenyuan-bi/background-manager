@@ -120,6 +120,8 @@ mySwal = {
 			var opt = {};
 			$.extend(opt, SWAL_ALERT_OPTION);
 			opt.icon = icon;
+			if (icon == iconArr[3])
+				opt.timer = 4000;
 			$.extend(opt, option);
 			return Swal.fire(opt);
 		},

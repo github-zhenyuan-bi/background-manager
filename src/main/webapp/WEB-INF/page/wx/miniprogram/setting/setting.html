@@ -19,15 +19,15 @@
 		<#include "/template/css/my-css.html" />
 		
 		<style type="text/css">
-			#swipper-imgs-wrapper {
-			    border: .5px dashed #b8b7b7;
-			    padding: 10px;
-			}
+			#swipper-imgs-wrapper {}
 			#swipper-imgs-wrapper h2{
 				text-align: center;
 			    line-height: 200px;
 			    color: #b8b4b4;
 			    letter-spacing: 8px;
+		    }
+		    .c-key {
+		    	min-width: 100px;
 		    }
 		</style>
     </head>
@@ -51,8 +51,8 @@
                     <div class="col-12">
                         <div class="card m-b-20">
                             <div class="card-body">  
-								<h4 class="mt-0 header-title">#首页轮播图</h4>
-								<div id="swipper-imgs-wrapper" style="position: relative;">
+								<div ><h5 class="m-b-20 font-italic">#首页轮播图#</h5></div>
+								<div id="swipper-imgs-wrapper" class="image-dashed-box" style="position: relative;">
 									<!-- <h2>暂无轮播图</h2> -->
 								</div>
 								<div class="text-center">
@@ -64,39 +64,46 @@
                 </div>
                 
                 <div class="row">
-                    <div class="col-4">
+                	<div class="col-12 pd-lr-40"><h5 class="m-b-20 font-italic">#合作模块#</h5></div>
+                	<#if coops?? && coops?size gt 0>
+                		<#list coops as coop>
+                	<div class="coop-item col-lg-4 col-md-6">
                         <div class="card m-b-20">
-                            <div class="card-body"> 
-                             1
-                            1
-                            1
-                            1
-                            1
-                            1
+                            <div class="befor-op-cover card-body"> 
+                            	<div class="row" style="min-height: 150px;">
+                            		<div class="col-4 d-flex flex-column align-items-center justify-content-center">
+                            			<img src="${(coop.icon)! }" style="width: 64px; height: 64px;">
+                            			<div class="m-t-20">${(coop.coopName)! }</div>
+                            		</div>
+                            		<div class="col-8  d-flex flex-column align-items-center">
+										<#if coop.getContents()??>
+											<#list coop.getContents() as content>
+												<div class="w-100 d-flex justify-content-between <#if content.isSubtitle?? && content.isSubtitle == true>font-weight-bold<#else>pd-l-10</#if>">
+													<span class="c-key">${(content.ctKey)! }</span>
+													<span class="c-val">${(content.ctValue)! }</span>
+												</div>
+											</#list>
+										</#if>
+									</div>
+                            	</div>
+							</div>
+							<div data-id="${(coop.id)! }" class="op-cover">
+								<a href="javascript:void(0);" class="edit" onclick="editCoop(this)"><i class="fa fa-pencil-square-o fa-3x" aria-hidden="true"></i></a>
+								<a href="javascript:void(0);" class="remove" onclick="removeCoop(this)"><i class="fa fa-times-circle fa-3x" aria-hidden="true"></i></a>
 							</div>
                         </div>
-                    </div>
-                    <div class="col-4">
+                    </div> 
+                		</#list>
+                	</#if>
+                	
+                    
+                    <div class="col-lg-4 col-md-6">
                         <div class="card m-b-20">
                             <div class="card-body"> 
-                             1
-                            1
-                            1
-                            1
-                            1
-                            1
-							</div>
-                        </div>
-                    </div>
-                    <div class="col-4">
-                        <div class="card m-b-20">
-                            <div class="card-body"> 
-                            1
-                            1
-                            1
-                            1
-                            1
-                            1
+                            	<div id="coop-add" class="d-flex flex-column align-items-center justify-content-center" style="min-height: 150px;">
+                            		<i class="fa fa-plus  fa-5x" aria-hidden="true"></i>
+                            		<p>点击添加</p>
+                            	</div>
 							</div>
                         </div>
                     </div>
@@ -110,8 +117,6 @@
 		<!-- 后台管理公共底部 -->
 		<#include "/template/common/footer-template.html">
 
-
-		
 
 		
         <!-- js模块  -->
@@ -130,6 +135,7 @@
 		<#include "/template/js/dragBox-js.html" />
 		
 		<!-- App js -->
+		<script src="/assets/js/plugins/sidebar/sidebar.js?v=${(db_constants.Style_and_Script_version)!'1.0'}"></script>
         <script src="/assets/js/app.js?v=${(db_constants.Style_and_Script_version)!'1.0'}"></script>
         <script src="/assets/js/plugins/dragBox/dragBox.js?v=${(db_constants.Style_and_Script_version)!'1.0'}"></script>
         
@@ -167,6 +173,7 @@
 			        });
 		        }
 	      });
+		  
 		  __jqGet("/wx/wxMiniprogramSettingIndeximg/getList").done(res => {
 			  if (res.code == 200) {
 				  dragBox = $.DragBoxBuilder({
@@ -208,7 +215,80 @@
 			  }
 		  });
 		  
-		
+		  const $coopAdd = $("#coop-add");
+		  var $cooperationSideBar = null;
+		  function initSideBar() {
+			  if ($cooperationSideBar == null) {
+				  $cooperationSideBar = $.SideBarbuilder({
+						title: "增加合作模块内容",
+						//contentUrl: "/wx/wxMiniprogramSetting/page/cooperationFormEdit",
+						//contentDom: "/wx/wxMiniprogramSetting/page/cooperationFormEdit",
+						confirmBtnAction: function(dom) {
+							var __form = dom.find("form");
+							var __jsondata = __form.serializeFormToJson();
+							__jsondata.ctKeys = $.type(__jsondata.ctKey) === "array"? __jsondata.ctKey.join(",") : __jsondata.ctKey;
+							__jsondata.ctValues = $.type(__jsondata.ctValue) === "array"? __jsondata.ctValue.join(",") : __jsondata.ctValue;
+							__jsondata.isSubtitles = [];
+							__form.find(":checkbox[name='isSubtitle']").each(function(){
+								__jsondata.isSubtitles.push(this.checked? "true" : "false")
+							});
+							__jsondata.isSubtitles = __jsondata.isSubtitles.join(",");
+							
+							var url = "/wx/wxMiniprogramSettingCooperation/addRecord";
+							if (!$.isEmptyObject(__jsondata.id))
+								url = "/wx/wxMiniprogramSettingCooperation/updateById";
+							
+							__jqPost(url, __jsondata).done(function(res) {
+								if (res.code == 200) {
+									mySwal.success('编辑合作模块成功').then((result) => {
+										window.location.reload();
+						    		});
+								} else {
+									mySwal.error('编辑合作模块失败', res.msg);
+								}
+							});
+						},
+						cancelBtnAction: function(dom) {
+							$cooperationSideBar.hide();
+						}
+				  });
+			  }
+		  }
+	      $coopAdd.one("click", function(){
+	    	  initSideBar();
+	    	  $coopAdd.click(function(e) {
+	 			 e.preventDefault();
+	 			 $cooperationSideBar.show(function(sidebar) {
+	 				 $cooperationSideBar.option.contentUrl = "/wx/wxMiniprogramSetting/page/cooperationFormEdit";
+	 				 sidebar.loadContent();
+	 			 });
+	 		  });
+	    	  $coopAdd.trigger("click");
+		  });
+	      
+	      
+	      
+	      
+	      function editCoop(_this) {
+	    	  var id = $(_this).parent().data("id");
+	    	  initSideBar();
+	    	  $cooperationSideBar.show(function(sidebar) {
+ 				 $cooperationSideBar.option.contentUrl = "/wx/wxMiniprogramSetting/page/cooperationFormEdit?id="+id;
+ 				 sidebar.loadContent();
+ 			 });
+	      }
+	      function removeCoop(_this) {
+	    	  var id = $(_this).parent().data("id");
+	    	  mySwal.delConfirm({
+					// 删除请求
+					url: "/wx/wxMiniprogramSettingCooperation/deleteById?id="+id,
+					// 删除成功后的回调方法
+					afterConfirm: function(res) {
+						$(_this).parents(".coop-item").remove()
+					}
+				});
+	      }
+	      
 		</script>
     </body>
 </html>

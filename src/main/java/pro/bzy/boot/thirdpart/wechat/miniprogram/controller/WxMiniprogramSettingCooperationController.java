@@ -24,7 +24,6 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
@@ -105,22 +104,24 @@ public class WxMiniprogramSettingCooperationController {
     
     @ApiOperation(value="插入一条新数据")
     @PostMapping("addRecord")
-    public R<String> addRecord(@Validated(value= {FormValid.class}) @RequestBody WxMiniprogramSettingCooperation wxMiniprogramSettingCooperation, BindingResult bindingResult) {
-        if (StringUtils.isEmpty(wxMiniprogramSettingCooperation.getId()))
-            wxMiniprogramSettingCooperation.setId(null);
+    public R<String> addRecord(String ctKeys, String ctValues, String isSubtitles,
+            @Validated(value= {FormValid.class}) WxMiniprogramSettingCooperation coop, BindingResult bindingResult) {
+        if (StringUtils.isEmpty(coop.getId()))
+            coop.setId(null);
         
-        boolean flag = wxMiniprogramSettingCooperationService.save(wxMiniprogramSettingCooperation);
-        return R.ofSuccess(flag? "添加成功，ID:" + wxMiniprogramSettingCooperation.getId() : "添加失败");
+        wxMiniprogramSettingCooperationService.addCoop(coop, ctKeys, ctValues, isSubtitles);
+        return R.ofSuccess("新增合作模块成功");
     }
     
     
     
     @ApiOperation(value="ID更新数据")
     @PostMapping("updateById")
-    public R<String> updateById(@Validated(value= {FormValid.class}) @RequestBody WxMiniprogramSettingCooperation updateBean, BindingResult bindingResult) {
-        ExceptionCheckUtil.hasLength(updateBean.getId(), "ID 不能为空");
+    public R<String> updateById(String ctKeys, String ctValues, String isSubtitles,
+            @Validated(value= {FormValid.class}) WxMiniprogramSettingCooperation coop, BindingResult bindingResult) {
+        ExceptionCheckUtil.hasLength(coop.getId(), "ID 不能为空");
         
-        boolean flag = wxMiniprogramSettingCooperationService.updateById(updateBean);
-        return R.ofSuccess(flag? "更新成功" : "更新失败");
+        wxMiniprogramSettingCooperationService.updateCoop(coop, ctKeys, ctValues, isSubtitles);
+        return R.ofSuccess("更新成功");
     }
 }

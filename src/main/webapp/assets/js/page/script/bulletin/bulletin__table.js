@@ -1,5 +1,5 @@
 // 侧边栏
-var $sideBar = $.SideBar.init({
+var $sideBar = $.SideBarbuilder({
 	title: "通知公告推送",
 	contentDom: $("#bulletin-form"),
 	confirmBtnAction: sendBtnClickFunc,

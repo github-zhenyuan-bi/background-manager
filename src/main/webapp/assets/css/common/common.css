@@ -73,10 +73,29 @@
 .box-wh-30 {width: 30px; height: 30px;}
 .box-wh-40 {width: 40px; height: 40px;}
 
+.image-dashed-box {border: .5px dashed #b8b7b7; padding: 10px;}
 
 
 
 
+.op-cover {
+	visibility: hidden;
+	height: 100%;
+	background-color: rgb(100, 100, 100, .4);
+	position: absolute;top: 0;
+	left: 0;width: 100%; 
+	border-radius: 5px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+.op-cover:hover {visibility: visible;}
+.op-cover a {color: #fff; padding: 20px;}
+.op-cover .edit:hover {color: #0095d9;}
+.op-cover .edit:active {color: #007bbb;}
+.op-cover .remove:hover {color: #e83929;}
+.op-cover .remove:active {color: #ba2636;}
+.befor-op-cover:hover ~ .op-cover {visibility: visible;}
 
 
 

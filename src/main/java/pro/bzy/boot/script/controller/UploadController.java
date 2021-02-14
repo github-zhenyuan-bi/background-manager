@@ -80,7 +80,7 @@ public class UploadController extends MyAbstractController {
     @ApiOperation(value="微信小程序合作模块icon")
     @PostMapping("wxMiniprogramCooperationIcon")
     public @ResponseBody R<Object> wxMiniprogramCooperationIcon(MultipartFile img) throws Exception {
-        return uploadJubenImg(img, ymlBean.getConfig().getImageServer().getWxMiniprogramCooperationIconPath(), true);
+        return uploadJubenImg(img, ymlBean.getConfig().getImageServer().getWxMiniprogramCooperationIconPath(), false);
     }
     
     

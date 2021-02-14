@@ -1,0 +1,139 @@
+<form id="cooperation-form" style="width: 400px;">
+	<input id="coop-id" type="hidden" name="id" value="${(coop.id)! }">
+	
+	<div class="border-bottom d-inline-block font-12 m-b-20 pd-lr-5 bg-grey-1"  style="color: #aba9a9;"># 左侧模块</div>
+	
+	<div class="form-group row">
+		<label for="" class="col-sm-2 col-md-3 col-form-label">上传图标 :</label>
+	    <div class="col-sm-10 col-md-9">
+	        <div id="coop-contnet-icon" class="image-dashed-box d-flex justify-content-center">
+	        	<div style="width: 80px; height: 80px;" class="bg-grey <#if coop?? && coop.icon??>d-none</#if>"></div>
+	        	<img style="width: 80px; height: 80px;" class="<#if coop?? && coop.icon??><#else>d-none</#if>" src="${(coop.icon)! }">
+	        	<input type="hidden" name="icon" value="${(coop.icon)! }">
+	        </div>
+	    </div>
+	</div>
+    
+    <div class="form-group row">
+	    <label class="col-sm-2 col-md-3 col-form-label">模块名称 :</label>
+	    <div class="col-sm-10 col-md-9">
+	        <input class="form-control" type="text" name="coopName" value="${(coop.coopName)! }"/>
+	    </div>
+	</div>
+	
+	
+	<div class="border-bottom d-inline-block font-12 m-b-20 m-t-20 pd-lr-5 bg-grey-1" style="color: #aba9a9;"># 右侧模块</div>
+	
+	<#if coopContents?? && coopContents?size gt 0>
+    	<#list coopContents as content>
+    		<div class="form-group row content-dom">
+			    <label class="col-sm-2 col-md-3 col-form-label">内容 :</label>
+			    <div class="col-sm-8 col-md-7">
+			    	<div class="form-check">
+					    <input type="checkbox" class="form-check-input" name="isSubtitle" <#if content.isSubtitle>checked</#if>>
+					    <label class="form-check-label">是否副标题</label>
+					</div>
+			        <input class="form-control m-b-5" type="text" name="ctKey" placeholder="请输入内容键" value="${(content.ctKey)! }"/>
+			        <textarea class="form-control" rows="2" name="ctValue"  placeholder="请输入内容值">${(content.ctValue)! }</textarea>
+			    </div>
+			    <div class="col-2 pd-lr-5 d-flex flex-column align-items-center justify-content-center">
+				    <a class="addNextContentBtn" href="javascript:void(0);" onclick="addNextContent(this)"><i class="fa fa-plus m-b-20 text-primary" aria-hidden="true"></i></a>
+				    <a class="removeCurrentContentBtn" href="javascript:void(0);" onclick="removeContent(this)"><i class="fa fa-minus text-danger" aria-hidden="true"></i></a>
+			    </div>
+			</div>
+    	</#list>
+    	<#else>
+    		<div class="form-group row content-dom">
+			    <label class="col-sm-2 col-md-3 col-form-label">内容 :</label>
+			    <div class="col-sm-8 col-md-7">
+			    	<div class="form-check">
+					    <input type="checkbox" class="form-check-input" name="isSubtitle">
+					    <label class="form-check-label">是否副标题</label>
+					</div>
+			        <input class="form-control m-b-5" type="text" name="ctKey" placeholder="请输入内容键"/>
+			        <textarea class="form-control" rows="2" name="ctValue"  placeholder="请输入内容值"></textarea>
+			    </div>
+			    <div class="col-2 pd-lr-5 d-flex flex-column align-items-center justify-content-center">
+				    <a class="addNextContentBtn" href="javascript:void(0);" onclick="addNextContent(this)"><i class="fa fa-plus m-b-20 text-primary" aria-hidden="true"></i></a>
+				    <a class="removeCurrentContentBtn" href="javascript:void(0);" onclick="removeContent(this)"><i class="fa fa-minus text-danger" aria-hidden="true"></i></a>
+			    </div>
+			</div>
+   	</#if>
+	
+</form>
+
+<div class="template d-none">
+	<div class="form-group row content-dom">
+	    <label class="col-sm-2 col-md-3 col-form-label">内容 :</label>
+	    <div class="col-sm-8 col-md-7">
+	    	<div class="form-check">
+			    <input type="checkbox" class="form-check-input" name="isSubtitle">
+			    <label class="form-check-label">是否副标题</label>
+			</div>
+	        <input class="form-control m-b-5" type="text" name="ctKey" placeholder="请输入内容键"/>
+	        <textarea class="form-control" rows="2" name="ctValue"  placeholder="请输入内容值"></textarea>
+	    </div>
+	    <div class="col-2 pd-lr-5 d-flex flex-column align-items-center justify-content-center">
+		    <a class="addNextContentBtn" href="javascript:void(0);" onclick="addNextContent(this)"><i class="fa fa-plus m-b-20 text-primary" aria-hidden="true"></i></a>
+		    <a class="removeCurrentContentBtn" href="javascript:void(0);" onclick="removeContent(this)"><i class="fa fa-minus text-danger" aria-hidden="true"></i></a>
+	    </div>
+	</div>
+</div>
+
+<script type="text/javascript">
+	var CONTENT_DOM_CLASS_NAME = ".content-dom";
+
+	// 增加内容模块得html模板
+	var $contentDomTemplate = $(".template " + CONTENT_DOM_CLASS_NAME);
+	// 在当前模块后面增加一个内容
+	function addNextContent(_this) {
+		var __thisWrapper = $(_this).parents(CONTENT_DOM_CLASS_NAME);
+		__thisWrapper.after($contentDomTemplate.clone());
+	}
+	// 删除当前内容
+	function removeContent(_this) {
+		var __thisWrapper = $(_this).parents(CONTENT_DOM_CLASS_NAME);
+		__thisWrapper.remove();
+	}
+	
+	
+	var COOP_ICON_TRRIGER_NAME = "#coop-contnet-icon";
+	var __coopIconCrop = null;
+	$(COOP_ICON_TRRIGER_NAME).one("click", function(){
+		__coopIconCrop = $.CropAvatarBuilder({
+		  	id: "coopIcon-img-upload",
+	        trigger: COOP_ICON_TRRIGER_NAME,
+	        preview: ".avatar-preview",
+	        imgInputName: 'img',
+	        //dragEnable: true,
+	        // 裁剪框 可设定固定宽高比 如 16/9 或者正方形 1 或者任意裁剪 null
+	        aspectRatio: 1,
+	        // 提交方法 formData 表单数据对象 obj当前裁剪对象
+	        submit: function(fromData, obj) {
+	        	__jqAjax({
+		            url: "/upload/wxMiniprogramCooperationIcon",
+		            type: "POST",
+		            data: fromData,
+		            processData : false,
+		            contentType : false,
+		            dataType : 'json',
+		            success : function (res) {
+		            	if (res.code === 200) { 
+		            		obj.cropDone();
+		            		mySwal.success('上传图片成功').then((result) => {
+		            			$(COOP_ICON_TRRIGER_NAME).find("img").removeClass("d-none").attr("src", res.data);
+		            			$(COOP_ICON_TRRIGER_NAME).find("div").addClass("d-none");
+		            			$(COOP_ICON_TRRIGER_NAME).find("input").val(res.data);
+				    		});
+		            	} else {
+		            		obj.alert("上传失败，原因：" + res.msg);
+		            	}
+		            }    
+		        }); 
+	        }
+	  	});
+		$(COOP_ICON_TRRIGER_NAME).trigger("click");
+	});
+</script>
+
+
