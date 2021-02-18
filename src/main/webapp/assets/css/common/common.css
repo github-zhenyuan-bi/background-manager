@@ -80,17 +80,19 @@
 
 .op-cover {
 	visibility: hidden;
-	height: 100%;
+	height: 52px;
 	background-color: rgb(100, 100, 100, .4);
-	position: absolute;top: 0;
-	left: 0;width: 100%; 
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	width: 100%; 
 	border-radius: 5px;
 	display: flex;
 	align-items: center;
 	justify-content: center;
 }
 .op-cover:hover {visibility: visible;}
-.op-cover a {color: #fff; padding: 20px;}
+.op-cover a {color: #fff; padding: 5px 20px;}
 .op-cover .edit:hover {color: #0095d9;}
 .op-cover .edit:active {color: #007bbb;}
 .op-cover .remove:hover {color: #e83929;}

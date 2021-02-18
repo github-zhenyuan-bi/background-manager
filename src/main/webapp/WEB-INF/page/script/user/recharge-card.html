@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+		<title>通知公告模板</title>
+        <!-- App Icons -->
+        <link rel="shortcut icon" href="/assets/images/favicon.ico">
+
+        <!-- App css -->
+        <#include "/template/css/bootstrap-css.html" />
+        <#include "/template/css/bootstrap-table-css.html" />
+        <#include "/template/css/bootstrap-switch-css.html" />
+        
+        <#include "/template/css/font-awesome-css.html" />
+		<#include "/template/css/my-css.html" />
+		
+    </head>
+
+
+    <body>
+
+        <!-- Loader -->
+        <div id="preloader"><div id="status"><div class="spinner"></div></div></div>
+		
+		<!-- 页面头 -->
+		<div class="header-bg">
+			<#include "/template/common/header/header-template.html" />
+        </div>
+        
+        <div class="wrapper">
+            <div class="container-fluid">
+
+                <div class="row">
+                
+                    <div class="col-lg-4">
+                    	<div class="card m-b-20">
+                            <div class="card-body">  
+								<h4 id="template-form-target" class="mt-0 header-title">#充值卡展示</h4>
+								
+	                           	
+							</div>
+                        </div>
+                    </div>
+                    
+                    
+                    <div class="col-lg-8">
+                        <div class="card m-b-20">
+                            <div class="card-body">  
+								<h4 class="mt-0 header-title">#充值卡配置</h4>
+								
+								<form id="cooperation-form">
+									<input id="" type="hidden" name="id" value="">
+									
+									<div class="form-group row">
+										<label for="" class="col-sm-3 col-md-2 col-form-label">卡图片 :</label>
+									    <div class="col-sm-9 col-md-10">
+									        <div id="coop-contnet-icon" class="image-dashed-box d-flex justify-content-center">
+									        	<div style="width: 80px; height: 80px;" class="bg-grey"></div>
+									        	<img style="width: 80px; height: 80px;" class="d-none" src="">
+									        	<input type="hidden" name="icon" value="">
+									        </div>
+									    </div>
+									</div>
+								    
+								    <div class="form-group row">
+									    <label class="col-sm-3 col-md-2 col-form-label">卡名称 :</label>
+									    <div class="col-sm-9 col-md-10">
+									        <input class="form-control" type="text" name="" value=""/>
+									    </div>
+									</div>
+									
+									<div class="form-group row">
+									    <label class="col-sm-3 col-md-2  col-form-label">定价 :</label>
+									    
+								        <div class="col-lg-3">
+									        <label class="sr-only"></label>
+									        <div class="input-group mb-2">
+									            <div class="input-group-prepend">
+									                <div class="input-group-text">原价格</div>
+									            </div>
+									            <input type="text" class="form-control" placeholder="2000">
+									        </div>
+									    </div>
+									    <div class="col-lg-3">
+									        <label class="sr-only"></label>
+									        <div class="input-group mb-2">
+									            <div class="input-group-prepend">
+									                <div class="input-group-text">折扣价格</div>
+									            </div>
+									            <input type="text" class="form-control" placeholder="500">
+									        </div>
+									    </div>
+									    <div class="col-lg-4">
+									        <label class="sr-only"></label>
+									        <div class="input-group mb-2">
+									            <div class="input-group-prepend">
+									                <div class="input-group-text">账面价值</div>
+									            </div>
+									            <input type="text" class="form-control" placeholder="200">
+									        </div>
+									    </div>
+									</div>
+									
+									<div class="form-group row">
+										<label class="col-sm-3 col-md-2 col-form-label">卡类型：</label>
+									    <div class="form-group input-group col-sm-9 col-md-10">
+									        <select id="bull-isFixedTop" class="form-control" name="isFixedTop">
+									        	<option value="0">xxxx</option>
+									        	<option value="1">yyyy</option>
+								            </select>
+									    </div>
+									</div>
+									
+									<div class="form-group row">
+									    <label class="col-sm-3 col-md-2  col-form-label">活动时间 :</label>
+									    
+								        <div class="col-sm-4">
+									        <label class="sr-only"></label>
+									        <div class="input-group mb-2">
+									            <div class="input-group-prepend">
+									                <div class="input-group-text">开始时间</div>
+									            </div>
+									            <input type="text" class="form-control" placeholder="2000">
+									        </div>
+									    </div>
+									    <div class="col-sm-4">
+									        <label class="sr-only"></label>
+									        <div class="input-group mb-2">
+									            <div class="input-group-prepend">
+									                <div class="input-group-text">结束时间</div>
+									            </div>
+									            <input type="text" class="form-control" placeholder="2000">
+									        </div>
+									    </div>
+									</div>
+									
+									<div class="form-group row">
+										<label class="col-sm-3 col-md-2 col-form-label">是否上架：</label>
+									    <div class="form-group col-sm-9 col-md-10">
+									        <div class="form-check form-check-inline">
+											    <input class="form-check-input" type="checkbox" id="inlineCheckbox1" value="option1">
+											    <label class="form-check-label" for="inlineCheckbox1">上架</label>
+											</div>
+											<div class="form-check form-check-inline">
+											    <input class="form-check-input" type="checkbox" id="inlineCheckbox2" value="option2">
+											    <label class="form-check-label" for="inlineCheckbox2">下架</label>
+											</div>
+									    </div>
+									</div>
+									
+									<div class="form-group row">
+										<label class="col-sm-3 col-md-2 col-form-label">使用说明：</label>
+									    <div class="form-group col-sm-9 col-md-10">
+									        <textarea class="form-control" rows="2" ></textarea>
+									    </div>
+									</div>
+									
+								</form>
+
+								
+							</div>
+                        </div>
+                    </div>
+                </div>
+
+            </div> <!-- end container -->
+        </div>
+        <!-- end wrapper -->
+
+
+		<!-- 后台管理公共底部 -->
+		<#include "/template/common/footer-template.html">
+
+
+
+        <!-- js模块  -->
+        <#include "/template/js/jquery-plugins-js.html" />
+        <#include "/template/js/bootstrap-propers-js.html" />
+        <#include "/template/js/bootstrap-js.html" />
+        
+		<#include "/template/js/my-js.html" />
+
+        <#include "/template/js/bootstrap-table-js.html" />
+		<#include "/template/js/bootstrap-sweet-alert-js.html" />
+		
+		<#include "/template/js/md5-and-parsley.html" />
+		<#include "/template/js/upload-js.html" />
+		<#include "/template/js/cropperPicture-js.html" />
+		<!-- App js -->
+        <script src="/assets/js/app.js"></script>
+        
+		<script type="text/javascript">
+		
+		</script>
+    </body>
+</html>

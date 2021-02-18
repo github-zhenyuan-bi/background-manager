@@ -1,8 +1,8 @@
 package pro.bzy.boot.script.controller;
 
-import pro.bzy.boot.script.domain.entity.WxJubenBrowseRecord;
-import pro.bzy.boot.script.mapper.WxJubenBrowseRecordMapper;
-import pro.bzy.boot.script.service.WxJubenBrowseRecordService;
+import pro.bzy.boot.script.domain.entity.UserRechargeRecord;
+import pro.bzy.boot.script.mapper.UserRechargeRecordMapper;
+import pro.bzy.boot.script.service.UserRechargeRecordService;
 
 import pro.bzy.boot.framework.web.domain.bean.R;
 import pro.bzy.boot.framework.web.annoations.FormValid;
@@ -33,49 +33,49 @@ import com.github.xiaoymin.knife4j.annotations.ApiSupport;
 
 
 /**
- * VIEW 前端控制器
+ *  前端控制器
  * 使用自定义逆向生成模板, 模板文件位置classpath：templates/mybatisCodeGen/controller.java.ftl
  * @author zhenyuan.bi
- * @since 2021-01-19
+ * @since 2021-02-17
  */
-@Api(tags = {"VIEW"}, value="微信剧本浏览记录")
+@Api(tags = {""})
 @ApiSupport(order = 100)
-@RequestMapping("/script/wxJubenBrowseRecord")
+@RequestMapping("/script/userRechargeRecord")
 @RestController
-public class WxJubenBrowseRecordController {
+public class UserRechargeRecordController {
 
 	@Resource
-    private WxJubenBrowseRecordMapper wxJubenBrowseRecordMapper;
+    private UserRechargeRecordMapper userRechargeRecordMapper;
     
     @Resource
-    private WxJubenBrowseRecordService wxJubenBrowseRecordService;
+    private UserRechargeRecordService userRechargeRecordService;
     
     
     
     @ApiOperation(value="id查询")
     @GetMapping("getById")
-    public R<WxJubenBrowseRecord> getById(final String id) {
+    public R<UserRechargeRecord> getById(final String id) {
         ExceptionCheckUtil.hasLength(id, "ID 不能为空");
         
-        return R.ofSuccess(wxJubenBrowseRecordService.getById(id));
+        return R.ofSuccess(userRechargeRecordService.getById(id));
     }
 
     
     
     @ApiOperation(value="查询数据列表")
     @GetMapping("getList")
-    public R<List<WxJubenBrowseRecord>> getList(WxJubenBrowseRecord queryBean) {
-        List<WxJubenBrowseRecord> wxJubenBrowseRecords = wxJubenBrowseRecordService.list(Wrappers.<WxJubenBrowseRecord>lambdaQuery(queryBean));
-        return R.ofSuccess(wxJubenBrowseRecords);
+    public R<List<UserRechargeRecord>> getList(UserRechargeRecord queryBean) {
+        List<UserRechargeRecord> userRechargeRecords = userRechargeRecordService.list(Wrappers.<UserRechargeRecord>lambdaQuery(queryBean));
+        return R.ofSuccess(userRechargeRecords);
     }
     
     
     
     @ApiOperation(value="查询数据分页")
     @GetMapping("getPage")
-    public R<Page<WxJubenBrowseRecord>> getPage(int pageNo, int pageSize, WxJubenBrowseRecord queryBean) {
-        Page<WxJubenBrowseRecord> page = new Page<>(pageNo, pageSize);
-        wxJubenBrowseRecordService.page(page, Wrappers.<WxJubenBrowseRecord>lambdaQuery(queryBean));
+    public R<Page<UserRechargeRecord>> getPage(int pageNo, int pageSize, UserRechargeRecord queryBean) {
+        Page<UserRechargeRecord> page = new Page<>(pageNo, pageSize);
+        userRechargeRecordService.page(page, Wrappers.<UserRechargeRecord>lambdaQuery(queryBean));
         return R.ofSuccess(page);
     }
     
@@ -86,7 +86,7 @@ public class WxJubenBrowseRecordController {
     public R<String> deleteById(final String id) {
         ExceptionCheckUtil.hasLength(id, "ID 不能为空");
         
-        boolean flag = wxJubenBrowseRecordService.removeById(id);
+        boolean flag = userRechargeRecordService.removeById(id);
         return R.ofSuccess("删除结果：" + (flag? "删除成功" : "删除失败"));
     }
     
@@ -97,7 +97,7 @@ public class WxJubenBrowseRecordController {
     public R<String> batchDeleteByIds(String[] ids) {
         ExceptionCheckUtil.notEmpty(ids, "批量删除的IDs 不能为空");
         
-        boolean flag = wxJubenBrowseRecordService.removeByIds(Arrays.asList(ids));
+        boolean flag = userRechargeRecordService.removeByIds(Arrays.asList(ids));
         return R.ofSuccess("删除结果：" + (flag? "删除成功" : "删除失败"));
     }
     
@@ -105,22 +105,22 @@ public class WxJubenBrowseRecordController {
     
     @ApiOperation(value="插入一条新数据")
     @PostMapping("addRecord")
-    public R<String> addRecord(@Validated(value= {FormValid.class}) @RequestBody WxJubenBrowseRecord wxJubenBrowseRecord, BindingResult bindingResult) {
-        if (StringUtils.isEmpty(wxJubenBrowseRecord.getId()))
-            wxJubenBrowseRecord.setId(null);
+    public R<String> addRecord(@Validated(value= {FormValid.class}) @RequestBody UserRechargeRecord userRechargeRecord, BindingResult bindingResult) {
+        if (StringUtils.isEmpty(userRechargeRecord.getId()))
+            userRechargeRecord.setId(null);
         
-        boolean flag = wxJubenBrowseRecordService.save(wxJubenBrowseRecord);
-        return R.ofSuccess(flag? "添加成功，ID:" + wxJubenBrowseRecord.getId() : "添加失败");
+        boolean flag = userRechargeRecordService.save(userRechargeRecord);
+        return R.ofSuccess(flag? "添加成功，ID:" + userRechargeRecord.getId() : "添加失败");
     }
     
     
     
     @ApiOperation(value="ID更新数据")
     @PostMapping("updateById")
-    public R<String> updateById(@Validated(value= {FormValid.class}) @RequestBody WxJubenBrowseRecord updateBean, BindingResult bindingResult) {
+    public R<String> updateById(@Validated(value= {FormValid.class}) @RequestBody UserRechargeRecord updateBean, BindingResult bindingResult) {
         ExceptionCheckUtil.hasLength(updateBean.getId(), "ID 不能为空");
         
-        boolean flag = wxJubenBrowseRecordService.updateById(updateBean);
+        boolean flag = userRechargeRecordService.updateById(updateBean);
         return R.ofSuccess(flag? "更新成功" : "更新失败");
     }
 }

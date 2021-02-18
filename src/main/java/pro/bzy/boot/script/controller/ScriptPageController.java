@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import pro.bzy.boot.framework.utils.CollectionUtil;
 import pro.bzy.boot.framework.utils.SystemConstant;
@@ -33,6 +34,7 @@ import pro.bzy.boot.script.service.JubenTagService;
 import pro.bzy.boot.script.service.TagService;
 import pro.bzy.boot.script.utils.ScriptConstant;
 
+@Api(tags = {"VIEW"}, value="剧本页面")
 @Controller
 @RequestMapping("/script")
 public class ScriptPageController extends MyAbstractController {
@@ -220,5 +222,16 @@ public class ScriptPageController extends MyAbstractController {
         if (!StringUtils.isEmpty(bulletin.getTemplateId()))
             model.put("curTemplate", bulletinTemplateService.getById(bulletin.getTemplateId()));
         return "/script/bulletin/" + pageName;
+    }
+    
+    
+    
+    @ApiOperation(value="会员卡管理")
+    @GetMapping("user/rechargeCard")
+    public String rechargeCard(HttpServletRequest request, Map<String, Object> model) {
+        // 菜单基本数据
+        prepareMenuData(request, model, menuService);
+        
+        return "script/user/recharge-card";
     }
 }

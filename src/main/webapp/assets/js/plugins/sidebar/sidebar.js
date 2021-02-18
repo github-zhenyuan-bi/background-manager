@@ -59,11 +59,13 @@
     	if (this.option.contentUrl && this.option.contentUrl != "") {
     		$.get(this.option.contentUrl).done(res=>{
     			__this.content.append(res);
-    			this.box.css("right", '-' + (this.box.width()+50) + 'px');
+    			if (this.box)
+    				this.box.css("right", '-' + (this.box.width()+50) + 'px');
     		}).fail(err=>{console.log(err)});
 		} else if (this.option.contentDom) {
     		__this.content.append(this.option.contentDom);
-    		this.box.css("right", '-' + (this.box.width()+50) + 'px');
+    		if (this.box)
+    			this.box.css("right", '-' + (this.box.width()+50) + 'px');
     	}
     },
     SideBar.prototype.loadContent = function (ct) {
@@ -71,16 +73,19 @@
     	__this.content.empty();
     	if (ct) {
     		__this.content.append(ct);
-    		this.box.css("right", '-' + (this.box.width()+50) + 'px');
+    		if (this.box)
+    			this.box.css("right", '-' + (this.box.width()+50) + 'px');
     	} else {
     		if (this.option.contentUrl && this.option.contentUrl != "") {
         		$.get(this.option.contentUrl).done(res=>{
         			__this.content.append(res);
-        			this.box.css("right", '-' + (this.box.width()+50) + 'px');
+        			if (this.box)
+        				this.box.css("right", '-' + (this.box.width()+50) + 'px');
         		}).fail(err=>{console.log(err)});
     		} else if (this.option.contentDom) {
         		__this.content.append(this.option.contentDom);
-        		this.box.css("right", '-' + (this.box.width()+50) + 'px');
+        		if (this.box)
+        			this.box.css("right", '-' + (this.box.width()+50) + 'px');
         	}
     	}
     },

@@ -68,9 +68,10 @@ public class MybatisPlusCodeGen {
         //String[] tables = {"SC_JUBEN_CHARACTER"};
         //String[] tables = {"T_USER"};
         //String[] tables = {"SC_BULLETIN_TEMPLATE", "SC_BULLETIN", "SC_BULLETIN_TIMER_TASK"};
-        String[] tables = {"V_BULLETIN_TIMER_TASK_DETAIL"};
+        //String[] tables = {"V_BULLETIN_TIMER_TASK_DETAIL"};
         //String[] tables = {"SC_JUBEN_BROWSE_LOG"};
         //String[] tables = {"V_WX_JUBEN_BROWSE_RECORD"};
+        String[] tables = {"SC_RECHARGE_CARD", "SC_RECHARGE_CARD_TAGS", "SC_USER_RECHARGE_RECORD", "SC_USER_BALANCE", "SC_USER_CONSUME_RECORD"};
         codeGen(db, parentPackage, viewPath, module, extraArgs, tables);
     }
     
