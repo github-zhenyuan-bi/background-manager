@@ -1,8 +1,12 @@
 package pro.bzy.boot.framework.config.mybatis;
 
+import java.util.concurrent.locks.ReadWriteLock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
+
 import org.apache.ibatis.cache.Cache;
 
 import pro.bzy.boot.framework.config.cache.ehcache.EhCacheMybatis;
+import pro.bzy.boot.framework.config.cache.redis.RedisMybatis;
 import pro.bzy.boot.framework.utils.PropertiesUtil;
 import pro.bzy.boot.framework.utils.SystemConstant;
 
@@ -16,7 +20,7 @@ public class MybatisCacheConfig implements Cache{
      */
     private Cache cache;
     
-    
+    private final ReadWriteLock readWriteLock = new ReentrantReadWriteLock();
     
     /**
      * constructor
@@ -25,8 +29,7 @@ public class MybatisCacheConfig implements Cache{
     public MybatisCacheConfig(final String id) {
         String useCache = PropertiesUtil.get(SystemConstant.USER_CACHE);
         if (SystemConstant.CACHE_REDIS.equalsIgnoreCase(useCache)) 
-            // TODO 完成Redis的缓存配置
-            throw new UnsupportedOperationException("暂时还未做对Redis缓存的支持");
+            cache = new RedisMybatis(id);
         else 
             cache = new EhCacheMybatis(id);
     }
@@ -86,5 +89,10 @@ public class MybatisCacheConfig implements Cache{
     @Override
     public String getId() {
         return cache.getId();
+    }
+    
+    @Override
+    public ReadWriteLock getReadWriteLock() {
+        return readWriteLock;
     }
 }

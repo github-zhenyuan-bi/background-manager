@@ -106,6 +106,7 @@ app:
       juben-cover-image-path: /juben/covers/
       juben-character-image-path: /juben/characters/
       juben-bulletin-icon-image-path: /juben/icon/
+      juben-recharge-card-img-path: /juben/rechargeCard/
       wx-miniprogram-index-image-path: /wx/miniprogram/index/swiper/
       wx-miniprogram-server-module-icon-path: /wx/miniprogram/server/
       wx-miniprogram-cooperation-icon-path: /wx/miniprogram/cooperation/

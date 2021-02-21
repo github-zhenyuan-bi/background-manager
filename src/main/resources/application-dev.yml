@@ -19,10 +19,10 @@ spring:
     driverClassName: com.mysql.jdbc.Driver
     username: root
     password: AliMysql123456
-#  redis:
-#    host: 192.168.2.71
-#    port: 6379
-#    timeout: 3000
+  redis:
+    host: 192.168.2.71
+    port: 6379
+    timeout: 3000
   freemarker:
     allow-request-override: false
     cache: false
@@ -78,7 +78,7 @@ app:
       server-url: http://localhost:${server.port}
     # 缓存配置变量
     cache:
-      use: ehcache
+      use: redis
       ehcache:
         max-elements-inMemory: 5000
         overflow-to-disk: false
@@ -110,6 +110,7 @@ app:
       juben-cover-image-path: /juben/covers/
       juben-character-image-path: /juben/characters/
       juben-bulletin-icon-image-path: /juben/icon/
+      juben-recharge-card-img-path: /juben/rechargeCard/
       wx-miniprogram-index-image-path: /wx/miniprogram/index/swiper/
       wx-miniprogram-server-module-icon-path: /wx/miniprogram/server/
       wx-miniprogram-cooperation-icon-path: /wx/miniprogram/cooperation/

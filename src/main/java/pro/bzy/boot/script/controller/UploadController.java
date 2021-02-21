@@ -23,7 +23,7 @@ import pro.bzy.boot.framework.utils.FileUtil;
 import pro.bzy.boot.framework.web.controller.parent.MyAbstractController;
 import pro.bzy.boot.framework.web.domain.bean.R;
 
-@Api(tags = {"上传"})
+@Api(tags = {"上传"}, value="剧本相关图片上传")
 @ApiSupport(order = 100)
 @Controller
 @RequestMapping("upload")
@@ -90,6 +90,15 @@ public class UploadController extends MyAbstractController {
     @PostMapping("bulletinIconImg")
     public @ResponseBody R<Object> bulletinIconImg(MultipartFile img) throws Exception {
         return uploadJubenImg(img, ymlBean.getConfig().getImageServer().getJubenBulletinIconImagePath(), false);
+    }
+    
+    
+    
+    
+    @ApiOperation(value="充值卡图片")
+    @PostMapping("rechargeCardImg")
+    public @ResponseBody R<Object> rechargeCardImg(MultipartFile img) throws Exception {
+        return uploadJubenImg(img, ymlBean.getConfig().getImageServer().getJubenRechargeCardImgPath(), true);
     }
     
     

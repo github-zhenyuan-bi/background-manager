@@ -52,16 +52,16 @@
                             <div class="card-body">  
 								<h4 class="mt-0 header-title">#充值卡配置</h4>
 								
-								<form id="cooperation-form">
-									<input id="" type="hidden" name="id" value="">
+								<form id="rechargecard-form">
+									<input id="recharge-card-id" type="hidden" name="id" value="">
 									
 									<div class="form-group row">
 										<label for="" class="col-sm-3 col-md-2 col-form-label">卡图片 :</label>
 									    <div class="col-sm-9 col-md-10">
-									        <div id="coop-contnet-icon" class="image-dashed-box d-flex justify-content-center">
-									        	<div style="width: 80px; height: 80px;" class="bg-grey"></div>
+									        <div id="recharge-card-img" class="image-dashed-box d-flex justify-content-center">
+									       		<div class="pd-tb-20">上传充值卡显示图片</div>
 									        	<img style="width: 80px; height: 80px;" class="d-none" src="">
-									        	<input type="hidden" name="icon" value="">
+									        	<input type="hidden" name="imageUri" value="">
 									        </div>
 									    </div>
 									</div>
@@ -69,7 +69,7 @@
 								    <div class="form-group row">
 									    <label class="col-sm-3 col-md-2 col-form-label">卡名称 :</label>
 									    <div class="col-sm-9 col-md-10">
-									        <input class="form-control" type="text" name="" value=""/>
+									        <input class="form-control" type="text" name="name" value="" placeholder="请输入充值卡名称"/>
 									    </div>
 									</div>
 									
@@ -82,7 +82,7 @@
 									            <div class="input-group-prepend">
 									                <div class="input-group-text">原价格</div>
 									            </div>
-									            <input type="text" class="form-control" placeholder="2000">
+									            <input type="text" class="form-control" name="originalPrice" placeholder="设定充值卡原售价">
 									        </div>
 									    </div>
 									    <div class="col-lg-3">
@@ -91,7 +91,7 @@
 									            <div class="input-group-prepend">
 									                <div class="input-group-text">折扣价格</div>
 									            </div>
-									            <input type="text" class="form-control" placeholder="500">
+									            <input type="text" class="form-control" name="discountPrice" placeholder="设定充值卡折扣价">
 									        </div>
 									    </div>
 									    <div class="col-lg-4">
@@ -100,7 +100,7 @@
 									            <div class="input-group-prepend">
 									                <div class="input-group-text">账面价值</div>
 									            </div>
-									            <input type="text" class="form-control" placeholder="200">
+									            <input type="text" class="form-control" name="cardValue" placeholder="设定充值卡账面价值">
 									        </div>
 									    </div>
 									</div>
@@ -108,9 +108,10 @@
 									<div class="form-group row">
 										<label class="col-sm-3 col-md-2 col-form-label">卡类型：</label>
 									    <div class="form-group input-group col-sm-9 col-md-10">
-									        <select id="bull-isFixedTop" class="form-control" name="isFixedTop">
-									        	<option value="0">xxxx</option>
-									        	<option value="1">yyyy</option>
+									        <select id="cardType" class="form-control" name="cardType">
+									        	<option value="">---请选择充值卡类型---</option>
+									        	<option value="剧本杀">剧本杀</option>
+									        	<option value="狼人杀">狼人杀</option>
 								            </select>
 									    </div>
 									</div>
@@ -124,7 +125,7 @@
 									            <div class="input-group-prepend">
 									                <div class="input-group-text">开始时间</div>
 									            </div>
-									            <input type="text" class="form-control" placeholder="2000">
+									            <input type="date" class="form-control" name="validityStarttime" placeholder="请输入活动开始时间">
 									        </div>
 									    </div>
 									    <div class="col-sm-4">
@@ -133,7 +134,7 @@
 									            <div class="input-group-prepend">
 									                <div class="input-group-text">结束时间</div>
 									            </div>
-									            <input type="text" class="form-control" placeholder="2000">
+									            <input type="date" class="form-control" name="validityEndtime" placeholder="请输入如活动结束时间">
 									        </div>
 									    </div>
 									</div>
@@ -142,12 +143,12 @@
 										<label class="col-sm-3 col-md-2 col-form-label">是否上架：</label>
 									    <div class="form-group col-sm-9 col-md-10">
 									        <div class="form-check form-check-inline">
-											    <input class="form-check-input" type="checkbox" id="inlineCheckbox1" value="option1">
-											    <label class="form-check-label" for="inlineCheckbox1">上架</label>
+											    <input class="form-check-input" type="checkbox" name="enabled" value="true">
+											    <label class="form-check-label" >上架</label>
 											</div>
 											<div class="form-check form-check-inline">
-											    <input class="form-check-input" type="checkbox" id="inlineCheckbox2" value="option2">
-											    <label class="form-check-label" for="inlineCheckbox2">下架</label>
+											    <input class="form-check-input" type="checkbox"  name="enabled" value="false">
+											    <label class="form-check-label" >下架</label>
 											</div>
 									    </div>
 									</div>
@@ -155,10 +156,16 @@
 									<div class="form-group row">
 										<label class="col-sm-3 col-md-2 col-form-label">使用说明：</label>
 									    <div class="form-group col-sm-9 col-md-10">
-									        <textarea class="form-control" rows="2" ></textarea>
+									        <textarea class="form-control" rows="2" name="instructions" placeholder="请填写充值卡使用概要说明"></textarea>
 									    </div>
 									</div>
 									
+									<div class="form-group row">
+										<div class="col text-center">
+											<button type="button" class="btn btn-primary">提交</button>
+									    	<button type="reset" class="btn btn-light">重置</button>
+										</div>
+									</div>
 								</form>
 
 								
@@ -195,6 +202,37 @@
         
 		<script type="text/javascript">
 		
+		
+			var $rechargeCardImgDom = $("#recharge-card-img");
+			$.CropAvatarBuilder({
+				  	id: "rechargeCardImg",
+			        trigger: "#recharge-card-img",
+			        preview: ".avatar-preview",
+			        imgInputName: 'img',
+			        // 裁剪框 可设定固定宽高比 如 16/9 或者正方形 1 或者任意裁剪 null
+			        aspectRatio: null,
+			        // 提交方法 formData 表单数据对象 obj当前裁剪对象
+			        submit: function(fromData, obj) {
+			        	__jqAjax({
+				            url: "/upload/rechargeCardImg",
+				            type: "POST",
+				            data: fromData,
+				            processData : false,
+				            contentType : false,
+				            dataType : 'json',
+				            success : function (res) {
+				            	if (res.code === 200) { 
+				            		obj.cropDone();
+				            		mySwal.success('上传图片成功').then((result) => {
+						    		});
+				            	} else {
+				            		obj.alert("上传失败，原因：" + res.msg);
+				            	}
+				            }    
+				        }); 
+			        	
+			        }
+		      });
 		</script>
     </body>
 </html>

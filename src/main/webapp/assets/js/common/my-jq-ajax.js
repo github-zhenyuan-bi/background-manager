@@ -28,3 +28,19 @@ function __jqLoad($dom, url) {
 	}).fail(err=>{handleAjaxFail(err)});;
 }
 
+//上传图片
+function __jqMyUploadImg(url, formData, sucFuc) {
+	return __jqAjax({
+        url: url,
+        type: "POST",
+        data: formData,
+        processData : false,
+        contentType : false,
+        dataType : 'json',
+        success : function (res) {
+        	if ($.type(sucFuc) === 'function') {
+        		sucFuc(res);
+        	}
+        }    
+    });
+}

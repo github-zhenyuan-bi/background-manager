@@ -25,6 +25,10 @@ public class ImageServer {
     /** 剧本通知图标 */
     private String jubenBulletinIconImagePath;
     
+    /** 剧本充值卡图片 */
+    private String jubenRechargeCardImgPath;
+    
+    
     
     
     /** 微信小程序首页轮播图存储路径 */
