@@ -120,4 +120,6 @@ public interface SystemConstant {
     
     String SCHEDULING_EXECUTE_FAILURE = "0";
     String SCHEDULING_EXECUTE_SUCCESS = "1";
+    
+    
 }

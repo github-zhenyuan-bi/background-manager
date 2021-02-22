@@ -18,12 +18,22 @@ public class CacheUtil implements MyUtil {
     }
     
     
-    public static void put(Object key, Object value, int expire) {
+    public static final void put(Object key, Object value, int expire) {
         cache.put(key, value, expire);
     }
     
     
-    public static void put(Object key, Object value) {
+    public static final void put(Object key, Object value) {
         put(key, value, 0);
+    }
+    
+    
+    public static final Object get(Object key) {
+        return cache.get(key);
+    }
+    
+    
+    public static final <T> Object get(Object key, Class<T> clazz) {
+        return cache.get(key, clazz);
     }
 }

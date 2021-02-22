@@ -24,6 +24,7 @@ import pro.bzy.boot.framework.config.jwt.JwtToken;
 import pro.bzy.boot.framework.config.jwt.JwtUtil;
 import pro.bzy.boot.framework.config.shrio.ShiroJwtConfig;
 import pro.bzy.boot.framework.utils.RequestAndResponseUtil;
+import pro.bzy.boot.framework.utils.CacheUtil;
 import pro.bzy.boot.framework.utils.PropertiesUtil;
 import pro.bzy.boot.framework.utils.SystemConstant;
 import pro.bzy.boot.framework.web.controller.parent.MyAbstractController;
@@ -98,6 +99,9 @@ public class LoginController extends MyAbstractController{
         // 2.3 将token内容放入cookie和header
         RequestAndResponseUtil.setCookiesAndHeaderToResponeForAccessToken(request, response, access_token);
         RequestAndResponseUtil.setCookiesAndHeaderToResponeForRefreshToken(request, response, refresh_token);
+        
+        // 2.4 将token放入缓存
+        CacheUtil.put(access_token, RequestAndResponseUtil.getIpAddress(request), (int) access_token_expire);
         
         return R.<String>builder().code(R.SUCCESS).msg("ok").data("/script/business/show").build();
     }

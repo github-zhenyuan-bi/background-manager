@@ -34,7 +34,7 @@ public class RedisCommonCache extends MyAbstractCache implements MyCahce{
     @Override
     public void put(Object key, Object value, int expire) throws MyCacheException {
         if (expire > 0)
-            getRedisTemplate().opsForValue().set(key, value, expire, TimeUnit.MINUTES);
+            getRedisTemplate().opsForValue().set(key, value, expire, TimeUnit.SECONDS);
         else
             getRedisTemplate().opsForValue().set(key, value);
         logPut(log, key, value, expire);

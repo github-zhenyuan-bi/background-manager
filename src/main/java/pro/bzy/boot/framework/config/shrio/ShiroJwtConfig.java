@@ -20,7 +20,7 @@ import org.springframework.context.annotation.Configuration;
 
 import lombok.Setter;
 import pro.bzy.boot.framework.config.jwt.JwtDefaultSubjectFactory;
-import pro.bzy.boot.framework.config.jwt.JwtFilter;
+import pro.bzy.boot.framework.config.jwt.JwtFilter2;
 import pro.bzy.boot.framework.config.shrio.parent.MyShiroConfig;
 
 @Configuration
@@ -80,7 +80,7 @@ public class ShiroJwtConfig implements MyShiroConfig{
         Map<String, Filter> filterMap = new HashMap<>();
         //这个地方其实另外两个filter可以不设置，默认就是
         filterMap.put("anon", new AnonymousFilter());
-        filterMap.put("jwt", new JwtFilter());
+        filterMap.put("jwt", new JwtFilter2());
         filterMap.put("logout", new LogoutFilter());
         shiroFilter.setFilters(filterMap);
 
