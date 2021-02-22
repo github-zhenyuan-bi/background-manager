@@ -32,7 +32,7 @@ public class EhCacheMybatis implements Cache{
         ExceptionCheckUtil.hasText(id, "Cache instances require an ID");
         
         this.id = id;
-        log.info("###### 生 成ehcache缓存对象, id: {}", id);
+        log.info("###### 生成ehcache缓存对象, id: {}", id);
     }
     
     
