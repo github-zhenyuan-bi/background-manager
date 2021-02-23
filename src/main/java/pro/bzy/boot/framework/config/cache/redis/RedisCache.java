@@ -4,16 +4,13 @@ import java.util.concurrent.TimeUnit;
 
 import org.springframework.data.redis.core.RedisTemplate;
 
-import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.extern.slf4j.Slf4j;
 import pro.bzy.boot.framework.config.cache.MyAbstractCache;
 import pro.bzy.boot.framework.config.cache.MyCahce;
 import pro.bzy.boot.framework.config.exceptions.MyCacheException;
 import pro.bzy.boot.framework.utils.SpringContextUtil;
 
-@Data
-@EqualsAndHashCode(callSuper=false)
+
 @Slf4j
 public class RedisCache extends MyAbstractCache implements MyCahce {
     

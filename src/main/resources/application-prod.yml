@@ -19,10 +19,11 @@ spring:
     driverClassName: com.mysql.jdbc.Driver
     username: root
     password: AliMysql123456
-#  redis:
-#    host: 192.168.2.71
-#    port: 6379
-#    timeout: 3000
+  redis:
+    host: 47.114.142.152
+    port: 6579
+    password: bzyredis
+    timeout: 3000
   freemarker:
     allow-request-override: false
     cache: true
@@ -75,7 +76,7 @@ app:
       server-url: http://localhost:${server.port}
     # 缓存配置变量
     cache:
-      use: ehcache
+      use: redis
       ehcache:
         max-elements-inMemory: 5000
         overflow-to-disk: false

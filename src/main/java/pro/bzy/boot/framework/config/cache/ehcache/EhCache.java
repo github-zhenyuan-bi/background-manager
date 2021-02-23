@@ -1,7 +1,5 @@
 package pro.bzy.boot.framework.config.cache.ehcache;
 
-import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.extern.slf4j.Slf4j;
 import net.sf.ehcache.Cache;
 import net.sf.ehcache.Element;
@@ -10,8 +8,6 @@ import pro.bzy.boot.framework.config.cache.MyCahce;
 import pro.bzy.boot.framework.config.exceptions.MyCacheException;
 import pro.bzy.boot.framework.utils.SpringContextUtil;
 
-@Data
-@EqualsAndHashCode(callSuper=false)
 @Slf4j
 public class EhCache extends MyAbstractCache implements MyCahce {
 
