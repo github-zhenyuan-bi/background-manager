@@ -16,7 +16,11 @@ import pro.bzy.boot.framework.utils.ArgUtil;
 
 /**
  * 我的Aop抽象
+ * 在 2021-02-24号废弃 
+ * 由于我使用了新的类替换 
+ * @see pro.bzy.boot.framework.config.aop.parent.MyAopSupport
  */
+@Deprecated
 public abstract class MyAbstractAop {
     
     /** 切面切到的所有控制层的日志对象 */

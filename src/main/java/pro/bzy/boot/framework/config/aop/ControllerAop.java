@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 
-import pro.bzy.boot.framework.config.aop.parent.MyAbstractAop;
+import pro.bzy.boot.framework.config.aop.parent.MyAopSupport;
 import pro.bzy.boot.framework.config.exceptions.FormValidatedException;
 
 /**
@@ -24,7 +24,7 @@ import pro.bzy.boot.framework.config.exceptions.FormValidatedException;
  */
 @Aspect
 @Component
-public class ControllerAop extends MyAbstractAop {
+public class ControllerAop extends MyAopSupport {
 
     
     /**
@@ -34,26 +34,31 @@ public class ControllerAop extends MyAbstractAop {
     public void aopMethod(){}
     
     
+    
+    /**
+     * 环绕通知
+     * @param joinPoint
+     * @return
+     * @throws Throwable
+     */
     @Around("aopMethod()")
     public Object around(ProceedingJoinPoint joinPoint) throws Throwable {
         // 打印切面方法信息
-        logJoinPointMethodInfo(joinPoint);
+        Logger log = logMethodInfo(joinPoint);
         
         // 校验切面表单信息
         checkBindingResult(joinPoint);
         
-        // 切面方法开始执行
-        Logger log = getJoinPointLogger(joinPoint);
+        // 执行切点
         Object result = null;
         try {
             result = joinPoint.proceed();
         } catch (Throwable e) {
-            log.error(e.getMessage());
-            throw e;
+            logMethodException(log, e);
         }
-        if (log.isDebugEnabled())
-            log.debug("返回结果# {}", result);
-        return result;
+        
+        // 方法返回值
+        return logMethodReturn(log, result);
     }
     
     
@@ -81,5 +86,12 @@ public class ControllerAop extends MyAbstractAop {
             }
             throw new FormValidatedException(res);
         }
+    }
+
+
+
+    @Override
+    public JoinPointType getType() {
+        return JoinPointType.CONTROlLER;
     }
 }

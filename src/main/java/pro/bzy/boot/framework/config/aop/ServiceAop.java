@@ -7,12 +7,13 @@ import org.aspectj.lang.annotation.Pointcut;
 import org.slf4j.Logger;
 import org.springframework.stereotype.Component;
 
-import pro.bzy.boot.framework.config.aop.parent.MyAbstractAop;
+import pro.bzy.boot.framework.config.aop.parent.MyAopSupport;
 
 @Aspect
 @Component
-public class ServiceAop extends MyAbstractAop {
+public class ServiceAop extends MyAopSupport {
 
+    
     /**
      * 切点 切到com包下所有的service.impl的全部公有方法
      */
@@ -24,12 +25,17 @@ public class ServiceAop extends MyAbstractAop {
     @Around("aopMethod()")
     public Object around(ProceedingJoinPoint joinPoint) throws Throwable {
         // 打印切面方法信息
-        logJoinPointMethodInfo(joinPoint);
-        
+        Logger log = logMethodInfo(joinPoint);
         Object result = joinPoint.proceed();
-        
-        Logger log = getJoinPointLogger(joinPoint);
-        log.debug("返回结果# {}", result);
-        return result;
+        return logMethodReturn(log, result);
     }
+
+
+
+    @Override
+    public JoinPointType getType() {
+        return JoinPointType.SERVICE;
+    }
+
+
 }

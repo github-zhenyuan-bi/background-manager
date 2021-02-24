@@ -4,26 +4,26 @@ import org.apache.ibatis.cache.Cache;
 
 import lombok.extern.slf4j.Slf4j;
 import pro.bzy.boot.framework.config.cache.MyAbstractCache;
-import pro.bzy.boot.framework.config.cache.MyCahce;
+import pro.bzy.boot.framework.config.cache.MyCache;
 import pro.bzy.boot.framework.utils.ExceptionCheckUtil;
 
 @Slf4j
-public class EhCacheMybatis2 implements Cache {
+public class EhCacheForMybatis implements Cache {
 
     private String id;
-    private MyCahce ehCache;
+    private MyCache ehCache;
     
     /** 对象生成时加锁 --> 防止多个线程同时访问数据库后的缓存导致生成ID相同Cache */
     private Object lock = new Object();
     
-    public EhCacheMybatis2(final String id) {
+    public EhCacheForMybatis(final String id) {
         ExceptionCheckUtil.hasText(id, "Cache instances require an ID");
         
         this.id = id;
         log.info("###### 生成ehcache缓存对象, id: {}", id);
     }
     
-    public MyCahce getEhCache() {
+    public MyCache getEhCache() {
         if (ehCache == null) {
             synchronized (lock) {
                 if (ehCache == null) {

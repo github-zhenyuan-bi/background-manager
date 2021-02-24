@@ -2,7 +2,7 @@ package pro.bzy.boot.framework.config.cache;
 
 import pro.bzy.boot.framework.config.exceptions.MyCacheException;
 
-public interface MyCahce {
+public interface MyCache {
 
     /** 将数据放入缓存 */
     void put(Object key, Object value, int expire) throws MyCacheException;
