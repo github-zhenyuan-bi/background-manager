@@ -12,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import pro.bzy.boot.framework.utils.SpringContextUtil;
 
 @Slf4j
+@Deprecated
 public class RedisMybatis implements Cache {
 
     private String id;

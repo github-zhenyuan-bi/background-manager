@@ -9,15 +9,8 @@ import lombok.Data;
 import pro.bzy.boot.framework.config.exceptions.MyCacheException;
 
 @Data
-public class MyAbstractCache {
-    
-    private String id;
-    public MyAbstractCache(final String id) {
-        this.id = id;
-    }
-
-    
-    public static <T extends MyCahce> MyCahce genCache(String id, Class<T> clazz) {
+public class MyCacheSupport {
+    public static <T extends MyCache> MyCache genCache(String id, Class<T> clazz) {
         try {
             Constructor<T> cons = clazz.getConstructor(String.class);
             return cons.newInstance(id);

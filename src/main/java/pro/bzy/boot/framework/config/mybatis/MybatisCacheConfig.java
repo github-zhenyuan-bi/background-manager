@@ -5,8 +5,8 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import org.apache.ibatis.cache.Cache;
 
-import pro.bzy.boot.framework.config.cache.ehcache.EhCacheMybatis2;
-import pro.bzy.boot.framework.config.cache.redis.RedisMybatis2;
+import pro.bzy.boot.framework.config.cache.ehcache.MyEhCacheFactory;
+import pro.bzy.boot.framework.config.cache.redis.MyRedisCacheFactory;
 import pro.bzy.boot.framework.utils.PropertiesUtil;
 import pro.bzy.boot.framework.utils.SystemConstant;
 
@@ -29,11 +29,9 @@ public class MybatisCacheConfig implements Cache{
     public MybatisCacheConfig(final String id) {
         String useCache = PropertiesUtil.get(SystemConstant.USER_CACHE);
         if (SystemConstant.CACHE_REDIS.equalsIgnoreCase(useCache)) 
-            //cache = new RedisMybatis(id);
-            cache = new RedisMybatis2(id);
+            cache = new MyRedisCacheFactory().getCacheForMybatis(id);
         else 
-            cache = new EhCacheMybatis2(id);
-            //cache = new EhCacheMybatis(id);
+            cache = new MyEhCacheFactory().getCacheForMybatis(id);
     }
     
 

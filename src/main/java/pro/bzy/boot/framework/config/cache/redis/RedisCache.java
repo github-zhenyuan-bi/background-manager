@@ -3,21 +3,44 @@ package pro.bzy.boot.framework.config.cache.redis;
 import java.util.concurrent.TimeUnit;
 
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.ValueOperations;
 
 import lombok.extern.slf4j.Slf4j;
-import pro.bzy.boot.framework.config.cache.MyAbstractCache;
-import pro.bzy.boot.framework.config.cache.MyCahce;
+import pro.bzy.boot.framework.config.cache.MyCacheSupport;
+import pro.bzy.boot.framework.config.cache.MyCache;
 import pro.bzy.boot.framework.config.exceptions.MyCacheException;
 import pro.bzy.boot.framework.utils.SpringContextUtil;
 
 
 @Slf4j
-public class RedisCache extends MyAbstractCache implements MyCahce {
+public class RedisCache extends MyCacheSupport implements MyCache {
     
+    /** 缓存实例id */
+    private String id;
+    
+    /** 缓存实例初始化锁 */
     private Object lock = new Object();
+    private Object lock2 = new Object();
+    
+    /** redis缓存实例 */
     private RedisTemplate<Object, Object> redisTemplate;
+    
+    /** redis值类型缓存 */
+    private ValueOperations<Object, Object> valueOps;
+    
+    /** 构造器 */
+    public RedisCache(String id) {
+        this.id = id;
+    }
+    
+    public String getId() {
+        return this.id;
+    }
+    
+    
+    /** 初始化 */
     @SuppressWarnings("unchecked")
-    private RedisTemplate<Object, Object> getRedisTemplate(){
+    private RedisTemplate<Object, Object> getTemplate() {
         if (redisTemplate == null) {
             synchronized (lock) {
                 if (redisTemplate == null) {
@@ -28,18 +51,26 @@ public class RedisCache extends MyAbstractCache implements MyCahce {
         return redisTemplate;
     }
     
-    public RedisCache(String id) {
-        super(id);
+    /** 初始化 */
+    private ValueOperations<Object, Object> getOps(){
+        if (valueOps == null) {
+            synchronized (lock2) {
+                if (valueOps == null) {
+                    valueOps = getTemplate().opsForValue();
+                }
+            }
+        }
+        return valueOps;
     }
+    
 
+    
     @Override
     public void put(Object key, Object value, int expire) throws MyCacheException {
-        
-        nullKeyCheck(key);
-        
-        getRedisTemplate().boundHashOps(getId()).put(key, value);
         if (expire > 0)
-            getRedisTemplate().boundHashOps(getId()).expire(expire, TimeUnit.SECONDS);
+            getOps().set(key, value, expire, TimeUnit.SECONDS);
+        else
+            getOps().set(key, value);
         logPut(log, key, value, expire);
     }
 
@@ -50,7 +81,7 @@ public class RedisCache extends MyAbstractCache implements MyCahce {
 
     @Override
     public Object get(Object key) throws MyCacheException {
-        Object value = getRedisTemplate().boundHashOps(getId()).get(key);
+        Object value = getOps().get(key);
         logGet(log, key, value);
         return value;
     }
@@ -72,21 +103,21 @@ public class RedisCache extends MyAbstractCache implements MyCahce {
 
     @Override
     public Object remove(Object key) throws MyCacheException {
-        Object value = getRedisTemplate().boundHashOps(getId()).delete(key);
+        Object value = redisTemplate.delete(key);
         logRemove(log, key, value);
         return value;
     }
 
     @Override
     public void clear() throws MyCacheException {
-        getRedisTemplate().delete(getId());
+        getTemplate().delete(getTemplate().keys("*"));
         logClear(log);
     }
 
-
+    @Override
     public int getSize() {
-        Long size = getRedisTemplate().boundHashOps(getId()).size();
-        return size == null ? 0 : size.intValue();
+        return getTemplate().keys("*").size();
     }
+    
     
 }

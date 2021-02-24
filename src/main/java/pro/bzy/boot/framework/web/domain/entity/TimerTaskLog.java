@@ -12,6 +12,7 @@ import io.swagger.annotations.ApiModelProperty;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.experimental.Accessors;
 import pro.bzy.boot.framework.utils.DateUtil;
 
 /**
@@ -24,6 +25,7 @@ import pro.bzy.boot.framework.utils.DateUtil;
  
 @Data
 @EqualsAndHashCode(callSuper = false)
+@Accessors(chain = true)
 @TableName("t_timer_task_log")
 @ApiModel(value="TimerTaskLog", description="")
 public class TimerTaskLog extends Model<TimerTaskLog> {
@@ -87,9 +89,10 @@ public class TimerTaskLog extends Model<TimerTaskLog> {
     }
     
     
-    public void calculateCostTime() {
+    public TimerTaskLog calculateCostTime() {
         Long cost = taskEndTime.getTime() - taskStartTime.getTime();
         setTaskCostTime(Integer.valueOf(cost.toString()));
+        return this;
     }
 
     @Override

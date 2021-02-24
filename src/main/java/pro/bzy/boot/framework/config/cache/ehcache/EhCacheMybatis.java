@@ -8,6 +8,7 @@ import pro.bzy.boot.framework.utils.ExceptionCheckUtil;
 import pro.bzy.boot.framework.utils.SpringContextUtil;
 
 @Slf4j
+@Deprecated
 public class EhCacheMybatis implements Cache{
 
     /** 每一个缓存cache的唯一识别号 */

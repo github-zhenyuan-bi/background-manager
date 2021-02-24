@@ -3,36 +3,20 @@ package pro.bzy.boot.framework.config.cache.ehcache;
 import org.apache.ibatis.cache.Cache;
 
 import lombok.extern.slf4j.Slf4j;
-import pro.bzy.boot.framework.config.cache.MyAbstractCache;
-import pro.bzy.boot.framework.config.cache.MyCache;
-import pro.bzy.boot.framework.utils.ExceptionCheckUtil;
 
 @Slf4j
 public class EhCacheForMybatis implements Cache {
 
+    /** id */
     private String id;
-    private MyCache ehCache;
     
-    /** 对象生成时加锁 --> 防止多个线程同时访问数据库后的缓存导致生成ID相同Cache */
-    private Object lock = new Object();
+    /** 缓存实例 */
+    private EhCache ehCache;
     
-    public EhCacheForMybatis(final String id) {
-        ExceptionCheckUtil.hasText(id, "Cache instances require an ID");
-        
-        this.id = id;
-        log.info("###### 生成ehcache缓存对象, id: {}", id);
-    }
     
-    public MyCache getEhCache() {
-        if (ehCache == null) {
-            synchronized (lock) {
-                if (ehCache == null) {
-                    ehCache = MyAbstractCache.genCache(id, EhCache.class);
-                    log.info("缓存对象 {} 初始化成功", getId());
-                }
-            }
-        }
-        return ehCache;
+    public EhCacheForMybatis(String id, EhCache ehCache) {
+        this.ehCache = ehCache;
+        log.info("【Cache】=> ehcacheForMybatis# id:", id);
     }
     
     
@@ -43,27 +27,27 @@ public class EhCacheForMybatis implements Cache {
 
     @Override
     public void putObject(Object key, Object value) {
-        getEhCache().put(key, value);
+        ehCache.put(key, value);
     }
 
     @Override
     public Object getObject(Object key) {
-        return getEhCache().get(key);
+        return ehCache.get(key);
     }
 
     @Override
     public Object removeObject(Object key) {
-        return getEhCache().remove(key);
+        return ehCache.remove(key);
     }
 
     @Override
     public void clear() {
-        getEhCache().clear();
+        ehCache.clear();
     }
 
     @Override
     public int getSize() {
-        return getEhCache().getSize();
+        return ehCache.getSize();
     }
 
 }
