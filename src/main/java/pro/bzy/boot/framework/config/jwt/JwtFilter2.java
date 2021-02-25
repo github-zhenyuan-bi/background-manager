@@ -14,7 +14,6 @@ import org.springframework.util.StringUtils;
 
 import com.auth0.jwt.exceptions.TokenExpiredException;
 
-import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import lombok.extern.slf4j.Slf4j;
 import pro.bzy.boot.framework.utils.CacheUtil;
@@ -36,6 +35,7 @@ public class JwtFilter2 extends AccessControlFilter {
         return false;
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     protected boolean onAccessDenied(ServletRequest servletRequest, ServletResponse servletResponse) throws Exception {
         log.debug("onAccessDenied 方法被调用");
@@ -48,7 +48,7 @@ public class JwtFilter2 extends AccessControlFilter {
                 SystemConstant.JWT_ACCESS_TOKEN_KEY, httpRequest, nameAndValuesOfCookies); 
         String refresh_token = RequestAndResponseUtil.getJwtTokenFromCookiesOrRequestHeader(
                 SystemConstant.JWT_REFRESH_TOKEN_KEY, httpRequest, nameAndValuesOfCookies); 
-        
+        Map<String, Object> datas = null;
         try {
             // 2. 已获取jwtToken 验证jwtToken合法性
             if (StringUtils.isEmpty(access_token) && StringUtils.isEmpty(refresh_token)) 
@@ -58,19 +58,22 @@ public class JwtFilter2 extends AccessControlFilter {
                         "为空，无法正常从Header或Cookies中获取，故无法认证，现准备跳转登录页");
                 
             // 3. token过期校验
-            Object accessIp = CacheUtil.get(access_token);
-            if (Objects.isNull(accessIp))
+            datas = CacheUtil.get(access_token, Map.class);
+            if (Objects.isNull(datas))
                 throw new TokenExpiredException("过期");
             
             // 4. ip验证
-            checkUserIp(accessIp.toString(), httpRequest);
+            checkUserIp(datas, httpRequest);
         } catch (TokenExpiredException e) {
             log.warn("【{}】已超时, 准备使用【{}】刷新", SystemConstant.JWT_ACCESS_TOKEN_KEY, SystemConstant.JWT_REFRESH_TOKEN_KEY);
             try {
                 String new_access_token = JwtUtil.refreshJwtTokenByExpiredTokenAndRefreshToken(access_token, refresh_token);
                 httpResponse.addHeader(SystemConstant.JWT_ACCESS_TOKEN_KEY, new_access_token);
                 RequestAndResponseUtil.setCookiesAndHeaderToResponeForAccessToken(httpRequest, httpResponse, new_access_token);
-                CacheUtil.put(new_access_token, RequestAndResponseUtil.getIpAddress(httpRequest), (int) PropertiesUtil.getJwtTokenExpire(SystemConstant.JWT_ACCESS_TOKEN_EXPIRE_KEY_IN_YML));
+                
+                CacheUtil.put(new_access_token, 
+                        JwtUtil.getBaseStorageDatasFromClaims(new JwtUtil().decode(new_access_token)), 
+                        (int) PropertiesUtil.getJwtTokenExpire(SystemConstant.JWT_ACCESS_TOKEN_EXPIRE_KEY_IN_YML));
                 access_token = new_access_token;
             } catch (Exception e2) {
                 log.error(e.getMessage(), e);
@@ -82,7 +85,7 @@ public class JwtFilter2 extends AccessControlFilter {
             cleanCookiesAndHeaderThenRedirectToLogin(httpRequest, httpResponse, e.getMessage());
             return false;
         }
-        setUserDetailToRequestForRenderView(access_token, httpRequest, httpResponse);
+        setUserDetailToRequestForRenderView(datas, httpRequest, httpResponse);
         return true;
     }
 
@@ -116,8 +119,9 @@ public class JwtFilter2 extends AccessControlFilter {
      * @param util
      * @param httpRequest
      */
-    private void checkUserIp(String storageIp, HttpServletRequest httpRequest) {
+    private void checkUserIp(Map<String, Object> cacheData, HttpServletRequest httpRequest) {
         String cur_ip = RequestAndResponseUtil.getIpAddress(httpRequest);
+        Object storageIp = cacheData.get(SystemConstant.JWT_LOGIN_USER_IP_KEY);
         if (storageIp != null && !cur_ip.equals(storageIp)) {
             throw new JwtException("access_token校验异常，原因：ip异常，异地使用");
         }
@@ -130,12 +134,12 @@ public class JwtFilter2 extends AccessControlFilter {
      * @param httpRequest
      * @param httpResponse
      */
-    private void setUserDetailToRequestForRenderView(String access_token, 
+    private void setUserDetailToRequestForRenderView(Map<String, Object> cacheData, 
             HttpServletRequest httpRequest, HttpServletResponse httpResponse) {
         try {
-            Claims claims = JwtUtil.BASE_UTIL.decode(access_token);
-            Map<String, Object> baseDatas = JwtUtil.getBaseStorageDatasFromClaims(claims);
-            httpRequest.setAttribute(SystemConstant.JWT_BASESTORAGE_DATAS_KEY, baseDatas);
+            // Claims claims = JwtUtil.BASE_UTIL.decode(access_token);
+            // Map<String, Object> baseDatas = JwtUtil.getBaseStorageDatasFromClaims(claims);
+            httpRequest.setAttribute(SystemConstant.JWT_BASESTORAGE_DATAS_KEY, cacheData);
         } catch (Exception e) {
             log.error("从jwttoken中获取用于渲染视图得基本数据失败", e);
         }

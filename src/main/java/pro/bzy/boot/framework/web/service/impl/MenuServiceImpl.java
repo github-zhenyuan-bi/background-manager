@@ -4,7 +4,7 @@ import pro.bzy.boot.framework.utils.CollectionUtil;
 import pro.bzy.boot.framework.web.domain.entity.Menu;
 import pro.bzy.boot.framework.web.mapper.MenuMapper;
 import pro.bzy.boot.framework.web.service.MenuService;
-
+import pro.bzy.boot.framework.web.service.RoleMenuService;
 import lombok.NonNull;
 
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
@@ -27,6 +27,8 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
 
     @Resource
     private MenuMapper menuMapper;
+    @Resource
+    private RoleMenuService roleMenuService;
 
     @Override
     public List<Menu> buildTreeMenus() {
@@ -60,6 +62,18 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
     @Override
     public List<Menu> getByTypeThenOrder(String type) {
         List<Menu> menuList = list(Wrappers.<Menu>lambdaQuery()
+                .eq(Menu::getMenuType, type)
+                .orderByAsc(Menu::getSort));
+        return menuList;
+    }
+
+
+
+    @Override
+    public List<Menu> getByAccessorAndTypeThenOrder(String accessor, String type) {
+        List<String> menuIds = roleMenuService.getUserPermitToAccessMenu(accessor);
+        List<Menu> menuList = list(Wrappers.<Menu>lambdaQuery()
+                .in(CollectionUtil.isNotEmpty(menuIds), Menu::getId, menuIds)
                 .eq(Menu::getMenuType, type)
                 .orderByAsc(Menu::getSort));
         return menuList;

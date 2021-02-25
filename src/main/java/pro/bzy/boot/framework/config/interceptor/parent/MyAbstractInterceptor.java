@@ -14,8 +14,8 @@ import com.google.common.collect.Maps;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import pro.bzy.boot.framework.config.jwt.JwtUtil;
 import pro.bzy.boot.framework.utils.RequestAndResponseUtil;
+import pro.bzy.boot.framework.utils.CacheUtil;
 import pro.bzy.boot.framework.utils.DateUtil;
 import pro.bzy.boot.framework.utils.SystemConstant;
 import pro.bzy.boot.framework.web.domain.entity.Log;
@@ -70,6 +70,7 @@ public abstract class MyAbstractInterceptor {
      * @param request
      * @param handler
      */
+    @SuppressWarnings("unchecked")
     protected void logToDB(HttpServletRequest request, Object handler) {
         if (handler instanceof HandlerMethod) { 
             /*if ("/".equals(request.getRequestURI())) 
@@ -79,8 +80,12 @@ public abstract class MyAbstractInterceptor {
             String refresh_token = RequestAndResponseUtil.getJwtTokenFromCookiesOrRequestHeader(SystemConstant.JWT_REFRESH_TOKEN_KEY, request);
             String accesstor = "", fromWhere = "";
             if (StringUtils.hasText(access_token) && StringUtils.hasText(refresh_token)) {
+                Map<String, Object> baseStorageDatas = (Map<String, Object>) request.getAttribute(SystemConstant.JWT_BASESTORAGE_DATAS_KEY);
                 try {
-                    Map<String, Object> baseStorageDatas = JwtUtil.getBaseStorageDatasFromClaims(new JwtUtil().decode(access_token));
+                    if (baseStorageDatas == null) {
+                        baseStorageDatas = CacheUtil.get(access_token, Map.class);
+                        request.setAttribute(SystemConstant.JWT_BASESTORAGE_DATAS_KEY, baseStorageDatas);
+                    }
                     accesstor = baseStorageDatas.getOrDefault(SystemConstant.JWT_LOGIN_USERID_KEY, "").toString();
                     fromWhere = baseStorageDatas.getOrDefault(SystemConstant.JWT_LOGIN_FROMWHERE_KEY, "").toString();
                 } catch (Exception e) {

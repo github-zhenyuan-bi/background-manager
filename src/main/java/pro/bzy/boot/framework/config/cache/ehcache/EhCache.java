@@ -18,6 +18,9 @@ public class EhCache extends MyCacheSupport implements MyCache {
     /** 缓存对象id */
     private String cacheId;
     
+    /** 缓存实例过期时间 */
+    private Integer expire;
+    
     /** cache初始化锁 */
     private Object lock = new Object();
     
@@ -25,6 +28,15 @@ public class EhCache extends MyCacheSupport implements MyCache {
     /** 构造器 */
     public EhCache(String cacheId) {
         this.cacheId = cacheId;
+    }
+    
+    /** 构造器 */
+    public EhCache(String cacheId, int expire) {
+        this.cacheId = cacheId;
+        this.expire = expire;
+        log.info("【创建缓存对象-ehCache】=> [id]: {}, [expire]: {}", cacheId, expire);
+        if (expire <= 0)
+            log.warn("当前缓存对象【{}】设定超时时间小于0，无意义，实际永久存活", cacheId);
     }
     
     
@@ -52,7 +64,7 @@ public class EhCache extends MyCacheSupport implements MyCache {
     
     @Override
     public void put(Object key, Object value) throws MyCacheException {
-        put(key, value, 0);
+        put(key, value, this.expire);
     }
 
     

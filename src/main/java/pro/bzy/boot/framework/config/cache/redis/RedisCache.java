@@ -100,7 +100,7 @@ public class RedisCache extends MyCacheSupport implements MyCache {
     @Override
     public <T> T get(Object key, Class<T> clazz) throws MyCacheException {
         Object value = get(key);
-        if (value != null && clazz.equals(value.getClass())) {
+        if (value != null) {
             T castValue = null;
             try {
                 castValue = clazz.cast(value);

@@ -32,7 +32,7 @@ public class CacheUtil implements MyUtil {
     }
     
     
-    public static final <T> Object get(Object key, Class<T> clazz) {
+    public static final <T> T get(Object key, Class<T> clazz) {
         return cache.get(key, clazz);
     }
 }

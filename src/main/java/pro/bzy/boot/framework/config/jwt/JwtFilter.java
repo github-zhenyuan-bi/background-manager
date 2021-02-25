@@ -27,6 +27,7 @@ import javax.servlet.http.HttpServletResponse;
  * onAccessDenied()是没有携带JwtToken的时候进行账号密码登录，登录成功允许访问，登录失败拒绝访问
  */
 @Slf4j
+@Deprecated
 public class JwtFilter extends AccessControlFilter {
     
     

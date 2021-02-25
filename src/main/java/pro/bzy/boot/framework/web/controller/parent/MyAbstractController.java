@@ -96,7 +96,11 @@ public abstract class MyAbstractController {
      */
     protected void prepareMenuData(HttpServletRequest request, Map<String, Object> model
             , MenuService menuService) {
-        List<Menu> menuList = menuService.getByTypeThenOrder(SystemConstant.BACKGROUND_MANAGER_MENU_KEY);
+        @SuppressWarnings("unchecked")
+        Map<String, Object> baseStorageDatas = (Map<String, Object>) request.getAttribute(SystemConstant.JWT_BASESTORAGE_DATAS_KEY);
+        String accessor = baseStorageDatas.getOrDefault(SystemConstant.JWT_LOGIN_USERID_KEY, "").toString();
+        
+        List<Menu> menuList = menuService.getByAccessorAndTypeThenOrder(accessor, SystemConstant.BACKGROUND_MANAGER_MENU_KEY);
         List<Menu> treeMenuList = CollectionUtil.buildTree(Menu.getDefualtRootMenu(), menuList);
         model.put("bgManageMenus", treeMenuList);
         

@@ -1,6 +1,7 @@
 package pro.bzy.boot.framework.web.service;
 
 import pro.bzy.boot.framework.web.domain.entity.Menu;
+import pro.bzy.boot.framework.web.domain.entity.Role;
 import pro.bzy.boot.framework.web.domain.entity.RoleMenu;
 
 import java.util.List;
@@ -21,4 +22,12 @@ public interface RoleMenuService extends IService<RoleMenu> {
     
     /** 绑定新的角色和菜单资源关系 */
     void updateRoleWithMenuRelationShip(String roleId, String[] menuIds);
+    
+    
+    /** 查询角色的全部权限菜单 */
+    List<RoleMenu> getAllMenuOfRole(List<Role> roles); 
+    
+    
+    /** 查询用户拥有访问权限的全部资源菜单 */
+    List<String> getUserPermitToAccessMenu(String accessor);
 }

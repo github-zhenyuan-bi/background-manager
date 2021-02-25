@@ -101,7 +101,7 @@ public class LoginController extends MyAbstractController{
         RequestAndResponseUtil.setCookiesAndHeaderToResponeForRefreshToken(request, response, refresh_token);
         
         // 2.4 将token放入缓存
-        CacheUtil.put(access_token, RequestAndResponseUtil.getIpAddress(request), (int) access_token_expire);
+        CacheUtil.put(access_token, datas, (int) access_token_expire);
         
         return R.<String>builder().code(R.SUCCESS).msg("ok").data("/script/business/show").build();
     }

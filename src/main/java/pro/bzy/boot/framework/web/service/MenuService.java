@@ -22,4 +22,7 @@ public interface MenuService extends IService<Menu> {
     
     /** 根据类别查询菜单 */
     List<Menu> getByTypeThenOrder(String type);
+    
+    /** 根据类别查询菜单+ 资源授权对象过滤*/
+    List<Menu> getByAccessorAndTypeThenOrder(String accessor, String type);
 }

@@ -18,7 +18,6 @@ import org.springframework.util.StringUtils;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import javax.annotation.Resource;
 
@@ -52,9 +51,9 @@ public class UserRoleServiceImpl extends ServiceImpl<UserRoleMapper, UserRole> i
             roles = roleMapper.selectList(
                     Wrappers.<Role>lambdaQuery().in(
                             Role::getId, 
-                            userRoles.stream().map(ur -> ur.getRoleId()).collect(Collectors.toList())));
+                            CollectionUtil.map(userRoles, ur -> ur.getRoleId())));
         } else {
-            roles = Lists.newArrayList();
+            roles = Lists.newArrayListWithCapacity(0);
         }
         return roles;
     }

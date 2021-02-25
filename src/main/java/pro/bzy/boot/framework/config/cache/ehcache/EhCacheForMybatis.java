@@ -2,21 +2,21 @@ package pro.bzy.boot.framework.config.cache.ehcache;
 
 import org.apache.ibatis.cache.Cache;
 
-import lombok.extern.slf4j.Slf4j;
+import pro.bzy.boot.framework.config.cache.MyCache;
 
-@Slf4j
+
 public class EhCacheForMybatis implements Cache {
 
     /** id */
     private String id;
     
     /** 缓存实例 */
-    private EhCache ehCache;
+    private MyCache ehCache;
     
     
-    public EhCacheForMybatis(String id, EhCache ehCache) {
+    public EhCacheForMybatis(String id, MyCache ehCache) {
+        this.id = id;
         this.ehCache = ehCache;
-        log.info("【Cache】=> ehcacheForMybatis# id:", id);
     }
     
     

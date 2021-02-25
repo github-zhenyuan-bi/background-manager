@@ -6,9 +6,11 @@ import pro.bzy.boot.framework.web.domain.entity.RoleMenu;
 import pro.bzy.boot.framework.web.mapper.RoleMenuMapper;
 import pro.bzy.boot.framework.web.service.RoleMenuService;
 import pro.bzy.boot.framework.web.service.RoleService;
+import pro.bzy.boot.framework.web.service.UserRoleService;
 import pro.bzy.boot.framework.utils.CollectionUtil;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 
@@ -34,6 +36,8 @@ public class RoleMenuServiceImpl extends ServiceImpl<RoleMenuMapper, RoleMenu> i
 
     @Resource
     private RoleService roleService;
+    @Resource
+    private UserRoleService userRoleService;
     
     @Override
     @Transactional(readOnly=true)
@@ -74,6 +78,30 @@ public class RoleMenuServiceImpl extends ServiceImpl<RoleMenuMapper, RoleMenu> i
                     .map(menuId -> new RoleMenu(roleId, menuId)).collect(Collectors.toList());
             saveBatch(roleMenus);
         }
+    }
+
+
+
+    @Override
+    public List<String> getUserPermitToAccessMenu(String accessor) {
+        List<Role> roles = userRoleService.getRolesByUserId(accessor);
+        List<RoleMenu> roleMenus = getAllMenuOfRole(roles);
+        return CollectionUtil.map(roleMenus, rm -> rm.getMenuId());
+    }
+
+
+
+    @Override
+    public List<RoleMenu> getAllMenuOfRole(List<Role> roles) {
+        List<RoleMenu> roleMenus = null;
+        if (CollectionUtil.isNotEmpty(roles)) {
+            roleMenus = list(Wrappers.<RoleMenu>lambdaQuery().in(
+                                RoleMenu::getRoleId, 
+                                CollectionUtil.map(roles, role -> role.getId())));
+        } else {
+            roleMenus = Lists.newArrayListWithCapacity(0);
+        }
+        return roleMenus;
     }
 
 }
