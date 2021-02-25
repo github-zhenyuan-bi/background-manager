@@ -10,4 +10,5 @@ public class Cache {
     
     private Ehcache ehcache;
     
+    private Redis redis;
 }

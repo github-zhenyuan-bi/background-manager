@@ -18,6 +18,10 @@ public class RedisCache extends MyCacheSupport implements MyCache {
     /** 缓存实例id */
     private String id;
     
+    /** 缓存实例过期时间 */
+    private Integer expire;
+    
+    
     /** 缓存实例初始化锁 */
     private Object lock = new Object();
     private Object lock2 = new Object();
@@ -30,7 +34,14 @@ public class RedisCache extends MyCacheSupport implements MyCache {
     
     /** 构造器 */
     public RedisCache(String id) {
+        this(id, 0);
+    }
+    public RedisCache(String id, int expire) {
         this.id = id;
+        this.expire = expire;
+        log.info("【创建缓存对象-redisCache】=> [id]: {}, [expire]: {}", id, expire);
+        if (expire <= 0)
+            log.warn("当前缓存对象【{}】设定超时时间小于0，无意义，实际永久存活", id);
     }
     
     public String getId() {
@@ -76,7 +87,7 @@ public class RedisCache extends MyCacheSupport implements MyCache {
 
     @Override
     public void put(Object key, Object value) throws MyCacheException {
-        put(key, value, 0);
+        put(key, value, this.expire);
     }
 
     @Override

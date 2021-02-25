@@ -28,27 +28,27 @@ public class MyCacheSupport {
     
     
     protected void logPut(Logger log, Object key, Object value, int expire) {
-        log.info("放入缓存：key=【{}】，value=【{}】，expire=【{}】。", key, value, expire);
+        log.debug("#####|缓      存|   key=【{}】，value=【{}】，expire=【{}】。", key, value, expire);
     }
     
     
     protected void logGet(Logger log, Object key, Object value) {
         if (Objects.nonNull(value)) 
-            log.info("从缓存中取值: key=【{}】, value=【{}】", key, value);
+            log.debug("#####|缓存->读|   key=【{}】, value=【{}】", key, value);
         else
-            log.info("缓存值=null; key={}]", key);
+            log.debug("#####|缓存->读|   value=null; key={}]", key);
     }
     
     
     
     protected void logRemove(Logger log, Object key, Object value) {
-        log.info("从缓存删除: key=【{}】，value=【{}】", key, value);
+        log.debug("#####|缓存->删|   key=【{}】，value=【{}】", key, value);
     }
     
     
     
     protected void logClear(Logger log) {
-        log.info("清空缓存!!!");
+        log.debug("#####|缓存->清空|");
     }
     
     

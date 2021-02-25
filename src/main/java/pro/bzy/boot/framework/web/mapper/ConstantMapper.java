@@ -2,6 +2,7 @@ package pro.bzy.boot.framework.web.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
+import pro.bzy.boot.framework.config.cache.annotation.CacheProperty;
 import pro.bzy.boot.framework.config.mybatis.MybatisCacheConfig;
 import pro.bzy.boot.framework.web.domain.entity.Constant;
 
@@ -19,6 +20,7 @@ import org.apache.ibatis.annotations.Mapper;
  
 @Mapper
 @CacheNamespace(implementation=MybatisCacheConfig.class, eviction=MybatisCacheConfig.class)
+@CacheProperty(expire=86400)
 public interface ConstantMapper extends BaseMapper<Constant> {
 
 }

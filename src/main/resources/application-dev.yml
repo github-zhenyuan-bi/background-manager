@@ -85,6 +85,8 @@ app:
         eternal: false
         time-to-live-seconds: 0
         time-to-idle-seconds: 600
+      redis:
+        expire: 60
     # 定时器配置
     timer:
       thread-pool-size: 8

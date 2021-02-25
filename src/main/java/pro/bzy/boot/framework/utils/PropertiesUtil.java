@@ -2,6 +2,7 @@ package pro.bzy.boot.framework.utils;
 
 import java.io.IOException;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Map.Entry;
 import java.util.Properties;
 import java.util.stream.Collectors;
@@ -24,7 +25,7 @@ import pro.bzy.boot.framework.utils.parents.MyUtil;
  * 
  */
 @Slf4j
-public class PropertiesUtil implements MyUtil{
+public final class PropertiesUtil implements MyUtil{
     
     public static ImmutableMap<String, String> props;
     static {
@@ -39,7 +40,7 @@ public class PropertiesUtil implements MyUtil{
      * @param key
      * @return
      */
-    public final static String get(String key) {
+    public static String get(String key) {
         return props.get(key);
     }
     
@@ -50,7 +51,7 @@ public class PropertiesUtil implements MyUtil{
      * @param key
      * @return
      */
-    public final static long getJwtTokenExpire(final String key) {
+    public static long getJwtTokenExpire(final String key) {
         String access_token_expire = get(key);
         if (StringUtils.hasText(access_token_expire)) {
             return Long.valueOf(access_token_expire);
@@ -60,6 +61,31 @@ public class PropertiesUtil implements MyUtil{
     
     
     
+    
+    /**
+     * 从yml中读取redis的超时时间
+     * @return
+     */
+    public static int getRedisExpireFormYml() {
+        // yml配置
+        Object ymlRedisExpire = PropertiesUtil.get(SystemConstant.REDIS_CACHE_EXPIRE_KEY);
+        if (Objects.nonNull(ymlRedisExpire)) {
+            try {
+                return Integer.parseInt(ymlRedisExpire.toString());
+            } catch (Exception e) {
+                log.error("从yml读取【{}】的超时时间设定异常，非常规数值", SystemConstant.REDIS_CACHE_EXPIRE_KEY);
+            }
+        }
+        return 0;
+    }
+    
+    
+    
+    /**
+     * 通过统一前缀查询全部的符合要求的设定
+     * @param prefix
+     * @return
+     */
     public static Map<String, String> getByPrefix(final String prefix) {
         Map<String, String> res = props.entrySet().stream().filter(
                 ent -> ent.getKey().startsWith(prefix))

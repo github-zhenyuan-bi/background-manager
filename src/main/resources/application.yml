@@ -8,7 +8,7 @@ server:
 spring:
   #启用的主文件
   profiles:
-    active: prod
+    active: dev
   # 缓存
   cache:
     # ehcache

@@ -16,6 +16,9 @@ public class RedisCacheForMybatis extends MyCacheSupport implements Cache {
     /** 缓存实例id */
     private String id;
     
+    /** 缓存实例过期时间 */
+    private Integer expire;
+    
     /** 缓存实例初始化锁 */
     private Object lock = new Object();
     private Object lock2 = new Object();
@@ -28,7 +31,14 @@ public class RedisCacheForMybatis extends MyCacheSupport implements Cache {
     
     /** 构造器 */
     public RedisCacheForMybatis(final String id) {
+        this(id, 0);
+    }
+    public RedisCacheForMybatis(final String id, int expire) {
         this.id = id;
+        this.expire = expire;
+        log.info("【创建缓存对象-redisForMyBatis】=> [id]: {}, [expire]: {}", id, expire);
+        if (expire <= 0)
+            log.warn("当前缓存对象【{}】设定超时时间小于1，无意义，实际永久存活", id);
     }
     
     
@@ -67,9 +77,13 @@ public class RedisCacheForMybatis extends MyCacheSupport implements Cache {
 
     @Override
     public void putObject(Object key, Object value) {
-        getOps().put(key, value);
-        getOps().expire(30, TimeUnit.SECONDS);
-        logPut(log, key, value, 0);
+        if (!getTemplate().hasKey(id) && expire > 0) {
+            getOps().put(key, value);
+            getOps().expire(expire, TimeUnit.SECONDS);
+        } else {
+            getOps().put(key, value);
+        }
+        logPut(log, key, value, expire);
     }
 
 

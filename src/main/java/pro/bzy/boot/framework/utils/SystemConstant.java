@@ -122,4 +122,5 @@ public interface SystemConstant {
     String SCHEDULING_EXECUTE_SUCCESS = "1";
     
     
+    String REDIS_CACHE_EXPIRE_KEY = "app.config.cache.redis.expire";
 }
