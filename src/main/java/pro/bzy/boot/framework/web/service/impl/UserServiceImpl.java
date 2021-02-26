@@ -13,7 +13,6 @@ import pro.bzy.boot.framework.web.service.UserService;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -59,7 +58,6 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     
     
     @Override
-    @Transactional(rollbackFor= {Exception.class})
     public void addUserThenHandlerSomething(User user) {
         // 1. 校验数据
         checkUserData(user);
