@@ -42,7 +42,7 @@ import com.github.xiaoymin.knife4j.annotations.ApiSupport;
  * @author zhenyuan.bi
  * @since 2020-10-08
  */
-@Api(tags = {"剧本"})
+@Api(tags = {"剧本"}, value="剧本")
 @ApiSupport(order = 100)
 @RequestMapping("/script/juben")
 @RestController
@@ -163,7 +163,7 @@ public class JubenController {
     @PostMapping("rebindTagRelationship/{jubenId}")
     public R<String> rebindTagRelationship(@PathVariable("jubenId") String jubenId,
             @RequestBody List<JubenTag> jubenTags) {
-        jubenTagService.rebindTagRelationship(jubenId, jubenTags);
+        jubenTagService.updateTagRelationship(jubenId, jubenTags);
         return R.ofSuccess("更新成功");
     }
     

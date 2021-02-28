@@ -1,6 +1,6 @@
 package pro.bzy.boot.framework.config.exceptions;
 
-import pro.bzy.boot.framework.config.exceptions.parent.MyException;
+import pro.bzy.boot.framework.config.exceptions.parent.MyAbstractRuntimeException;
 
 import lombok.Getter;
 
@@ -10,8 +10,7 @@ import lombok.Getter;
  * @author zhenyuan.bi
  *
  */
-public class FormValidatedException 
-extends RuntimeException implements MyException{
+public class FormValidatedException extends MyAbstractRuntimeException {
 
     private static final long serialVersionUID = 1L;
 

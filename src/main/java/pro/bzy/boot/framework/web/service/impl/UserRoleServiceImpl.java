@@ -12,7 +12,6 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.google.common.collect.Lists;
 
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import java.util.Arrays;
@@ -61,7 +60,7 @@ public class UserRoleServiceImpl extends ServiceImpl<UserRoleMapper, UserRole> i
     
     
     @Override
-    public void bindPublicRoleForUser(final String userId) {
+    public void updateUserForBindPublicRole(final String userId) {
         if (StringUtils.isEmpty(userId))
             throw new IllegalArgumentException("需要绑定公共角色的用户ID不能为空");
         
@@ -82,8 +81,7 @@ public class UserRoleServiceImpl extends ServiceImpl<UserRoleMapper, UserRole> i
 
 
     @Override
-    @Transactional(rollbackFor= {Exception.class})
-    public void changeUserRoles(String userId, String[] roles) {
+    public void updateUserRoles(String userId, String[] roles) {
         // 1. 删除该用户得全部角色
         remove(Wrappers.<UserRole>lambdaQuery().eq(UserRole::getUserId, userId));
         

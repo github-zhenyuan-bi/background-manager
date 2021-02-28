@@ -148,7 +148,7 @@ public class WxMiniprogramSettingIndeximgController {
     @ApiOperation(value="调整图像顺序")
     @PostMapping("adjustImageSort")
     public R<Object> adjustImageSort(int fromIndex, int toIndex) {
-        wxMiniprogramSettingIndeximgService.adjustImageSort(fromIndex, toIndex);
+        wxMiniprogramSettingIndeximgService.updateImageSort(fromIndex, toIndex);
         return R.ofSuccess("顺序调整成功");
     }
 }

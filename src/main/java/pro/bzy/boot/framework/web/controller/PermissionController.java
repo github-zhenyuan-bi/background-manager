@@ -35,7 +35,7 @@ import com.github.xiaoymin.knife4j.annotations.ApiSupport;
  * @author zhenyuan.bi
  * @since 2020-09-07
  */
-@Api(tags = {"权限"})
+@Api(tags = {"权限"}, value="权限")
 @ApiSupport(order = 100)
 @RequestMapping("/framework/permission")
 @RestController

@@ -15,10 +15,10 @@ public interface TimerTaskService extends IService<TimerTask> {
     void addTimertask(TimerTask timerTask);
     
     /** 动态修改定时任务 */
-    void editTimertask(TimerTask timerTask);
+    void updateTimertask(TimerTask timerTask);
     
     /** 动态启动或者挂起定时任务 */
-    void suspendTimertask(TimerTask timerTask);
+    void updateForSuspendTimertask(TimerTask timerTask);
     
     
     /** 注册定时任务 */

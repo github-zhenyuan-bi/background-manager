@@ -11,7 +11,6 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.google.common.collect.Lists;
 
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
@@ -36,7 +35,6 @@ public class JubenTagServiceImpl extends ServiceImpl<JubenTagMapper, JubenTag> i
     
     
     @Override
-    @Transactional(readOnly=true)
     public List<Tag> getTagsByJuben(String jubenId) {
         // 剧本与标签的关联关系
         List<JubenTag> jubenTags = list(Wrappers.<JubenTag>lambdaQuery().eq(JubenTag::getJubenId, jubenId));
@@ -54,8 +52,7 @@ public class JubenTagServiceImpl extends ServiceImpl<JubenTagMapper, JubenTag> i
 
     
     @Override
-    @Transactional(rollbackFor=Exception.class)
-    public void rebindTagRelationship(String jubenId, List<JubenTag> jubenTags) {
+    public void updateTagRelationship(String jubenId, List<JubenTag> jubenTags) {
         // 1. 删除旧的绑定关系
         remove(Wrappers.<JubenTag>lambdaUpdate().eq(JubenTag::getJubenId, jubenId));
         
@@ -67,7 +64,6 @@ public class JubenTagServiceImpl extends ServiceImpl<JubenTagMapper, JubenTag> i
 
 
     @Override
-    @Transactional(readOnly=true)
     public Map<String, List<JubenTag>> getJubenTagsGroupByJubenId(List<String> jubenIds) {
         List<JubenTag> jubenTags = list(
                 Wrappers.<JubenTag>lambdaQuery().in(JubenTag::getJubenId, jubenIds));

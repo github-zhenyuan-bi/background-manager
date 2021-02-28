@@ -38,7 +38,7 @@ import com.github.xiaoymin.knife4j.annotations.ApiSupport;
  * @author zhenyuan.bi
  * @since 2021-02-17
  */
-@Api(tags = {""})
+@Api(tags = {"用户充值记录"}, value="用户充值卡充值记录")
 @ApiSupport(order = 100)
 @RequestMapping("/script/userRechargeRecord")
 @RestController

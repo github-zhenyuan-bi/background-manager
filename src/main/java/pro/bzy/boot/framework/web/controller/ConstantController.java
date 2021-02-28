@@ -37,7 +37,7 @@ import com.github.xiaoymin.knife4j.annotations.ApiSupport;
  * @author zhenyuan.bi
  * @since 2020-10-01
  */
-@Api(tags = {"系统常量"})
+@Api(tags = {"系统常量"}, value="系统常量")
 @ApiSupport(order = 100)
 @RequestMapping("/framework/constant")
 @RestController

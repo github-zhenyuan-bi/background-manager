@@ -4,6 +4,7 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.TokenExpiredException;
+import com.google.common.collect.Maps;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtBuilder;
@@ -11,7 +12,6 @@ import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.extern.slf4j.Slf4j;
-import pro.bzy.boot.framework.utils.ExceptionCheckUtil;
 import pro.bzy.boot.framework.utils.PropertiesUtil;
 import pro.bzy.boot.framework.utils.SystemConstant;
 
@@ -135,7 +135,7 @@ public class JwtUtil {
      * @return
      */
     public static Map<String, Object> getBaseStorageDatasFromClaims(Claims claims) {
-        Map<String, Object> claimsDatas = new HashMap<>(2);
+        Map<String, Object> claimsDatas = Maps.newHashMapWithExpectedSize(5);
         claimsDatas.put(SystemConstant.JWT_LOGIN_FROMWHERE_KEY, claims.get(SystemConstant.JWT_LOGIN_FROMWHERE_KEY));
         claimsDatas.put(SystemConstant.JWT_LOGIN_USERID_KEY, claims.get(SystemConstant.JWT_LOGIN_USERID_KEY));
         claimsDatas.put(SystemConstant.JWT_LOGIN_USER, claims.get(SystemConstant.JWT_LOGIN_USER));
@@ -155,8 +155,8 @@ public class JwtUtil {
             final String expiredToken, final String refreshToken) {
         
         // 1. refreshToken空校验
-        ExceptionCheckUtil.notNull(expiredToken, "expiredToken为空");
-        ExceptionCheckUtil.notNull(refreshToken, "refreshToken为空");
+        //ExceptionCheckUtil.notNull(expiredToken, "expiredToken为空");
+        //ExceptionCheckUtil.notNull(refreshToken, "refreshToken为空");
         
         // 2. 校验freshToken合法性
         JwtUtil util = new JwtUtil();
@@ -183,7 +183,34 @@ public class JwtUtil {
     }
     
     
-    
+    public static Map<String, Object> refreshJwtTokenByExpiredTokenAndRefreshToken2(
+            final String expiredToken, final String refreshToken) {
+        
+        // 2. 校验freshToken合法性
+        JwtUtil util = new JwtUtil();
+        boolean isRefreshTokenUsable = false;
+        try {
+            isRefreshTokenUsable = util.isVerify(refreshToken);
+        } catch (TokenExpiredException e) {
+            log.warn("refreshToken已过期失效，" + e.getMessage());
+        } catch (Exception e) {
+            log.error("refreshToken校验失败，原因: " + e.getMessage());
+        }
+        
+        // 3. refreshToken合法后 使用refreshToken生成新的accessToken
+        if (isRefreshTokenUsable) {
+            Claims claims = util.decode(refreshToken);
+            Map<String, Object> res = getBaseStorageDatasFromClaims(claims);
+            String newAccessToken = getToken(
+                    claims.getSubject(), 
+                    PropertiesUtil.getJwtTokenExpire(SystemConstant.JWT_ACCESS_TOKEN_EXPIRE_KEY_IN_YML), 
+                    res);
+            res.put("newAccessToken", newAccessToken);
+            return res;
+        } else {
+            throw new JwtException("使用refreshToken刷新access_token失败，freshToken不合法");
+        }
+    }
     
     
     

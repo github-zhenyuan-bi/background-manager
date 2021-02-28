@@ -25,5 +25,5 @@ public interface JubenTagService extends IService<JubenTag> {
     
     
     /** 重新绑定剧本个标签的关系 */
-    void rebindTagRelationship(String jubenId, List<JubenTag> jubenTags);
+    void updateTagRelationship(String jubenId, List<JubenTag> jubenTags);
 }

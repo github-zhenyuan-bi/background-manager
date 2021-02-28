@@ -67,12 +67,17 @@ public class JwtFilter2 extends AccessControlFilter {
         } catch (TokenExpiredException e) {
             log.warn("【{}】已超时, 准备使用【{}】刷新", SystemConstant.JWT_ACCESS_TOKEN_KEY, SystemConstant.JWT_REFRESH_TOKEN_KEY);
             try {
-                String new_access_token = JwtUtil.refreshJwtTokenByExpiredTokenAndRefreshToken(access_token, refresh_token);
+                // String new_access_token = JwtUtil.refreshJwtTokenByExpiredTokenAndRefreshToken(access_token, refresh_token);
+                datas = JwtUtil.refreshJwtTokenByExpiredTokenAndRefreshToken2(access_token, refresh_token);
+                
+                // ip验证
+                checkUserIp(datas, httpRequest);
+                
+                String new_access_token = datas.remove("newAccessToken").toString();
                 httpResponse.addHeader(SystemConstant.JWT_ACCESS_TOKEN_KEY, new_access_token);
                 RequestAndResponseUtil.setCookiesAndHeaderToResponeForAccessToken(httpRequest, httpResponse, new_access_token);
                 
-                CacheUtil.put(new_access_token, 
-                        JwtUtil.getBaseStorageDatasFromClaims(new JwtUtil().decode(new_access_token)), 
+                CacheUtil.put(new_access_token, datas, 
                         (int) PropertiesUtil.getJwtTokenExpire(SystemConstant.JWT_ACCESS_TOKEN_EXPIRE_KEY_IN_YML));
                 access_token = new_access_token;
             } catch (Exception e2) {
@@ -123,7 +128,7 @@ public class JwtFilter2 extends AccessControlFilter {
         String cur_ip = RequestAndResponseUtil.getIpAddress(httpRequest);
         Object storageIp = cacheData.get(SystemConstant.JWT_LOGIN_USER_IP_KEY);
         if (storageIp != null && !cur_ip.equals(storageIp)) {
-            throw new JwtException("access_token校验异常，原因：ip异常，异地使用");
+            throw new JwtException("access_token校验异常，原因：ip异常，异地使用"+cur_ip);
         }
     }
     
@@ -139,7 +144,8 @@ public class JwtFilter2 extends AccessControlFilter {
         try {
             // Claims claims = JwtUtil.BASE_UTIL.decode(access_token);
             // Map<String, Object> baseDatas = JwtUtil.getBaseStorageDatasFromClaims(claims);
-            httpRequest.setAttribute(SystemConstant.JWT_BASESTORAGE_DATAS_KEY, cacheData);
+            //httpRequest.setAttribute(SystemConstant.JWT_BASESTORAGE_DATAS_KEY, cacheData);
+            RequestAndResponseUtil.setJwttokenDatasToRequest(httpRequest, cacheData);
         } catch (Exception e) {
             log.error("从jwttoken中获取用于渲染视图得基本数据失败", e);
         }

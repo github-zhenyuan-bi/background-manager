@@ -19,7 +19,8 @@ public class RedisConfig {
 
     @Bean
     public RedisTemplate<String,Object> redisTemplate() {
-        RedisTemplate<String, Object> redisTemplate = new RedisTemplate<>();
+        //RedisTemplate<String, Object> redisTemplate = new RedisTemplate<>();
+        RedisTemplate<String, Object> redisTemplate = new CustomRedisTemplate<>();
         initDomainRedisTemplate(redisTemplate, connectionFactory);
         return redisTemplate;
     }

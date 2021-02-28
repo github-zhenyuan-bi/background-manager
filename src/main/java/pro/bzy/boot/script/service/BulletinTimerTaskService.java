@@ -16,11 +16,11 @@ public interface BulletinTimerTaskService extends IService<BulletinTimerTask> {
     
     
     /** 注册定时任务到定时器 */
-    void registerSchedulingBulletinTimerTask(BulletinTimerTask btt);
+    void addSchedulingBulletinTimerTask(BulletinTimerTask btt);
     
     
     /** 启动/暂停定时任务 启动返回1 暂停返回0 */
-    int startOrStopTimerTask(BulletinTimerTask btt, boolean startOrStop);
+    int updateTimerTaskStatusForStartOrStop(BulletinTimerTask btt, boolean startOrStop);
     
     
     /** 移除定时推送任务 */
@@ -28,7 +28,7 @@ public interface BulletinTimerTaskService extends IService<BulletinTimerTask> {
     
     
     /** 从定时器中移除定时任务 */
-    void cancelSchedulingBulletinTimerTask(BulletinTimerTask btt);
+    void removeSchedulingBulletinTimerTask(BulletinTimerTask btt);
     
     
     /** 更新定时任务 */

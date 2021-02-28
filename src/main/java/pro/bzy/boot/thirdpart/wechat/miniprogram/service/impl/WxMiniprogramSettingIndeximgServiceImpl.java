@@ -57,7 +57,7 @@ public class WxMiniprogramSettingIndeximgServiceImpl extends ServiceImpl<WxMinip
 
 
     @Override
-    public void adjustImageSort(int fromIndex, int toIndex) {
+    public void updateImageSort(int fromIndex, int toIndex) {
         if (fromIndex == toIndex) return;
         
         //1. 先查出所有的图像信息

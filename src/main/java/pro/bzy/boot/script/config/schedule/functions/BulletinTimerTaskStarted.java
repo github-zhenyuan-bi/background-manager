@@ -26,7 +26,7 @@ public class BulletinTimerTaskStarted implements ApplicationRunner {
                 .eq(BulletinTimerTask::getEnable, true));
         
         if (CollectionUtil.isNotEmpty(btts))
-            btts.forEach(btt -> bulletinTimerTaskService.registerSchedulingBulletinTimerTask(btt));
+            btts.forEach(btt -> bulletinTimerTaskService.addSchedulingBulletinTimerTask(btt));
     }
 
 }

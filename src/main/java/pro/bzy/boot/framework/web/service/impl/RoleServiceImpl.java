@@ -10,7 +10,6 @@ import pro.bzy.boot.framework.web.service.RoleService;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
 import java.util.List;
@@ -40,7 +39,6 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
 
 
     @Override
-    @Transactional(readOnly= true)
     public List<Role> getRolesWithUserHasFlag(String userId) {
         // 1. 查询全部可用的角色列表 并排序
         List<Role> allUseableRoles = list(Wrappers.<Role>lambdaQuery()

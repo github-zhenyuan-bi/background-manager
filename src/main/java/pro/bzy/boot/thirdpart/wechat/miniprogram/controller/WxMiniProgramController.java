@@ -9,7 +9,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.alibaba.fastjson.JSONObject;
+import com.github.xiaoymin.knife4j.annotations.ApiSupport;
 
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import pro.bzy.boot.framework.config.jwt.JwtUtil;
 import pro.bzy.boot.framework.utils.RequestAndResponseUtil;
@@ -19,6 +21,8 @@ import pro.bzy.boot.thirdpart.wechat.miniprogram.service.WxMiniProgramService;
 import pro.bzy.boot.thirdpart.wechat.miniprogram.service.WxMiniprogramLogService;
 import pro.bzy.boot.thirdpart.wechat.wx.service.WxUserinfoService;
 
+@Api(tags = {"微信登陆"}, value="微信登陆")
+@ApiSupport(order = 100)
 @RestController
 public class WxMiniProgramController extends MyAbstractController {
 

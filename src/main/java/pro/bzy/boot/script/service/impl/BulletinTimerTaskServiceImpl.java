@@ -18,7 +18,6 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
@@ -43,7 +42,7 @@ public class BulletinTimerTaskServiceImpl extends ServiceImpl<BulletinTimerTaskM
     
     
     @Override
-    public void registerSchedulingBulletinTimerTask(BulletinTimerTask btt) {
+    public void addSchedulingBulletinTimerTask(BulletinTimerTask btt) {
         boolean is_sendMode_delay = ScriptConstant.BULLETIN_SEND_MODE_DELAY_CODE.equals(btt.getSendMode()) ;
         SchedulingRunnable schedulingRunnable = new SchedulingRunnable(
                 buildTimingBulletinTaskName(btt),
@@ -105,19 +104,17 @@ public class BulletinTimerTaskServiceImpl extends ServiceImpl<BulletinTimerTaskM
 
 
     @Override
-    @Transactional(rollbackFor=Exception.class)
     public void saveBulletinTimerTaskThenRegisterScheduling(BulletinTimerTask btt) {
         btt.setEnable(true);
         save(btt);
         
-        registerSchedulingBulletinTimerTask(btt);
+        addSchedulingBulletinTimerTask(btt);
     }
 
 
 
     @Override
-    @Transactional(rollbackFor=Exception.class)
-    public int startOrStopTimerTask(BulletinTimerTask btt, boolean startOrStop) {
+    public int updateTimerTaskStatusForStartOrStop(BulletinTimerTask btt, boolean startOrStop) {
         // 1. 查询定时推送任务数据
         BulletinTimerTask timerTask = getById(btt.getId());
         if (timerTask.getEnable().equals(startOrStop))
@@ -129,10 +126,10 @@ public class BulletinTimerTaskServiceImpl extends ServiceImpl<BulletinTimerTaskM
         
         // 3. 更新定时器
         if (startOrStop) {
-            registerSchedulingBulletinTimerTask(timerTask);
+            addSchedulingBulletinTimerTask(timerTask);
             return 1;
         } else {
-            cancelSchedulingBulletinTimerTask(timerTask);
+            removeSchedulingBulletinTimerTask(timerTask);
             return 0;
         }
     }
@@ -140,11 +137,10 @@ public class BulletinTimerTaskServiceImpl extends ServiceImpl<BulletinTimerTaskM
 
 
     @Override
-    @Transactional(rollbackFor=Exception.class)
     public void removeTimerTaskThenCancelFromScheduling(String id) {
         // 1. 移除定时任务
         BulletinTimerTask btt = getById(id);
-        cancelSchedulingBulletinTimerTask(btt);
+        removeSchedulingBulletinTimerTask(btt);
         
         // 2. 删除定时任务数据记录
         removeById(btt.getId());
@@ -153,7 +149,7 @@ public class BulletinTimerTaskServiceImpl extends ServiceImpl<BulletinTimerTaskM
 
 
     @Override
-    public void cancelSchedulingBulletinTimerTask(BulletinTimerTask btt) {
+    public void removeSchedulingBulletinTimerTask(BulletinTimerTask btt) {
         try {
             schedulingRunnableTaskRegistrar.removeSchedulingTask(buildTimingBulletinTaskName(btt));
         } catch (Exception e) {
@@ -164,7 +160,6 @@ public class BulletinTimerTaskServiceImpl extends ServiceImpl<BulletinTimerTaskM
 
 
     @Override
-    @Transactional(rollbackFor=Exception.class)
     public void updateBulletinTimerTaskThenUpdateScheduling(BulletinTimerTask btt) {
         // 1.查询历史数据
         BulletinTimerTask oldBtt = getById(btt.getId());
@@ -178,7 +173,7 @@ public class BulletinTimerTaskServiceImpl extends ServiceImpl<BulletinTimerTaskM
         updateById(oldBtt);
         
         // 3.注册到定时器中
-        registerSchedulingBulletinTimerTask(oldBtt);
+        addSchedulingBulletinTimerTask(oldBtt);
     }
 
 

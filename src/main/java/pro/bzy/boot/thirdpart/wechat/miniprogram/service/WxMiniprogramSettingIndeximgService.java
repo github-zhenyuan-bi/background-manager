@@ -16,5 +16,5 @@ public interface WxMiniprogramSettingIndeximgService extends IService<WxMiniprog
     
     
     /** 调整图像顺序 */
-    void adjustImageSort(int fromIndex, int toIndex);
+    void updateImageSort(int fromIndex, int toIndex);
 }

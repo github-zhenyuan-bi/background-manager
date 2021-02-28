@@ -74,7 +74,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             userInfoService.save(UserInfo.builder().id(user.getId()).build());
             
             // 5. 给用户挂上基本角色
-            userRoleService.bindPublicRoleForUser(user.getId());
+            userRoleService.updateUserForBindPublicRole(user.getId());
         }  
     }
 

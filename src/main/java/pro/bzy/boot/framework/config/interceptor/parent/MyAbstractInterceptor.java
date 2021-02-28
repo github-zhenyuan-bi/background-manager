@@ -1,6 +1,7 @@
 package pro.bzy.boot.framework.config.interceptor.parent;
 
 import java.util.Map;
+import java.util.Objects;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -38,6 +39,7 @@ public abstract class MyAbstractInterceptor {
      * 保存未登陆认证前的一次访问地址
      * @param request
      */
+    @Deprecated
     protected void saveLastAccessUrlIfUnlogin(HttpServletRequest request) {
         request.getSession().setAttribute(SystemConstant.SAVED_URL, request.getRequestURI());
     }
@@ -50,6 +52,7 @@ public abstract class MyAbstractInterceptor {
      * @param response
      * @return
      */
+    @Deprecated
     protected boolean isAuthenticated(HttpServletResponse response) {
         Subject subject = SecurityUtils.getSubject();
         boolean isAuthen = subject.isAuthenticated();
@@ -61,6 +64,7 @@ public abstract class MyAbstractInterceptor {
     @Setter 
     protected LogMapper logMapper;
     
+    @Deprecated
     protected Map<String, String> apiDescCache = Maps.newConcurrentMap();
     
     
@@ -78,6 +82,8 @@ public abstract class MyAbstractInterceptor {
             
             String access_token = RequestAndResponseUtil.getJwtTokenFromCookiesOrRequestHeader(SystemConstant.JWT_ACCESS_TOKEN_KEY, request); 
             String refresh_token = RequestAndResponseUtil.getJwtTokenFromCookiesOrRequestHeader(SystemConstant.JWT_REFRESH_TOKEN_KEY, request);
+            String requestUri = request.getRequestURI();
+            
             String accesstor = "", fromWhere = "";
             if (StringUtils.hasText(access_token) && StringUtils.hasText(refresh_token)) {
                 Map<String, Object> baseStorageDatas = (Map<String, Object>) request.getAttribute(SystemConstant.JWT_BASESTORAGE_DATAS_KEY);
@@ -94,22 +100,24 @@ public abstract class MyAbstractInterceptor {
             } else {
                 return;
             }
-            String apidesc = apiDescCache.get(request.getRequestURI());
-            if (StringUtils.isEmpty(apidesc)) {
+            //String apidesc = apiDescCache.get(request.getRequestURI());
+            Object apidesc = CacheUtil.get(SystemConstant.CACHE_URI_DESC_PREFIX + requestUri);
+            if (Objects.isNull(apidesc)) {
                 HandlerMethod handerMethod = (HandlerMethod) handler;
                 Api controllerApiAnno = handerMethod.getBeanType().getAnnotation(Api.class);
                 ApiOperation methodApiOperationAnno = handerMethod.getMethodAnnotation(ApiOperation.class);
                 String apidescTemp = controllerApiAnno == null? "" : controllerApiAnno.value()+"-";
                 apidescTemp += methodApiOperationAnno == null? "" : methodApiOperationAnno.value();
-                apiDescCache.put(request.getRequestURI(), apidescTemp);
+                //apiDescCache.put(request.getRequestURI(), apidescTemp);
+                CacheUtil.put(SystemConstant.CACHE_URI_DESC_PREFIX + requestUri, apidescTemp);
                 apidesc = apidescTemp;
             }
             logMapper.insert(Log.builder()
                     .accessorIp(RequestAndResponseUtil.getIpAddress(request))
                     .accessor(accesstor)
-                    .accessModule(request.getRequestURI())
+                    .accessModule(requestUri)
                     .accessTime(DateUtil.getNow())
-                    .field1(apidesc)
+                    .field1(apidesc.toString())
                     .field2(fromWhere)
                     .build());
         }

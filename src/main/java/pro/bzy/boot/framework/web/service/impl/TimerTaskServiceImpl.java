@@ -13,7 +13,6 @@ import pro.bzy.boot.framework.web.service.TimerTaskService;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Map;
 
@@ -36,7 +35,6 @@ public class TimerTaskServiceImpl extends ServiceImpl<TimerTaskMapper, TimerTask
     private SchedulingRunnableTaskRegistrar schedulingRunnableTaskRegistrar;
     
     @Override
-    @Transactional(rollbackFor= {Exception.class})
     public void addTimertask(TimerTask timerTask) {
         // 新增定时任务入库
         save(timerTask);
@@ -46,8 +44,7 @@ public class TimerTaskServiceImpl extends ServiceImpl<TimerTaskMapper, TimerTask
     
 
     @Override
-    @Transactional(rollbackFor= {Exception.class})
-    public void editTimertask(TimerTask timerTask) {
+    public void updateTimertask(TimerTask timerTask) {
         // 查询旧的定时任务信息
         TimerTask old = getById(timerTask.getId());
         
@@ -64,7 +61,7 @@ public class TimerTaskServiceImpl extends ServiceImpl<TimerTaskMapper, TimerTask
     
     
     @Override
-    public void suspendTimertask(TimerTask timerTask) {
+    public void updateForSuspendTimertask(TimerTask timerTask) {
         // 查询任务配置详情
         TimerTask task = getById(timerTask.getId());
         

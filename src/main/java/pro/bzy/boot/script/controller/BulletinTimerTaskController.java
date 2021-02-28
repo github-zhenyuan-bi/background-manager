@@ -38,7 +38,7 @@ import com.github.xiaoymin.knife4j.annotations.ApiSupport;
  * @author zhenyuan.bi
  * @since 2020-12-14
  */
-@Api(tags = {""})
+@Api(tags = {"通知公告定时任务"}, value="通知公告定时任务")
 @ApiSupport(order = 100)
 @RequestMapping("/script/bulletinTimerTask")
 @RestController
@@ -135,7 +135,7 @@ public class BulletinTimerTaskController {
     public R<String> startOrStop(BulletinTimerTask btt, Boolean startOrStop) {
         ExceptionCheckUtil.hasLength(btt.getId(), "ID 不能为空");
         
-        bulletinTimerTaskService.startOrStopTimerTask(btt, startOrStop);
+        bulletinTimerTaskService.updateTimerTaskStatusForStartOrStop(btt, startOrStop);
         return R.ofSuccess("更新成功");
     }
 }

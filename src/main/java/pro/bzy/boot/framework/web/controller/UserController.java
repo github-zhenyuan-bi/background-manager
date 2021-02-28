@@ -159,7 +159,7 @@ public class UserController {
     public R<String> allocateRoles(String userId, String[] roles) {
         ExceptionCheckUtil.hasLength(userId, "用户ID 不能为空");
         
-        userRoleService.changeUserRoles(userId, roles);
+        userRoleService.updateUserRoles(userId, roles);
         return R.ofSuccess("更新成功");
     } 
     

@@ -38,7 +38,7 @@ import com.github.xiaoymin.knife4j.annotations.ApiSupport;
  * @author zhenyuan.bi
  * @since 2020-12-14
  */
-@Api(tags = {""})
+@Api(tags = {"通知公告模板"}, value="通知公告模板")
 @ApiSupport(order = 100)
 @RequestMapping("/script/bulletinTemplate")
 @RestController

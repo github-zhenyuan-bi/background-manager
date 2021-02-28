@@ -13,7 +13,6 @@ import pro.bzy.boot.script.utils.ScriptConstant;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import java.util.Map;
@@ -36,7 +35,6 @@ public class BulletinServiceImpl extends ServiceImpl<BulletinMapper, Bulletin> i
     
     
     @Override
-    @Transactional(rollbackFor=Exception.class)
     public void sendBulletin(Bulletin updateBean) {
         // 1. 查询到使用的模板
         BulletinTemplate template = bulletinTemplateService.getById(updateBean.getTemplateId());
@@ -60,8 +58,7 @@ public class BulletinServiceImpl extends ServiceImpl<BulletinMapper, Bulletin> i
 
     
     @Override
-    @Transactional(rollbackFor=Exception.class)
-    public boolean fixedTopOperation(String bulletinId, boolean isFixedTop) {
+    public boolean updateBulletinForfixedTop(String bulletinId, boolean isFixedTop) {
         update(Wrappers.<Bulletin>lambdaUpdate()
                 .eq(Bulletin::getId, bulletinId)
                 .set(Bulletin::getIsFixedTop, isFixedTop));

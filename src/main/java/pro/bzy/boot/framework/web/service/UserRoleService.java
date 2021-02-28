@@ -19,8 +19,8 @@ public interface UserRoleService extends IService<UserRole> {
     List<Role> getRolesByUserId(String userId);
     
     /** 给用户绑定上公共角色 */
-    void bindPublicRoleForUser(String userId);
+    void updateUserForBindPublicRole(String userId);
     
     /** 修改用户角色 */
-    void changeUserRoles(String userId, String[] roles);
+    void updateUserRoles(String userId, String[] roles);
 }

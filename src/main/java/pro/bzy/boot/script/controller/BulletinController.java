@@ -38,7 +38,7 @@ import com.github.xiaoymin.knife4j.annotations.ApiSupport;
  * @author zhenyuan.bi
  * @since 2020-12-14
  */
-@Api(tags = {""})
+@Api(tags = {"通知公告"}, value="通知公告")
 @ApiSupport(order = 100)
 @RequestMapping("/script/bulletin")
 @RestController
@@ -135,7 +135,7 @@ public class BulletinController {
     public R<String> updateFixedTopStatus(String bulletinId, Boolean isFixedTop) {
         ExceptionCheckUtil.hasLength(bulletinId, "ID 不能为空");
         
-        boolean flag = bulletinService.fixedTopOperation(bulletinId, isFixedTop);
+        boolean flag = bulletinService.updateBulletinForfixedTop(bulletinId, isFixedTop);
         return R.ofSuccess(flag? "已置顶" : "取消置顶");
     }
     

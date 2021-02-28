@@ -119,7 +119,7 @@ public class TimerTaskController {
     public R<String> updateById(@Validated(value= {}) @RequestBody TimerTask updateBean, BindingResult bindingResult) {
         ExceptionCheckUtil.hasLength(updateBean.getId(), "ID 不能为空");
         
-        timerTaskService.editTimertask(updateBean);
+        timerTaskService.updateTimertask(updateBean);
         return R.ofSuccess("更新成功");
     }
     
@@ -130,7 +130,7 @@ public class TimerTaskController {
         ExceptionCheckUtil.hasLength(id, "ID 不能为空");
         ExceptionCheckUtil.notNull(enable, "启用状态不能为空");
         
-        timerTaskService.suspendTimertask(
+        timerTaskService.updateForSuspendTimertask(
                 TimerTask.builder().id(id).enable(enable).build());
         return R.ofSuccess("成功");
     }

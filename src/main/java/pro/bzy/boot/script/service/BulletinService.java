@@ -16,5 +16,5 @@ public interface BulletinService extends IService<Bulletin> {
     
     
     /** 通知公告置顶操作 */
-    boolean fixedTopOperation(String bulletinId, boolean isFixedTop);
+    boolean updateBulletinForfixedTop(String bulletinId, boolean isFixedTop);
 }

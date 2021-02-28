@@ -10,7 +10,6 @@ import lombok.NonNull;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -44,7 +43,6 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
     
     
     @Override
-    @Transactional(rollbackFor= {Exception.class})
     public int removeMenuThenHandleChilds(@NonNull String id) {
         int count = 0;
         

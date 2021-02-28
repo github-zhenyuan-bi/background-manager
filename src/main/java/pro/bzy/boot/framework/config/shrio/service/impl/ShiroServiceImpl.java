@@ -36,7 +36,7 @@ public class ShiroServiceImpl implements ShiroService {
         List<Menu> menus = menuService.list();
         
         // 每一个菜单对应的 角色权限
-        Map<String, String> filterChainDefinitionMap = roleMenuService.menuNamesWithRoleNames(menus);
+        Map<String, String> filterChainDefinitionMap = roleMenuService.getMenuNamesWithRoleNames(menus);
         filterChainDefinitionMap.put("/bgManage/**", "authc");
         return filterChainDefinitionMap;
     }

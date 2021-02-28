@@ -15,7 +15,6 @@ import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
@@ -40,8 +39,7 @@ public class RoleMenuServiceImpl extends ServiceImpl<RoleMenuMapper, RoleMenu> i
     private UserRoleService userRoleService;
     
     @Override
-    @Transactional(readOnly=true)
-    public Map<String, String> menuNamesWithRoleNames(List<Menu> menus) {
+    public Map<String, String> getMenuNamesWithRoleNames(List<Menu> menus) {
         Map<String, String> names = Maps.newLinkedHashMap();
         if (!CollectionUtil.isEmpty(menus)) {
             menus.forEach(menu -> {
@@ -67,7 +65,6 @@ public class RoleMenuServiceImpl extends ServiceImpl<RoleMenuMapper, RoleMenu> i
     
     
     @Override
-    @Transactional(rollbackFor= {Exception.class})
     public void updateRoleWithMenuRelationShip(String roleId, String[] menuIds) {
         // 删除旧的绑定关系
         remove(Wrappers.<RoleMenu>lambdaUpdate().eq(RoleMenu::getRoleId, roleId));

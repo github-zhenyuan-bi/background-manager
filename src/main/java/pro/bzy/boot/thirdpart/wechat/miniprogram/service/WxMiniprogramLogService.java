@@ -12,5 +12,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
 public interface WxMiniprogramLogService extends IService<WxMiniprogramLog> {
 
     /** 记录小程序用户访问 */
-    void recordUserAccess(String openid, String session_key, String logType);
+    void saveUserAccess(String openid, String session_key, String logType);
 }

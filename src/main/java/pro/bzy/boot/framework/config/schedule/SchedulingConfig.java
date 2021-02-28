@@ -27,7 +27,7 @@ public class SchedulingConfig {
         Timer timerConfig = ymlBean.getConfig().getTimer();
         ThreadPoolTaskScheduler taskScheduler = new ThreadPoolTaskScheduler();
         // 定时任务执行线程池核心线程数
-        taskScheduler.setPoolSize(ArgUtil.defaultValueIfNull(timerConfig.getThreadPoolSize(), 4));
+        taskScheduler.setPoolSize(ArgUtil.defaultValueIfNull(timerConfig.getThreadPoolSize(), 8));
         taskScheduler.setRemoveOnCancelPolicy(true);
         taskScheduler.setThreadNamePrefix(ArgUtil.defaultValueIfNull(timerConfig.getThreadPrefix(), "Schedule-task-"));
         return taskScheduler;

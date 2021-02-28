@@ -35,7 +35,7 @@ import com.github.xiaoymin.knife4j.annotations.ApiSupport;
  * @author zhenyuan.bi
  * @since 2020-11-02
  */
-@Api(tags = {""})
+@Api(tags = {"微信小程序日志"}, value="微信小程序日志")
 @ApiSupport(order = 100)
 @RequestMapping("/wx/wxMiniprogramLog")
 @RestController

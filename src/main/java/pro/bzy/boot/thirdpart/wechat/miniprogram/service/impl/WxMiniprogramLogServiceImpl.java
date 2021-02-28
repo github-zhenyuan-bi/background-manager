@@ -7,7 +7,6 @@ import pro.bzy.boot.thirdpart.wechat.miniprogram.service.WxMiniprogramLogService
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 
@@ -25,8 +24,7 @@ public class WxMiniprogramLogServiceImpl extends ServiceImpl<WxMiniprogramLogMap
 
     
     @Override
-    @Transactional(rollbackFor=Exception.class)
-    public void recordUserAccess(String openid, String session_key, String logType) {
+    public void saveUserAccess(String openid, String session_key, String logType) {
         save(WxMiniprogramLog.builder()
                 .openid(openid)
                 .sessionKey(session_key)

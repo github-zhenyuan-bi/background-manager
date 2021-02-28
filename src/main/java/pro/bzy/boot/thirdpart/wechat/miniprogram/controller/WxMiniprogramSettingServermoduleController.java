@@ -38,7 +38,7 @@ import com.github.xiaoymin.knife4j.annotations.ApiSupport;
  * @author zhenyuan.bi
  * @since 2021-01-19
  */
-@Api(tags = {""})
+@Api(tags = {"微信小程序服务模块"}, value="微信小程序服务模块")
 @ApiSupport(order = 100)
 @RequestMapping("/wx/wxMiniprogramSettingServermodule")
 @RestController

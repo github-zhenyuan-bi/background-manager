@@ -46,7 +46,7 @@ public class WxUserinfoServiceImpl extends ServiceImpl<WxUserinfoMapper, WxUseri
             } 
             
             // 2. 记录用户访问日志
-            wxMiniprogramLogService.recordUserAccess(openid, session_key, logType);
+            wxMiniprogramLogService.saveUserAccess(openid, session_key, logType);
         } catch (Exception e) {
             throw new RuntimeException("微信用户系统注册失败，原因：" + e.getMessage());
         }

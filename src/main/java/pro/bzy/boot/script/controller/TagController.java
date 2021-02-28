@@ -38,7 +38,7 @@ import com.github.xiaoymin.knife4j.annotations.ApiSupport;
  * @author zhenyuan.bi
  * @since 2020-10-08
  */
-@Api(tags = {"剧本类型标签"})
+@Api(tags = {"剧本类型标签"}, value="剧本标签")
 @ApiSupport(order = 100)
 @RequestMapping("/script/tag")
 @RestController

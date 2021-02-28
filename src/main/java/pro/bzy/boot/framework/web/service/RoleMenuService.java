@@ -17,7 +17,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface RoleMenuService extends IService<RoleMenu> {
 
-    Map<String, String> menuNamesWithRoleNames(List<Menu> menus);
+    Map<String, String> getMenuNamesWithRoleNames(List<Menu> menus);
     
     
     /** 绑定新的角色和菜单资源关系 */

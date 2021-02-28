@@ -37,7 +37,7 @@ import com.github.xiaoymin.knife4j.annotations.ApiSupport;
  * @author zhenyuan.bi
  * @since 2020-10-14
  */
-@Api(tags = {"剧本的角色"})
+@Api(tags = {"剧本的角色"}, value="剧本人物")
 @ApiSupport(order = 100)
 @RequestMapping("/script/jubenCharacter")
 @RestController

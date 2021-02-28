@@ -38,7 +38,7 @@ import com.github.xiaoymin.knife4j.annotations.ApiSupport;
  * @author zhenyuan.bi
  * @since 2021-01-25
  */
-@Api(tags = {"剧本定时器-视图"})
+@Api(tags = {"剧本定时器-视图"}, value="剧本定时器-视图")
 @ApiSupport(order = 100)
 @RequestMapping("/script/bulletinTimerTaskDetail")
 @RestController
