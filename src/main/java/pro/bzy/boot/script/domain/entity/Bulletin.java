@@ -19,6 +19,7 @@ import lombok.Builder;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import lombok.experimental.Accessors;
 import pro.bzy.boot.framework.web.annoations.FormValid;
 
@@ -35,6 +36,7 @@ import pro.bzy.boot.framework.web.annoations.FormValid;
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
+@ToString(of = {"title", "isFixedTop"})
 @TableName("sc_bulletin")
 @ApiModel(value="Bulletin", description="")
 public class Bulletin extends Model<Bulletin> {

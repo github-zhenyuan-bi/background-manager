@@ -14,6 +14,7 @@ import lombok.Builder;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
@@ -31,6 +32,7 @@ import lombok.experimental.Accessors;
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
+@ToString(of= {"jubenId", "name"})
 @TableName("SC_JUBEN_CHARACTER")
 @ApiModel(value="JubenCharacter", description="剧本的角色")
 public class JubenCharacter extends Model<JubenCharacter> {

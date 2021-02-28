@@ -23,7 +23,7 @@ import lombok.extern.slf4j.Slf4j;
 import pro.bzy.boot.framework.utils.parents.MyUtil;
 
 @Slf4j
-public class RequestAndResponseUtil implements MyUtil {
+public final class RequestAndResponseUtil implements MyUtil {
 
     
     /**
@@ -63,7 +63,7 @@ public class RequestAndResponseUtil implements MyUtil {
         HttpServletRequest httpRequest = (HttpServletRequest) servletRequest;
         Cookie[] cookies = httpRequest.getCookies();
         
-        Map<String, String> cookiesNamesAndValues = Maps.newHashMap();
+        Map<String, String> cookiesNamesAndValues = Maps.newHashMapWithExpectedSize(8);
         if (CollectionUtil.isEmpty(cookies)) {
             log.warn("cookie中未存储内容，取值为空");
             return cookiesNamesAndValues;
@@ -93,12 +93,12 @@ public class RequestAndResponseUtil implements MyUtil {
         // 优先从header中获取
         valueOfkey =  httpRequest.getHeader(key);
         if (!StringUtils.isEmpty(valueOfkey)) {
-            log.debug("从【Header】中获取【 {}】 ={}", key, valueOfkey);
+            log.trace("从【Header】中获取【 {}】 ={}", key, valueOfkey);
             return valueOfkey;
         }
         valueOfkey = nameAndValuesOfCookies.get(key);
         if (!StringUtils.isEmpty(valueOfkey)) {
-            log.debug("从【Cookies】中获取 【{}】 ={}", key, valueOfkey);
+            log.trace("从【Cookies】中获取 【{}】 ={}", key, valueOfkey);
             return valueOfkey;
         }
         
@@ -263,5 +263,28 @@ public class RequestAndResponseUtil implements MyUtil {
     
     public static Map<String, Object> getJwttokenStorageDatasFromRequest() {
         return getJwttokenStorageDatasFromRequest(getRequest());
+    }
+    
+    
+    
+    public static void setLastAccessUrlToCookie(HttpServletRequest request, HttpServletResponse response, String url) {
+        setCookiesToRespone(request, response, SystemConstant.COOKIE_LAST_ACCESS_URL_KEY, url, 300);
+    }
+    
+    
+    public static String getLastAccessUrlToCookie(HttpServletRequest request, HttpServletResponse response) {
+        Cookie[] cookies = request.getCookies();
+        int size = cookies.length;
+        String url = null;
+        for (int i = 0; i < size; i++) {
+            Cookie item = cookies[i];
+            if (SystemConstant.COOKIE_LAST_ACCESS_URL_KEY.equals(item.getName())) {
+                url = item.getValue();
+                item.setMaxAge(0);
+                response.addCookie(item);
+                break;
+            }
+        }
+        return url;
     }
 }

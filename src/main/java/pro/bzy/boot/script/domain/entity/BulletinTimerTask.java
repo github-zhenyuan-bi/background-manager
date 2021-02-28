@@ -21,6 +21,7 @@ import lombok.Builder;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 import pro.bzy.boot.framework.web.annoations.FormValid;
@@ -39,6 +40,7 @@ import pro.bzy.boot.framework.web.annoations.FormValid;
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
+@ToString(of= {"enable", "sendMode"})
 @TableName("sc_bulletin_timer_task")
 @ApiModel(value="BulletinTimerTask", description="")
 public class BulletinTimerTask extends Model<BulletinTimerTask> {

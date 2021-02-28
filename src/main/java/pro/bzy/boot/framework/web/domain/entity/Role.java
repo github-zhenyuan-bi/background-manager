@@ -23,6 +23,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import lombok.experimental.Accessors;
 import pro.bzy.boot.framework.web.annoations.FormValid;
 
@@ -40,6 +41,7 @@ import pro.bzy.boot.framework.web.annoations.FormValid;
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
 @JsonIgnoreProperties({"deleted", "datascope", "flag", "userHas", "gmtCreator", "gmtModifier"})
+@ToString(of = {"name"})
 @Accessors(chain = true)
 @TableName("T_ROLE")
 @ApiModel(value="Role", description="角色")

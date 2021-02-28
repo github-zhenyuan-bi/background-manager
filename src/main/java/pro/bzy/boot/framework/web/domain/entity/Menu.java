@@ -22,6 +22,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import lombok.experimental.Accessors;
 import pro.bzy.boot.framework.utils.SystemConstant;
 import pro.bzy.boot.framework.web.annoations.FormValid;
@@ -41,6 +42,7 @@ import pro.bzy.boot.framework.web.domain.bean.TreeDomain;
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
+@ToString(of= {"name"})
 @TableName("T_MENU")
 @ApiModel(value="Menu", description="菜单资源")
 public class Menu extends Model<Menu> implements TreeDomain<Menu>{

@@ -125,4 +125,6 @@ public interface SystemConstant {
     String REDIS_CACHE_EXPIRE_KEY = "app.config.cache.redis.expire";
     
     String CACHE_URI_DESC_PREFIX = "uri-cache-";
+    
+    String COOKIE_LAST_ACCESS_URL_KEY = "lastAccessUrl";
 }

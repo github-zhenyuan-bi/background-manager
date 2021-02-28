@@ -16,6 +16,7 @@ import lombok.Builder;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
@@ -33,6 +34,7 @@ import lombok.experimental.Accessors;
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
+@ToString(of = {"title", "isFixedTop"})
 @TableName("sc_bulletin_template")
 @ApiModel(value="BulletinTemplate", description="")
 public class BulletinTemplate extends Model<BulletinTemplate> {

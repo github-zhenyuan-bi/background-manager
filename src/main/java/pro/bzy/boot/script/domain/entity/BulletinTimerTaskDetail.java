@@ -13,6 +13,7 @@ import lombok.Builder;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
@@ -30,6 +31,7 @@ import lombok.experimental.Accessors;
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
+@ToString(exclude= {"id", "content", "sendMode", "sendResult", "sendCron", "nextTimeForCron"})
 @TableName("v_bulletin_timer_task_detail")
 @ApiModel(value="BulletinTimerTaskDetail", description="VIEW")
 public class BulletinTimerTaskDetail extends Model<BulletinTimerTaskDetail> {

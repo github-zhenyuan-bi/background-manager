@@ -38,11 +38,11 @@ public class JwtFilter2 extends AccessControlFilter {
     @SuppressWarnings("unchecked")
     @Override
     protected boolean onAccessDenied(ServletRequest servletRequest, ServletResponse servletResponse) throws Exception {
-        log.debug("onAccessDenied 方法被调用");
+        log.trace("onAccessDenied 方法被调用");
         HttpServletRequest httpRequest = (HttpServletRequest) servletRequest;
         HttpServletResponse httpResponse = (HttpServletResponse) servletResponse;
         Map<String, String> nameAndValuesOfCookies = RequestAndResponseUtil.getCookiesFromRequest(httpRequest);
-        
+
         // 1. 从cookie或者header中获取token
         String access_token = RequestAndResponseUtil.getJwtTokenFromCookiesOrRequestHeader(
                 SystemConstant.JWT_ACCESS_TOKEN_KEY, httpRequest, nameAndValuesOfCookies); 
@@ -112,7 +112,23 @@ public class JwtFilter2 extends AccessControlFilter {
                     SystemConstant.JWT_ERROR_RESPONSE_CODE,
                     R.builder().code(600).msg(msg).build());
         } else {
+            setUrlToResponse(httpRequest, httpResponse);
             redirectToLogin(httpRequest, httpResponse);
+        }
+    }
+    
+    
+    
+    /**
+     * 将认证前访问被拦截的资源地址记录 以便认证后恢复访问
+     * @param httpRequest
+     * @param httpResponse
+     */
+    private void setUrlToResponse(HttpServletRequest httpRequest, HttpServletResponse httpResponse) {
+        String curAccessUrl = httpRequest.getRequestURI();
+        if (curAccessUrl.startsWith("/login")) {}
+        else {
+            RequestAndResponseUtil.setLastAccessUrlToCookie(httpRequest, httpResponse, curAccessUrl);
         }
     }
     

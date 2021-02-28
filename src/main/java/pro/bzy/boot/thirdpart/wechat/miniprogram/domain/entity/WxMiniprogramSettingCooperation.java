@@ -17,6 +17,7 @@ import lombok.Builder;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
@@ -34,6 +35,7 @@ import lombok.experimental.Accessors;
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
+@ToString(of= {"coopName"})
 @ApiModel(value="WxMiniprogramSettingCooperation", description="")
 public class WxMiniprogramSettingCooperation extends Model<WxMiniprogramSettingCooperation> {
 

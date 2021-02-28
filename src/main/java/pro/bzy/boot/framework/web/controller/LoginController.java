@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.shiro.SecurityUtils;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -103,7 +104,11 @@ public class LoginController extends MyAbstractController{
         // 2.4 将token放入缓存
         CacheUtil.put(access_token, datas, (int) access_token_expire);
         
-        return R.<String>builder().code(R.SUCCESS).msg("ok").data("/script/business/show").build();
+        String accessUrl = RequestAndResponseUtil.getLastAccessUrlToCookie(request, response);
+        if (StringUtils.isEmpty(accessUrl))
+            accessUrl = "/script/business/show";
+        
+        return R.<String>builder().code(R.SUCCESS).msg("ok").data(accessUrl).build();
     }
     
     
