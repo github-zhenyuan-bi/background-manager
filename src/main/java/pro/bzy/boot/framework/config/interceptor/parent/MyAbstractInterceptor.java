@@ -16,9 +16,10 @@ import com.google.common.collect.Maps;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import pro.bzy.boot.framework.utils.RequestAndResponseUtil;
+import pro.bzy.boot.framework.config.constant.CACHE_constant;
+import pro.bzy.boot.framework.config.constant.JWT_constant;
 import pro.bzy.boot.framework.utils.CacheUtil;
 import pro.bzy.boot.framework.utils.DateUtil;
-import pro.bzy.boot.framework.utils.SystemConstant;
 import pro.bzy.boot.framework.web.domain.entity.Log;
 import pro.bzy.boot.framework.web.mapper.LogMapper;
 
@@ -35,14 +36,7 @@ import lombok.Setter;
 @NoArgsConstructor
 public abstract class MyAbstractInterceptor {
 
-    /**
-     * 保存未登陆认证前的一次访问地址
-     * @param request
-     */
-    @Deprecated
-    protected void saveLastAccessUrlIfUnlogin(HttpServletRequest request) {
-        request.getSession().setAttribute(SystemConstant.SAVED_URL, request.getRequestURI());
-    }
+   
     
     
     
@@ -80,20 +74,20 @@ public abstract class MyAbstractInterceptor {
             /*if ("/".equals(request.getRequestURI())) 
                 return;*/
             
-            String access_token = RequestAndResponseUtil.getJwtTokenFromCookiesOrRequestHeader(SystemConstant.JWT_ACCESS_TOKEN_KEY, request); 
-            String refresh_token = RequestAndResponseUtil.getJwtTokenFromCookiesOrRequestHeader(SystemConstant.JWT_REFRESH_TOKEN_KEY, request);
+            String access_token = RequestAndResponseUtil.getJwtTokenFromCookiesOrRequestHeader(JWT_constant.JWT_ACCESS_TOKEN_KEY, request); 
+            String refresh_token = RequestAndResponseUtil.getJwtTokenFromCookiesOrRequestHeader(JWT_constant.JWT_REFRESH_TOKEN_KEY, request);
             String requestUri = request.getRequestURI();
             
             String accesstor = "", fromWhere = "";
             if (StringUtils.hasText(access_token) && StringUtils.hasText(refresh_token)) {
-                Map<String, Object> baseStorageDatas = (Map<String, Object>) request.getAttribute(SystemConstant.JWT_BASESTORAGE_DATAS_KEY);
+                Map<String, Object> baseStorageDatas = (Map<String, Object>) request.getAttribute(JWT_constant.JWT_BASESTORAGE_DATAS_KEY);
                 try {
                     if (baseStorageDatas == null) {
                         baseStorageDatas = CacheUtil.get(access_token, Map.class);
-                        request.setAttribute(SystemConstant.JWT_BASESTORAGE_DATAS_KEY, baseStorageDatas);
+                        request.setAttribute(JWT_constant.JWT_BASESTORAGE_DATAS_KEY, baseStorageDatas);
                     }
-                    accesstor = baseStorageDatas.getOrDefault(SystemConstant.JWT_LOGIN_USERID_KEY, "").toString();
-                    fromWhere = baseStorageDatas.getOrDefault(SystemConstant.JWT_LOGIN_FROMWHERE_KEY, "").toString();
+                    accesstor = baseStorageDatas.getOrDefault(JWT_constant.JWT_LOGIN_USERID_KEY, "").toString();
+                    fromWhere = baseStorageDatas.getOrDefault(JWT_constant.JWT_LOGIN_FROMWHERE_KEY, "").toString();
                 } catch (Exception e) {
                     System.err.println(e.getMessage());
                 }
@@ -101,7 +95,7 @@ public abstract class MyAbstractInterceptor {
                 return;
             }
             //String apidesc = apiDescCache.get(request.getRequestURI());
-            Object apidesc = CacheUtil.get(SystemConstant.CACHE_URI_DESC_PREFIX + requestUri);
+            Object apidesc = CacheUtil.get(CACHE_constant.CACHE_URI_DESC_PREFIX + requestUri);
             if (Objects.isNull(apidesc)) {
                 HandlerMethod handerMethod = (HandlerMethod) handler;
                 Api controllerApiAnno = handerMethod.getBeanType().getAnnotation(Api.class);
@@ -109,7 +103,7 @@ public abstract class MyAbstractInterceptor {
                 String apidescTemp = controllerApiAnno == null? "" : controllerApiAnno.value()+"-";
                 apidescTemp += methodApiOperationAnno == null? "" : methodApiOperationAnno.value();
                 //apiDescCache.put(request.getRequestURI(), apidescTemp);
-                CacheUtil.put(SystemConstant.CACHE_URI_DESC_PREFIX + requestUri, apidescTemp);
+                CacheUtil.put(CACHE_constant.CACHE_URI_DESC_PREFIX + requestUri, apidescTemp);
                 apidesc = apidescTemp;
             }
             logMapper.insert(Log.builder()

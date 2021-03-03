@@ -1,9 +1,9 @@
 package pro.bzy.boot.script.service.impl;
 
+import pro.bzy.boot.framework.config.constant.Schedule_constant;
 import pro.bzy.boot.framework.config.schedule.SchedulingRunnable;
 import pro.bzy.boot.framework.config.schedule.SchedulingRunnableTaskRegistrar;
 import pro.bzy.boot.framework.utils.DateUtil;
-import pro.bzy.boot.framework.utils.SystemConstant;
 import pro.bzy.boot.script.domain.entity.Bulletin;
 import pro.bzy.boot.script.domain.entity.BulletinTemplate;
 import pro.bzy.boot.script.domain.entity.BulletinTimerTask;
@@ -65,7 +65,7 @@ public class BulletinTimerTaskServiceImpl extends ServiceImpl<BulletinTimerTaskM
                         
                         // 4. 更新定时任务结果
                         update(Wrappers.<BulletinTimerTask>lambdaUpdate()
-                                .set(BulletinTimerTask::getSendResult, SystemConstant.SCHEDULING_EXECUTE_SUCCESS)
+                                .set(BulletinTimerTask::getSendResult, Schedule_constant.SCHEDULING_EXECUTE_SUCCESS)
                                 .eq(BulletinTimerTask::getId, btt.getId())
                                 .set(is_sendMode_delay, 
                                         BulletinTimerTask::getEnable, false));
@@ -73,7 +73,7 @@ public class BulletinTimerTaskServiceImpl extends ServiceImpl<BulletinTimerTaskM
                         // 4*. 更新定时任务结果 --错误--
                         e.printStackTrace();
                         update(Wrappers.<BulletinTimerTask>lambdaUpdate()
-                                .set(BulletinTimerTask::getSendResult, SystemConstant.SCHEDULING_EXECUTE_FAILURE)
+                                .set(BulletinTimerTask::getSendResult, Schedule_constant.SCHEDULING_EXECUTE_FAILURE)
                                 .eq(BulletinTimerTask::getId, btt.getId())
                                 .set(is_sendMode_delay, 
                                         BulletinTimerTask::getEnable, false));

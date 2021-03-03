@@ -19,6 +19,9 @@ import com.google.common.collect.Maps;
 
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
+import pro.bzy.boot.framework.config.constant.CACHE_constant;
+import pro.bzy.boot.framework.config.constant.File_constant;
+import pro.bzy.boot.framework.config.constant.System_constant;
 import pro.bzy.boot.framework.utils.parents.MyUtil;
 
 /**
@@ -68,12 +71,12 @@ public final class PropertiesUtil implements MyUtil{
      */
     public static int getRedisExpireFormYml() {
         // yml配置
-        Object ymlRedisExpire = PropertiesUtil.get(SystemConstant.REDIS_CACHE_EXPIRE_KEY);
+        Object ymlRedisExpire = PropertiesUtil.get(CACHE_constant.REDIS_CACHE_EXPIRE_KEY);
         if (Objects.nonNull(ymlRedisExpire)) {
             try {
                 return Integer.parseInt(ymlRedisExpire.toString());
             } catch (Exception e) {
-                log.error("从yml读取【{}】的超时时间设定异常，非常规数值", SystemConstant.REDIS_CACHE_EXPIRE_KEY);
+                log.error("从yml读取【{}】的超时时间设定异常，非常规数值", CACHE_constant.REDIS_CACHE_EXPIRE_KEY);
             }
         }
         return 0;
@@ -111,17 +114,17 @@ public final class PropertiesUtil implements MyUtil{
         Map<String, String> res = Maps.newHashMap();
         try {
             // 检测classpath下存在哪一种配置文件
-            Resource resource = new ClassPathResource(SystemConstant.APPLICATION_YML);
+            Resource resource = new ClassPathResource(File_constant.APPLICATION_YML);
             if (!resource.exists())
-                resource = new ClassPathResource(SystemConstant.APPLICATION_PROPERTIES);
+                resource = new ClassPathResource(File_constant.APPLICATION_PROPERTIES);
             ExceptionCheckUtil.isTrue(resource.exists(), "未检测到classpath下存在 application 文件");
             
             // 获取主文件内容
             ImmutableMap<String, String> applicationProps = loadFile(resource.getFilename());
             res.putAll(applicationProps);
             // 获取副文件内容
-            if (applicationProps.containsKey(SystemConstant.APPLICATION_PROFILE_ACTIVE_KEY)) {
-                String active = applicationProps.get(SystemConstant.APPLICATION_PROFILE_ACTIVE_KEY);
+            if (applicationProps.containsKey(System_constant.APPLICATION_PROFILE_ACTIVE_KEY)) {
+                String active = applicationProps.get(System_constant.APPLICATION_PROFILE_ACTIVE_KEY);
                 String activeFileName = buildActiveFileName(resource.getFilename(), active);
                 ImmutableMap<String, String> activeProps = loadFile(activeFileName);
                 res.putAll(activeProps);
@@ -157,9 +160,9 @@ public final class PropertiesUtil implements MyUtil{
      * @throws Exception
      */
     private static ImmutableMap<String, String> loadFile(@NonNull final String fileName) throws Exception {
-        if (StringUtils.endsWithIgnoreCase(fileName, SystemConstant.YML_SUFFIX)) {
+        if (StringUtils.endsWithIgnoreCase(fileName, File_constant.YML_SUFFIX)) {
             return loadYmlFile(fileName);
-        } else if (StringUtils.endsWithIgnoreCase(fileName, SystemConstant.PROPERTIES_SUFFIX)){
+        } else if (StringUtils.endsWithIgnoreCase(fileName, File_constant.PROPERTIES_SUFFIX)){
             return loadPropertiesFile(fileName);
         } else {
             throw new UnsupportedOperationException("暂时仅支持对该类型的配置文件的读取：" + fileName);

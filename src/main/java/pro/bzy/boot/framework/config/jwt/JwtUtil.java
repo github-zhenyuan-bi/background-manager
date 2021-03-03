@@ -12,8 +12,8 @@ import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.extern.slf4j.Slf4j;
+import pro.bzy.boot.framework.config.constant.JWT_constant;
 import pro.bzy.boot.framework.utils.PropertiesUtil;
-import pro.bzy.boot.framework.utils.SystemConstant;
 
 import org.apache.commons.codec.binary.Base64;
 
@@ -136,10 +136,10 @@ public class JwtUtil {
      */
     public static Map<String, Object> getBaseStorageDatasFromClaims(Claims claims) {
         Map<String, Object> claimsDatas = Maps.newHashMapWithExpectedSize(5);
-        claimsDatas.put(SystemConstant.JWT_LOGIN_FROMWHERE_KEY, claims.get(SystemConstant.JWT_LOGIN_FROMWHERE_KEY));
-        claimsDatas.put(SystemConstant.JWT_LOGIN_USERID_KEY, claims.get(SystemConstant.JWT_LOGIN_USERID_KEY));
-        claimsDatas.put(SystemConstant.JWT_LOGIN_USER, claims.get(SystemConstant.JWT_LOGIN_USER));
-        claimsDatas.put(SystemConstant.JWT_LOGIN_USER_IP_KEY, claims.get(SystemConstant.JWT_LOGIN_USER_IP_KEY));
+        claimsDatas.put(JWT_constant.JWT_LOGIN_FROMWHERE_KEY, claims.get(JWT_constant.JWT_LOGIN_FROMWHERE_KEY));
+        claimsDatas.put(JWT_constant.JWT_LOGIN_USERID_KEY, claims.get(JWT_constant.JWT_LOGIN_USERID_KEY));
+        claimsDatas.put(JWT_constant.JWT_LOGIN_USER, claims.get(JWT_constant.JWT_LOGIN_USER));
+        claimsDatas.put(JWT_constant.JWT_LOGIN_USER_IP_KEY, claims.get(JWT_constant.JWT_LOGIN_USER_IP_KEY));
         return claimsDatas;
     }
     
@@ -175,7 +175,7 @@ public class JwtUtil {
             
             return getToken(
                     claims.getSubject(), 
-                    PropertiesUtil.getJwtTokenExpire(SystemConstant.JWT_ACCESS_TOKEN_EXPIRE_KEY_IN_YML), 
+                    PropertiesUtil.getJwtTokenExpire(JWT_constant.JWT_ACCESS_TOKEN_EXPIRE_KEY_IN_YML), 
                     getBaseStorageDatasFromClaims(claims));
         } else {
             throw new JwtException("使用refreshToken刷新access_token失败，freshToken不合法");
@@ -203,7 +203,7 @@ public class JwtUtil {
             Map<String, Object> res = getBaseStorageDatasFromClaims(claims);
             String newAccessToken = getToken(
                     claims.getSubject(), 
-                    PropertiesUtil.getJwtTokenExpire(SystemConstant.JWT_ACCESS_TOKEN_EXPIRE_KEY_IN_YML), 
+                    PropertiesUtil.getJwtTokenExpire(JWT_constant.JWT_ACCESS_TOKEN_EXPIRE_KEY_IN_YML), 
                     res);
             res.put("newAccessToken", newAccessToken);
             return res;

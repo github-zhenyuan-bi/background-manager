@@ -1,7 +1,7 @@
 package pro.bzy.boot.framework.web.service.impl;
 
+import pro.bzy.boot.framework.config.constant.DB_constant;
 import pro.bzy.boot.framework.utils.CollectionUtil;
-import pro.bzy.boot.framework.utils.SystemConstant;
 import pro.bzy.boot.framework.web.domain.entity.Role;
 import pro.bzy.boot.framework.web.domain.entity.UserRole;
 import pro.bzy.boot.framework.web.mapper.RoleMapper;
@@ -42,7 +42,7 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
     public List<Role> getRolesWithUserHasFlag(String userId) {
         // 1. 查询全部可用的角色列表 并排序
         List<Role> allUseableRoles = list(Wrappers.<Role>lambdaQuery()
-                .eq(Role::getIsForbidden, SystemConstant.NOT_FORBIDDEN)
+                .eq(Role::getIsForbidden, DB_constant.NOT_FORBIDDEN)
                 .orderByAsc(Role::getSort));
         
         // 2. 查询指定用户拥有的全部角色ID

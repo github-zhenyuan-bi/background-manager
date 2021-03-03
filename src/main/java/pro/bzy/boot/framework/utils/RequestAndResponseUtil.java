@@ -20,6 +20,8 @@ import com.google.common.collect.Maps;
 import lombok.Cleanup;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
+import pro.bzy.boot.framework.config.constant.JWT_constant;
+import pro.bzy.boot.framework.config.constant.System_constant;
 import pro.bzy.boot.framework.utils.parents.MyUtil;
 
 @Slf4j
@@ -158,9 +160,9 @@ public final class RequestAndResponseUtil implements MyUtil {
     public final static void setCookiesAndHeaderToResponeForAccessToken(HttpServletRequest request, HttpServletResponse response, 
             final String value) {
         setCookiesToRespone(request, response, 
-                SystemConstant.JWT_ACCESS_TOKEN_KEY, value, 
-                PropertiesUtil.getJwtTokenExpire(SystemConstant.JWT_REFRESH_TOKEN_EXPIRE_KEY_IN_YML));
-        response.setHeader(SystemConstant.JWT_ACCESS_TOKEN_KEY, value);
+                JWT_constant.JWT_ACCESS_TOKEN_KEY, value, 
+                PropertiesUtil.getJwtTokenExpire(JWT_constant.JWT_REFRESH_TOKEN_EXPIRE_KEY_IN_YML));
+        response.setHeader(JWT_constant.JWT_ACCESS_TOKEN_KEY, value);
     }
     
     /**
@@ -172,9 +174,9 @@ public final class RequestAndResponseUtil implements MyUtil {
     public final static void setCookiesAndHeaderToResponeForRefreshToken(HttpServletRequest request, HttpServletResponse response, 
             final String value) {
         setCookiesToRespone(request, response, 
-                SystemConstant.JWT_REFRESH_TOKEN_KEY, value, 
-                PropertiesUtil.getJwtTokenExpire(SystemConstant.JWT_REFRESH_TOKEN_EXPIRE_KEY_IN_YML));
-        response.setHeader(SystemConstant.JWT_REFRESH_TOKEN_KEY, value);
+                JWT_constant.JWT_REFRESH_TOKEN_KEY, value, 
+                PropertiesUtil.getJwtTokenExpire(JWT_constant.JWT_REFRESH_TOKEN_EXPIRE_KEY_IN_YML));
+        response.setHeader(JWT_constant.JWT_REFRESH_TOKEN_KEY, value);
     }
     
     
@@ -190,8 +192,8 @@ public final class RequestAndResponseUtil implements MyUtil {
         if (!CollectionUtil.isEmpty(cookies)) {
             for (Cookie cookie : cookies) {
                 // 删除access_token 和 refresh_token
-                if (SystemConstant.JWT_ACCESS_TOKEN_KEY.equals(cookie.getName())
-                        || SystemConstant.JWT_REFRESH_TOKEN_KEY.equals(cookie.getName())) {
+                if (JWT_constant.JWT_ACCESS_TOKEN_KEY.equals(cookie.getName())
+                        || JWT_constant.JWT_REFRESH_TOKEN_KEY.equals(cookie.getName())) {
                     cookie.setMaxAge(0);
                     response.addCookie(cookie);
                 }
@@ -223,8 +225,8 @@ public final class RequestAndResponseUtil implements MyUtil {
             Integer responseCode, Object data) throws IOException {
         if (responseCode != null)
             response.setStatus(responseCode);
-        response.setCharacterEncoding(SystemConstant.CHARSET_UTF8);
-        response.setContentType(SystemConstant.HTTP_CONTENT_TYPE_JSON);
+        response.setCharacterEncoding(System_constant.CHARSET_UTF8);
+        response.setContentType(System_constant.HTTP_CONTENT_TYPE_JSON);
         @Cleanup PrintWriter writer = response.getWriter();
         writer.write(JSONObject.toJSONString(data));
     }
@@ -245,12 +247,12 @@ public final class RequestAndResponseUtil implements MyUtil {
     
     
     public static void setJwttokenDatasToRequest(HttpServletRequest request, Object datas) {
-        request.setAttribute(SystemConstant.JWT_BASESTORAGE_DATAS_KEY, datas);
+        request.setAttribute(JWT_constant.JWT_BASESTORAGE_DATAS_KEY, datas);
     }
     
     
     public static Map<String, Object> getJwttokenStorageDatasFromRequest(HttpServletRequest request) {
-        Object jwttokenDatas = request.getAttribute(SystemConstant.JWT_BASESTORAGE_DATAS_KEY);
+        Object jwttokenDatas = request.getAttribute(JWT_constant.JWT_BASESTORAGE_DATAS_KEY);
         if (jwttokenDatas == null)
             throw new RuntimeException("从request中获取jwttoken存储的数据为空");
         
@@ -268,21 +270,23 @@ public final class RequestAndResponseUtil implements MyUtil {
     
     
     public static void setLastAccessUrlToCookie(HttpServletRequest request, HttpServletResponse response, String url) {
-        setCookiesToRespone(request, response, SystemConstant.COOKIE_LAST_ACCESS_URL_KEY, url, 300);
+        setCookiesToRespone(request, response, System_constant.COOKIE_LAST_ACCESS_URL_KEY, url, 300);
     }
     
     
     public static String getLastAccessUrlToCookie(HttpServletRequest request, HttpServletResponse response) {
         Cookie[] cookies = request.getCookies();
-        int size = cookies.length;
         String url = null;
-        for (int i = 0; i < size; i++) {
-            Cookie item = cookies[i];
-            if (SystemConstant.COOKIE_LAST_ACCESS_URL_KEY.equals(item.getName())) {
-                url = item.getValue();
-                item.setMaxAge(0);
-                response.addCookie(item);
-                break;
+        if (cookies != null) {
+            int size = cookies.length;
+            for (int i = 0; i < size; i++) {
+                Cookie item = cookies[i];
+                if (System_constant.COOKIE_LAST_ACCESS_URL_KEY.equals(item.getName())) {
+                    url = item.getValue();
+                    item.setMaxAge(0);
+                    response.addCookie(item);
+                    break;
+                }
             }
         }
         return url;

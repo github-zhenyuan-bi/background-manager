@@ -9,10 +9,10 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
+import pro.bzy.boot.framework.config.constant.JWT_constant;
 import pro.bzy.boot.framework.config.interceptor.parent.MyAbstractInterceptor;
 import pro.bzy.boot.framework.config.yml.YmlBean;
 import pro.bzy.boot.framework.utils.CollectionUtil;
-import pro.bzy.boot.framework.utils.SystemConstant;
 import pro.bzy.boot.framework.web.domain.entity.Constant;
 import pro.bzy.boot.framework.web.mapper.LogMapper;
 import pro.bzy.boot.framework.web.service.ConstantService;
@@ -79,7 +79,7 @@ public class BaseInterceptor extends MyAbstractInterceptor implements HandlerInt
             model.put("db_constants_groups", ConstGroupByType);
             model.put("db_constants", Constant.toMap(constants));
             // jwttoken获取基本数据
-            model.put(SystemConstant.JWT_BASESTORAGE_DATAS_KEY, request.getAttribute(SystemConstant.JWT_BASESTORAGE_DATAS_KEY));
+            model.put(JWT_constant.JWT_BASESTORAGE_DATAS_KEY, request.getAttribute(JWT_constant.JWT_BASESTORAGE_DATAS_KEY));
         }
         HandlerInterceptor.super.postHandle(request, response, handler, modelAndView);
     }

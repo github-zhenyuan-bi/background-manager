@@ -18,8 +18,11 @@ import com.github.xiaoymin.knife4j.annotations.ApiSupport;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import pro.bzy.boot.framework.config.constant.File_constant;
+import pro.bzy.boot.framework.config.yml.ImageServer;
 import pro.bzy.boot.framework.config.yml.YmlBean;
 import pro.bzy.boot.framework.utils.FileUtil;
+import pro.bzy.boot.framework.utils.ImageUploaderUtil;
 import pro.bzy.boot.framework.web.controller.parent.MyAbstractController;
 import pro.bzy.boot.framework.web.domain.bean.R;
 
@@ -35,11 +38,11 @@ public class UploadController extends MyAbstractController {
     
     
     
+    
     @ApiOperation(value="剧本封面图")
     @PostMapping("jubenCoverImg")
     public @ResponseBody R<Object> jubenCoverImg(MultipartFile img) throws Exception {
-        return uploadJubenImg(img, ymlBean.getConfig().getImageServer().getJubenCoverImagePath(), true);
-        //return uploadJubenImg(img, ScriptConstant.JUBEN_UPLOAD_COVER_IMG_PATH);
+        return uploadJubenImg2(img, ymlBean.getConfig().getImageServer().getJubenCoverImagePath(), File_constant.MB_4, true);
     }
     
     
@@ -48,8 +51,7 @@ public class UploadController extends MyAbstractController {
     @ApiOperation(value="剧本人物图")
     @PostMapping("jubenCharacterImg")
     public @ResponseBody R<Object> jubenCharacterImg(MultipartFile img) throws Exception {
-        return uploadJubenImg(img, ymlBean.getConfig().getImageServer().getJubenCharacterImagePath(), true);
-        //return uploadJubenImg(img, ScriptConstant.JUBEN_UPLOAD_CHARACTER_IMG_PATH);
+        return uploadJubenImg2(img, ymlBean.getConfig().getImageServer().getJubenCharacterImagePath(), File_constant.MB_4, true);
     }
     
     
@@ -59,10 +61,9 @@ public class UploadController extends MyAbstractController {
     @PostMapping("wxIndexSwipperImg")
     public void wxIndexSwipperImg(MultipartFile img, 
             HttpServletRequest request, HttpServletResponse response) throws Exception {
-        R<Object> uploadedImg = uploadJubenImg(img, ymlBean.getConfig().getImageServer().getWxMiniprogramIndexImagePath(), false);
+        R<Object> uploadedImg = uploadJubenImg2(img, ymlBean.getConfig().getImageServer().getWxMiniprogramIndexImagePath(), File_constant.MB_8, false);
         request.setAttribute("uploadedImg", uploadedImg.getData());
         request.getRequestDispatcher("/wx/wxMiniprogramSettingIndeximg/saveAfterUpload").forward(request, response);
-        //return uploadJubenImg(img, ScriptConstant.JUBEN_UPLOAD_CHARACTER_IMG_PATH);
     }
     
     
@@ -71,7 +72,7 @@ public class UploadController extends MyAbstractController {
     @ApiOperation(value="微信小程序服务模块icon")
     @PostMapping("wxMiniprogramServerIcon")
     public @ResponseBody R<Object> wxMiniprogramServerIcon(MultipartFile img) throws Exception {
-        return uploadJubenImg(img, ymlBean.getConfig().getImageServer().getWxMiniprogramServerModuleIconPath(), true);
+        return uploadJubenImg2(img, ymlBean.getConfig().getImageServer().getWxMiniprogramServerModuleIconPath(), File_constant.KB_128, true);
     }
     
     
@@ -80,7 +81,7 @@ public class UploadController extends MyAbstractController {
     @ApiOperation(value="微信小程序合作模块icon")
     @PostMapping("wxMiniprogramCooperationIcon")
     public @ResponseBody R<Object> wxMiniprogramCooperationIcon(MultipartFile img) throws Exception {
-        return uploadJubenImg(img, ymlBean.getConfig().getImageServer().getWxMiniprogramCooperationIconPath(), false);
+        return uploadJubenImg2(img, ymlBean.getConfig().getImageServer().getWxMiniprogramCooperationIconPath(), File_constant.KB_128, false);
     }
     
     
@@ -89,7 +90,7 @@ public class UploadController extends MyAbstractController {
     @ApiOperation(value="通知公告图")
     @PostMapping("bulletinIconImg")
     public @ResponseBody R<Object> bulletinIconImg(MultipartFile img) throws Exception {
-        return uploadJubenImg(img, ymlBean.getConfig().getImageServer().getJubenBulletinIconImagePath(), false);
+        return uploadJubenImg2(img, ymlBean.getConfig().getImageServer().getJubenBulletinIconImagePath(), File_constant.KB_128, false);
     }
     
     
@@ -98,12 +99,38 @@ public class UploadController extends MyAbstractController {
     @ApiOperation(value="充值卡图片")
     @PostMapping("rechargeCardImg")
     public @ResponseBody R<Object> rechargeCardImg(MultipartFile img) throws Exception {
-        return uploadJubenImg(img, ymlBean.getConfig().getImageServer().getJubenRechargeCardImgPath(), true);
+        return uploadJubenImg2(img, ymlBean.getConfig().getImageServer().getJubenRechargeCardImgPath(), File_constant.MB_1, true);
     }
     
     
+    private R<Object> uploadJubenImg2(MultipartFile img, String uploadPath, long limitSize, boolean thumbnail) throws Exception {
+        File uploadedImg = null;
+        File thumbnailImg = null;
+        try {
+            // 1. 获取上传图片服务配置
+            ImageServer imageServer = ymlBean.getConfig().getImageServer();
+            // 2. 原图上传
+            uploadedImg = ImageUploaderUtil.upload(img, imageServer.buildStoragePath(uploadPath), limitSize);
+            // 3. 如有需要则构造原图的压缩图
+            if (thumbnail)
+                thumbnailImg = ImageUploaderUtil.genThumbnailFile(uploadedImg);
+            
+            Object resUrl = imageServer.buildServerPath(uploadPath) + 
+                    (thumbnailImg == null? uploadedImg.getName() : thumbnailImg.getName());
+            return R.ofSuccess(resUrl);
+        } catch (Exception e) {
+            // exp: 异常时将上传的文件删除
+            if (uploadedImg != null && uploadedImg.exists()) 
+                uploadedImg.delete();
+            if (thumbnailImg != null && thumbnailImg.exists()) {
+                thumbnailImg.delete();
+            }
+            throw e;
+        }
+    }
     
-    private R<Object> uploadJubenImg(MultipartFile img, String uploadJubenImgPath, boolean thumbnail) throws Exception {
+    @Deprecated
+    public R<Object> uploadJubenImg(MultipartFile img, String uploadJubenImgPath, boolean thumbnail) throws Exception {
         File uploadedImg = null;
         String thumbnailImgName = null;
         String uploadJubenImgPath2 = null;

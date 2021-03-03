@@ -7,9 +7,9 @@ import org.springframework.context.annotation.Configuration;
 import lombok.extern.slf4j.Slf4j;
 import net.sf.ehcache.Cache;
 import net.sf.ehcache.CacheManager;
+import pro.bzy.boot.framework.config.constant.CACHE_constant;
 import pro.bzy.boot.framework.config.yml.Ehcache;
 import pro.bzy.boot.framework.config.yml.YmlBean;
-import pro.bzy.boot.framework.utils.SystemConstant;
 
 @Slf4j
 @EnableCaching
@@ -52,6 +52,6 @@ public class EhCacheConfig {
      * @return
      */
     public Cache getApiDescOnMethodCache() {
-        return manager.getCache(SystemConstant.EHCACHE_APIDESC_CACHE_NAME);
+        return manager.getCache(CACHE_constant.EHCACHE_APIDESC_CACHE_NAME);
     }
 }

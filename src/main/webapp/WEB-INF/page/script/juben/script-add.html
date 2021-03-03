@@ -3,11 +3,13 @@
 	<input type="hidden" name="id" value="${(juben.id)!}">
 	
 	<div class="form-row">
-		<div class="col-sm-6">
+		<div class="col-md-6">
 			<div class="form-row">
 				<label class="col-sm-2 col-form-label">封面</label>
-			    <div class="form-group col-sm-10">
-			        <div id="drop_area"></div>
+			    <div class="form-group col-sm-10 text-center">
+			        <div id="img-wrapper" style="width: 80%; height: 0; border: 1px dashed; padding-top: 106.4%;">
+			        	<img class="d-none w-100 h-100 pd-20" src="">
+			        </div>
 			        <input type="text" name="coverImg" style="display: none;" value="${(juben.coverImg)!}"
 			        		data-parsley-required="true" data-parsley-required-message="剧本封面图必须上传"
 			        		data-parsley-trigger="focusout">
@@ -15,7 +17,7 @@
 			</div>
 		</div>
 			
-		<div class="col-sm-6">
+		<div class="col-md-6">
 			<div class="form-row">
 			    <label class="col-sm-3 col-form-label">剧本名</label>
 			    <div class="form-group col-sm-9">
@@ -146,7 +148,46 @@
 	
 </form>
 <script>
-	var $imgArea = $("#drop_area");
+	var JUBEN_IMG_TRRIGER_NAME = "#img-wrapper";
+	var __coopIconCrop = null;
+	$(JUBEN_IMG_TRRIGER_NAME).one("click", function(){
+		__coopIconCrop = $.CropAvatarBuilder({
+		  	id: "jubencover-img-upload",
+	        trigger: JUBEN_IMG_TRRIGER_NAME,
+	        preview: ".avatar-preview",
+	        imgInputName: 'img',
+	        //dragEnable: true,
+	        // 裁剪框 可设定固定宽高比 如 16/9 或者正方形 1 或者任意裁剪 null
+	        aspectRatio: 300/400,
+	        // 提交方法 formData 表单数据对象 obj当前裁剪对象
+	        submit: function(fromData, obj) {
+	        	__jqAjax({
+		            url: "/upload/jubenCoverImg",
+		            type: "POST",
+		            data: fromData,
+		            processData : false,
+		            contentType : false,
+		            dataType : 'json',
+		            success : function (res) {
+		            	if (res.code === 200) { 
+		            		obj.cropDone();
+		            		mySwal.success('上传图片成功').then((result) => {
+		            			$(JUBEN_IMG_TRRIGER_NAME).find("img").removeClass("d-none").attr("src", res.data);
+		            			$(JUBEN_IMG_TRRIGER_NAME).find("div").addClass("d-none");
+		            			$(JUBEN_IMG_TRRIGER_NAME).find("input").val(res.data);
+				    		});
+		            	} else {
+		            		obj.alert("上传失败，原因：" + res.msg);
+		            	}
+		            }    
+		        }); 
+	        }
+	  	});
+		$(JUBEN_IMG_TRRIGER_NAME).trigger("click");
+	});
+
+
+	/* var $imgArea = $("#drop_area");
 	var $imgInput = $imgArea.next('[name="coverImg"]');
 	var dragImgUpload = new DragImgUpload("#drop_area",{
 		boxWidth: '80%',
@@ -179,5 +220,5 @@
 	            }    
 	        })  
 	    }
-	});
+	}); */
 </script>

@@ -1,11 +1,11 @@
 package pro.bzy.boot.framework.web.service.impl;
 
+import pro.bzy.boot.framework.config.constant.DB_constant;
 import pro.bzy.boot.framework.config.exceptions.MySchedulingException;
 import pro.bzy.boot.framework.config.schedule.SchedulingFunction;
 import pro.bzy.boot.framework.config.schedule.SchedulingRunnable;
 import pro.bzy.boot.framework.config.schedule.SchedulingRunnableTaskRegistrar;
 import pro.bzy.boot.framework.utils.SpringContextUtil;
-import pro.bzy.boot.framework.utils.SystemConstant;
 import pro.bzy.boot.framework.web.domain.entity.TimerTask;
 import pro.bzy.boot.framework.web.mapper.TimerTaskMapper;
 import pro.bzy.boot.framework.web.service.TimerTaskLogService;
@@ -66,7 +66,7 @@ public class TimerTaskServiceImpl extends ServiceImpl<TimerTaskMapper, TimerTask
         TimerTask task = getById(timerTask.getId());
         
         task.setEnable(timerTask.getEnable());
-        if (SystemConstant.UNABLE.equals(timerTask.getEnable())) {
+        if (DB_constant.UNABLE.equals(timerTask.getEnable())) {
             schedulingRunnableTaskRegistrar.removeSchedulingTask(task.getName());
         } else {
             registerTimerTaskToSchedulingRunnable(task);
@@ -81,7 +81,7 @@ public class TimerTaskServiceImpl extends ServiceImpl<TimerTaskMapper, TimerTask
     @Override
     public void registerTimerTaskToSchedulingRunnable(TimerTask timerTask) {
         // 如果任务状态为启用 则开启定时任务
-        if (SystemConstant.ENABLE.equals(timerTask.getEnable())) {
+        if (DB_constant.ENABLE.equals(timerTask.getEnable())) {
             SchedulingRunnable schedulingRunnable = new SchedulingRunnable(
                     timerTask.getName(), 
                     () -> {

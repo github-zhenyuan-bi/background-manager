@@ -3,7 +3,10 @@ package pro.bzy.boot.framework.utils;
 import java.io.File;
 import java.io.IOException;
 
+import com.baomidou.mybatisplus.core.toolkit.StringPool;
+
 import lombok.NonNull;
+import pro.bzy.boot.framework.config.constant.System_constant;
 import pro.bzy.boot.framework.utils.parents.MyUtil;
 
 /**
@@ -72,7 +75,7 @@ public class PathUtil implements MyUtil {
     public static String getJavaPath(@NonNull Class<?> clazz) {
         String projectPath = getProjectPath(); 
         // 包名默认用a.c.b格式 将其替换成a/c/b
-        String javaPackagePath = clazz.getPackage().getName().replace(SystemConstant.DOT, File.separator);
+        String javaPackagePath = clazz.getPackage().getName().replace(StringPool.DOT, File.separator);
         return projectPath + BASE_JAVA_PATH + javaPackagePath + File.separator;
     }
     
@@ -93,7 +96,7 @@ public class PathUtil implements MyUtil {
      * @throws IOException
      */
     public static String getWEB_INFPath() throws IOException {
-        return getWebappResourcePath(SystemConstant.WEB_INF_PATH);
+        return getWebappResourcePath(System_constant.WEB_INF_PATH);
     }
     
     

@@ -21,7 +21,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import pro.bzy.boot.framework.utils.SystemConstant;
+
+import pro.bzy.boot.framework.config.constant.DB_constant;
 import pro.bzy.boot.framework.web.domain.entity.Permission;
 import pro.bzy.boot.framework.web.domain.entity.Role;
 import pro.bzy.boot.framework.web.domain.entity.User;
@@ -83,7 +84,7 @@ public class CustomRealm extends AuthorizingRealm {
         User user = userService.getOne(Wrappers.<User>lambdaQuery().eq(User::getUsername, username));
         if (user == null) {
             throw new AuthenticationException("当前账号不存在");
-        } else if (SystemConstant.IS_FORBIDDEN.equals(user.getIsForbidden())) {
+        } else if (DB_constant.IS_FORBIDDEN.equals(user.getIsForbidden())) {
             throw new AuthenticationException("该用户已被禁止");
         } else {
             //这里验证authenticationToken和simpleAuthenticationInfo的信息

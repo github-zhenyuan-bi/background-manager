@@ -8,9 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import pro.bzy.boot.framework.config.aop.parent.MyAopSupport;
+import pro.bzy.boot.framework.config.constant.Schedule_constant;
 import pro.bzy.boot.framework.config.exceptions.MyAopException;
 import pro.bzy.boot.framework.utils.DateUtil;
-import pro.bzy.boot.framework.utils.SystemConstant;
 import pro.bzy.boot.framework.web.domain.entity.TimerTask;
 import pro.bzy.boot.framework.web.domain.entity.TimerTaskLog;
 import pro.bzy.boot.framework.web.service.TimerTaskLogService;
@@ -56,12 +56,12 @@ public class SchedulingFunctionAop extends MyAopSupport{
             
             timertasklog.setTaskEndTime(DateUtil.getNow())
                     .calculateCostTime()
-                    .setExecSuccess(SystemConstant.SCHEDULING_EXECUTE_SUCCESS)
+                    .setExecSuccess(Schedule_constant.SCHEDULING_EXECUTE_SUCCESS)
                     .setExecResult(res.toString());
             timerTaskLogService.save(timertasklog);
         } catch (Throwable e) {
             if (timertasklog != null) {
-                timertasklog.setExecSuccess(SystemConstant.SCHEDULING_EXECUTE_FAILURE);
+                timertasklog.setExecSuccess(Schedule_constant.SCHEDULING_EXECUTE_FAILURE);
                 timertasklog.setExecResult(e.getMessage());
                 timerTaskLogService.save(timertasklog);
             }

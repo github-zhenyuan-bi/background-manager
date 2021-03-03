@@ -25,6 +25,7 @@ import com.google.common.io.Files;
 import lombok.NonNull;
 import net.coobird.thumbnailator.Thumbnails;
 import net.coobird.thumbnailator.name.Rename;
+import pro.bzy.boot.framework.config.constant.System_constant;
 import pro.bzy.boot.framework.utils.parents.MyUtil;
 
 /**
@@ -39,7 +40,7 @@ public class FileUtil implements MyUtil {
      * @throws IOException
      */
     public static String readString(File file) throws IOException {
-        return Files.toString(file, Charset.forName(SystemConstant.CHARSET_UTF8));
+        return Files.toString(file, Charset.forName(System_constant.CHARSET_UTF8));
     }
     
     

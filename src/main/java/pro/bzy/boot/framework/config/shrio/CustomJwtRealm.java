@@ -10,9 +10,9 @@ import org.apache.shiro.subject.PrincipalCollection;
 import org.springframework.util.StringUtils;
 
 import lombok.extern.slf4j.Slf4j;
+import pro.bzy.boot.framework.config.constant.JWT_constant;
 import pro.bzy.boot.framework.config.jwt.JwtToken;
 import pro.bzy.boot.framework.config.jwt.JwtUtil;
-import pro.bzy.boot.framework.utils.SystemConstant;
 
 @Slf4j
 public class CustomJwtRealm extends AuthorizingRealm{
@@ -53,8 +53,8 @@ public class CustomJwtRealm extends AuthorizingRealm{
         }
         // 判断
         JwtUtil jwtUtil = new JwtUtil();
-        String username = (String) jwtUtil.decode(access_token).getOrDefault(SystemConstant.JWT_TOKEN_BASE_LOGIN_ISS_KEY, "").toString();
-        String fromwhere = jwtUtil.decode(access_token).getOrDefault(SystemConstant.JWT_LOGIN_FROMWHERE_KEY, "").toString();
+        String username = (String) jwtUtil.decode(access_token).getOrDefault(JWT_constant.JWT_TOKEN_BASE_LOGIN_ISS_KEY, "").toString();
+        String fromwhere = jwtUtil.decode(access_token).getOrDefault(JWT_constant.JWT_LOGIN_FROMWHERE_KEY, "").toString();
         log.info("【{}】用户【{}】使用token访问", fromwhere, username);
         return new SimpleAuthenticationInfo(access_token, access_token, "CustomJwtRealm");
         //这里返回的是类似账号密码的东西，但是jwtToken都是jwt字符串。还需要一个该Realm的类名

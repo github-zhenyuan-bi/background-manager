@@ -7,8 +7,8 @@ import org.apache.ibatis.cache.Cache;
 
 import pro.bzy.boot.framework.config.cache.ehcache.MyEhCacheFactory;
 import pro.bzy.boot.framework.config.cache.redis.MyRedisCacheFactory;
+import pro.bzy.boot.framework.config.constant.CACHE_constant;
 import pro.bzy.boot.framework.utils.PropertiesUtil;
-import pro.bzy.boot.framework.utils.SystemConstant;
 
 /**
  * Mybatis缓存控制类
@@ -27,8 +27,8 @@ public class MybatisCacheConfig implements Cache{
      * @param id
      */
     public MybatisCacheConfig(final String id) {
-        String useCache = PropertiesUtil.get(SystemConstant.USER_CACHE);
-        if (SystemConstant.CACHE_REDIS.equalsIgnoreCase(useCache)) 
+        String useCache = PropertiesUtil.get(CACHE_constant.USER_CACHE);
+        if (CACHE_constant.CACHE_REDIS.equalsIgnoreCase(useCache)) 
             cache = new MyRedisCacheFactory().getCacheForMybatis(id);
         else 
             cache = new MyEhCacheFactory().getCacheForMybatis(id);

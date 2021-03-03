@@ -24,7 +24,7 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import lombok.experimental.Accessors;
-import pro.bzy.boot.framework.utils.SystemConstant;
+import pro.bzy.boot.framework.config.constant.DB_constant;
 import pro.bzy.boot.framework.web.annoations.FormValid;
 import pro.bzy.boot.framework.web.domain.bean.TreeDomain;
 
@@ -158,7 +158,7 @@ public class Menu extends Model<Menu> implements TreeDomain<Menu>{
      * @return
      */
     public static Menu getDefualtRootMenu() {
-        return builder().id(SystemConstant.TREE_ROOT_ID).build();
+        return builder().id(DB_constant.TREE_ROOT_ID).build();
     }
     
 

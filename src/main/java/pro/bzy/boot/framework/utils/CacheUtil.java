@@ -3,14 +3,15 @@ package pro.bzy.boot.framework.utils;
 import pro.bzy.boot.framework.config.cache.MyCache;
 import pro.bzy.boot.framework.config.cache.ehcache.MyEhCacheFactory;
 import pro.bzy.boot.framework.config.cache.redis.MyRedisCacheFactory;
+import pro.bzy.boot.framework.config.constant.CACHE_constant;
 import pro.bzy.boot.framework.utils.parents.MyUtil;
 
 public class CacheUtil implements MyUtil {
 
     private static final MyCache cache;
     static {
-        String useCache = PropertiesUtil.get(SystemConstant.USER_CACHE);
-        if (SystemConstant.CACHE_REDIS.equalsIgnoreCase(useCache)) 
+        String useCache = PropertiesUtil.get(CACHE_constant.USER_CACHE);
+        if (CACHE_constant.CACHE_REDIS.equalsIgnoreCase(useCache)) 
             cache = new MyRedisCacheFactory().getCache("REDIS_CACHE_UTIL");
         else 
             cache = new MyEhCacheFactory().getCache("EHCACHE_UTIL");

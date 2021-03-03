@@ -16,8 +16,8 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import pro.bzy.boot.framework.config.constant.DB_constant;
 import pro.bzy.boot.framework.utils.CollectionUtil;
-import pro.bzy.boot.framework.utils.SystemConstant;
 import pro.bzy.boot.framework.web.controller.parent.MyAbstractController;
 import pro.bzy.boot.framework.web.domain.entity.Constant;
 import pro.bzy.boot.framework.web.service.ConstantService;
@@ -85,7 +85,7 @@ public class ScriptPageController extends MyAbstractController {
                     .orderByAsc(JubenCharacter::getSex));
             if (!CollectionUtil.isEmpty(jubenCharacs)) {
                 Map<String, List<JubenCharacter>> map = CollectionUtil.groupBy(jubenCharacs, jubenCharac -> {
-                    return (SystemConstant.SEX_MAN.equals(jubenCharac.getSex()))
+                    return (DB_constant.SEX_MAN.equals(jubenCharac.getSex()))
                             ? "maleGamers" : "femaleGamers";
                 });
                 model.putAll(map);

@@ -1,8 +1,8 @@
 package pro.bzy.boot.script.service.impl;
 
+import pro.bzy.boot.framework.config.constant.JWT_constant;
 import pro.bzy.boot.framework.utils.DateUtil;
 import pro.bzy.boot.framework.utils.RequestAndResponseUtil;
-import pro.bzy.boot.framework.utils.SystemConstant;
 import pro.bzy.boot.script.domain.entity.Bulletin;
 import pro.bzy.boot.script.domain.entity.BulletinTemplate;
 import pro.bzy.boot.script.mapper.BulletinMapper;
@@ -48,7 +48,7 @@ public class BulletinServiceImpl extends ServiceImpl<BulletinMapper, Bulletin> i
         Bulletin bean = new Bulletin(template);
         bean.setContent(updateBean.getContent());
         bean.setSendWay(ScriptConstant.BULLETIN_SENDWAY_SHOUDONG);
-        bean.setSender(datas.get(SystemConstant.JWT_LOGIN_USERID_KEY).toString());
+        bean.setSender(datas.get(JWT_constant.JWT_LOGIN_USERID_KEY).toString());
         bean.setSendTime(DateUtil.getNow());
         
         // 3. 推送通知

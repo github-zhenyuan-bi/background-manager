@@ -18,6 +18,7 @@ import com.google.common.base.Joiner;
 import lombok.Cleanup;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
+import pro.bzy.boot.framework.config.constant.System_constant;
 import pro.bzy.boot.framework.utils.parents.MyUtil;
 
 /**
@@ -34,7 +35,7 @@ public class HttpUtil implements MyUtil {
      * @throws Exception
      */
     public static String httpGet(@NonNull String url) throws Exception {
-        return httpGet(url, null, null, SystemConstant.HTTP_CONTENT_TYPE_JSON);
+        return httpGet(url, null, null, System_constant.HTTP_CONTENT_TYPE_JSON);
     }
     
     
@@ -48,7 +49,7 @@ public class HttpUtil implements MyUtil {
      */
     public static String httpGet(@NonNull String url, 
             Map<String, String> headers) throws Exception {
-        return httpGet(url, headers, null, SystemConstant.HTTP_CONTENT_TYPE_JSON);
+        return httpGet(url, headers, null, System_constant.HTTP_CONTENT_TYPE_JSON);
     }
     
     
@@ -63,7 +64,7 @@ public class HttpUtil implements MyUtil {
      */
     public static String httpGet(@NonNull String url, 
             Map<String, String> headers, Map<String, String> params) throws Exception {
-        return httpGet(url, headers, params, SystemConstant.HTTP_CONTENT_TYPE_JSON);
+        return httpGet(url, headers, params, System_constant.HTTP_CONTENT_TYPE_JSON);
     }
     
     
@@ -104,7 +105,7 @@ public class HttpUtil implements MyUtil {
             
             // 返回 utf8解码
             String responseResult = responseEntity != null
-                    ? EntityUtils.toString(responseEntity, SystemConstant.CHARSET_UTF8)
+                    ? EntityUtils.toString(responseEntity, System_constant.CHARSET_UTF8)
                     : "";
                     
             // 打印请求信息
@@ -126,7 +127,7 @@ public class HttpUtil implements MyUtil {
      * @throws Exception
      */
     public static String httpPost(@NonNull final String url) throws Exception {
-        return httpPost(url, null, null, SystemConstant.HTTP_CONTENT_TYPE_JSON);
+        return httpPost(url, null, null, System_constant.HTTP_CONTENT_TYPE_JSON);
     }
     
     
@@ -140,7 +141,7 @@ public class HttpUtil implements MyUtil {
      */
     public static String httpPost(@NonNull final String url, 
             Object params) throws Exception {
-        return httpPost(url, params, null, SystemConstant.HTTP_CONTENT_TYPE_JSON);
+        return httpPost(url, params, null, System_constant.HTTP_CONTENT_TYPE_JSON);
     }
     
     
@@ -155,7 +156,7 @@ public class HttpUtil implements MyUtil {
      */
     public static String httpPost(@NonNull final String url, 
             Object params, Map<String, String> headers) throws Exception {
-        return httpPost(url, params, headers, SystemConstant.HTTP_CONTENT_TYPE_JSON);
+        return httpPost(url, params, headers, System_constant.HTTP_CONTENT_TYPE_JSON);
     }
     
     
@@ -183,7 +184,7 @@ public class HttpUtil implements MyUtil {
             
             // 添加请求参数
             httpPost.setEntity(params != null
-                    ? new StringEntity(params.toString(), SystemConstant.CHARSET_UTF8)
+                    ? new StringEntity(params.toString(), System_constant.CHARSET_UTF8)
                     : null);
             
             // 进行请求 并返回响应数据
@@ -192,7 +193,7 @@ public class HttpUtil implements MyUtil {
             
             // 返回 utf8解码
             String responseResult = responseEntity != null
-                    ? EntityUtils.toString(responseEntity, SystemConstant.CHARSET_UTF8)
+                    ? EntityUtils.toString(responseEntity, System_constant.CHARSET_UTF8)
                     : "";
                     
             // 打印请求信息

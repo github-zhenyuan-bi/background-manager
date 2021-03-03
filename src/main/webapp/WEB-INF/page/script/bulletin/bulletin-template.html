@@ -150,6 +150,7 @@
         <#include "/template/js/bootstrap-table-js.html" />
 		<#include "/template/js/bootstrap-sweet-alert-js.html" />
 		
+		<#include "/template/js/cropperPicture-js.html" />
 		<#include "/template/js/md5-and-parsley.html" />
 		<#include "/template/js/upload-js.html" />
 		
@@ -157,11 +158,44 @@
         <script src="/assets/js/app.js"></script>
         
 		<script type="text/javascript">
+			var $imgArea = $("#drop_area");
+			var $imgInput = $imgArea.next('[name="iconPath"]');
+			$.CropAvatarBuilder({
+			  	id: "bulletin-template-img-upload",
+		        trigger: "#drop_area",
+		        preview: ".avatar-preview",
+		        imgInputName: 'img',
+		        // 裁剪框 可设定固定宽高比 如 16/9 或者正方形 1 或者任意裁剪 null
+		        aspectRatio: 1,
+		        // 提交方法 formData 表单数据对象 obj当前裁剪对象
+		        submit: function(fromData, obj) {
+		        	__jqAjax({
+			            url: "/upload/bulletinIconImg",
+			            type: "POST",
+			            data: fromData,
+			            processData : false,
+			            contentType : false,
+			            dataType : 'json',
+			            success : function (res) {
+			            	if (res.code === 200) { 
+			            		obj.cropDone();
+			            		mySwal.success('上传图片成功');
+			            		$imgArea.find("div").addClass("d-none");
+			            		$imgArea.find("img").removeClass("d-none").attr("src", res.data);
+			            		$imgInput.val(res.data);
+			            	} else {
+			            		obj.alert("上传失败，原因：" + res.msg);
+			            	}
+			            }    
+			        });
+		        }
+	      });
+		
 		
 			/** ======================================
 		      	 图标图片选择事件事件 
 			=========================================*/
-			var $imgArea = $("#drop_area");
+			/* var $imgArea = $("#drop_area");
 			var $imgInput = $imgArea.next('[name="iconPath"]');
 			var dragImgUpload = new DragImgUpload("#drop_area",{
 				boxWidth: '64px',
@@ -204,7 +238,7 @@
 			            }    
 			        })  
 			    }
-			});
+			}); */
 			
 			
 			

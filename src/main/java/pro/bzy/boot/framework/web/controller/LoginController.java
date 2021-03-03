@@ -21,13 +21,13 @@ import com.github.xiaoymin.knife4j.annotations.ApiSupport;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import pro.bzy.boot.framework.config.constant.JWT_constant;
 import pro.bzy.boot.framework.config.jwt.JwtToken;
 import pro.bzy.boot.framework.config.jwt.JwtUtil;
 import pro.bzy.boot.framework.config.shrio.ShiroJwtConfig;
 import pro.bzy.boot.framework.utils.RequestAndResponseUtil;
 import pro.bzy.boot.framework.utils.CacheUtil;
 import pro.bzy.boot.framework.utils.PropertiesUtil;
-import pro.bzy.boot.framework.utils.SystemConstant;
 import pro.bzy.boot.framework.web.controller.parent.MyAbstractController;
 import pro.bzy.boot.framework.web.domain.bean.R;
 import pro.bzy.boot.framework.web.domain.entity.User;
@@ -79,15 +79,15 @@ public class LoginController extends MyAbstractController{
         loginUser.setUserInfo(userInfoService.getById(loginUser.getId()));
         
         // 过期时间
-        final long access_token_expire = PropertiesUtil.getJwtTokenExpire(SystemConstant.JWT_ACCESS_TOKEN_EXPIRE_KEY_IN_YML);
-        final long refresh_token_expire = PropertiesUtil.getJwtTokenExpire(SystemConstant.JWT_REFRESH_TOKEN_EXPIRE_KEY_IN_YML);
+        final long access_token_expire = PropertiesUtil.getJwtTokenExpire(JWT_constant.JWT_ACCESS_TOKEN_EXPIRE_KEY_IN_YML);
+        final long refresh_token_expire = PropertiesUtil.getJwtTokenExpire(JWT_constant.JWT_REFRESH_TOKEN_EXPIRE_KEY_IN_YML);
         
         // token包含的必要数据
         Map<String, Object> datas = new HashMap<>(2);
-        datas.put(SystemConstant.JWT_LOGIN_FROMWHERE_KEY, SystemConstant.JWT_LOGIN_FROMWHERE_BACKGROUND);
-        datas.put(SystemConstant.JWT_LOGIN_USER, loginUser);
-        datas.put(SystemConstant.JWT_LOGIN_USERID_KEY, loginUser.getId());
-        datas.put(SystemConstant.JWT_LOGIN_USER_IP_KEY, RequestAndResponseUtil.getIpAddress(request));
+        datas.put(JWT_constant.JWT_LOGIN_FROMWHERE_KEY, JWT_constant.JWT_LOGIN_FROMWHERE_BACKGROUND);
+        datas.put(JWT_constant.JWT_LOGIN_USER, loginUser);
+        datas.put(JWT_constant.JWT_LOGIN_USERID_KEY, loginUser.getId());
+        datas.put(JWT_constant.JWT_LOGIN_USER_IP_KEY, RequestAndResponseUtil.getIpAddress(request));
         
         
         // 2.1 生成认证access_token和refresh_token

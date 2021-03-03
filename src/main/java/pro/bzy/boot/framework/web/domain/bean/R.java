@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import pro.bzy.boot.framework.utils.SystemConstant;
+import pro.bzy.boot.framework.config.constant.System_constant;
 
 /**
  * Controller请求时的标准响应结果
@@ -60,7 +60,7 @@ public class R<T> {
      * 请求响应成功
      */
     public static <T> R<T> ofSuccess(T data) {
-        return ofSuccess(SystemConstant.RESPONSE_MSG_OK, data);
+        return ofSuccess(System_constant.RESPONSE_MSG_OK, data);
     }
     
     

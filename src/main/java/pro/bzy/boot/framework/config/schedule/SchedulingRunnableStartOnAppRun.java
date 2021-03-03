@@ -9,8 +9,9 @@ import org.springframework.boot.ApplicationRunner;
 import org.springframework.context.annotation.Configuration;
 
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+
+import pro.bzy.boot.framework.config.constant.DB_constant;
 import pro.bzy.boot.framework.utils.CollectionUtil;
-import pro.bzy.boot.framework.utils.SystemConstant;
 import pro.bzy.boot.framework.web.domain.entity.TimerTask;
 import pro.bzy.boot.framework.web.service.TimerTaskService;
 
@@ -31,7 +32,7 @@ public class SchedulingRunnableStartOnAppRun implements ApplicationRunner{
     private void runDBSchedule() {
         // 查询全部可用得定时任务
         List<TimerTask> tasks = timerTaskService.list(
-                Wrappers.<TimerTask>lambdaQuery().eq(TimerTask::getEnable, SystemConstant.ENABLE));
+                Wrappers.<TimerTask>lambdaQuery().eq(TimerTask::getEnable, DB_constant.ENABLE));
         
         // 逐个添加定时任务
         if (!CollectionUtil.isEmpty(tasks)) {

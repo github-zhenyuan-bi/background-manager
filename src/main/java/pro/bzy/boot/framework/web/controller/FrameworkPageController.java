@@ -18,10 +18,11 @@ import com.google.common.collect.Maps;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import pro.bzy.boot.framework.config.constant.JWT_constant;
+import pro.bzy.boot.framework.config.constant.Schedule_constant;
 import pro.bzy.boot.framework.config.schedule.SchedulingFunction;
 import pro.bzy.boot.framework.utils.RequestAndResponseUtil;
 import pro.bzy.boot.framework.utils.SpringContextUtil;
-import pro.bzy.boot.framework.utils.SystemConstant;
 import pro.bzy.boot.framework.web.controller.parent.MyAbstractController;
 import pro.bzy.boot.framework.web.domain.entity.Constant;
 import pro.bzy.boot.framework.web.domain.entity.Role;
@@ -100,10 +101,10 @@ public class FrameworkPageController extends MyAbstractController {
            List<TimerTask> tasks =  timerTaskService.list();
            model.put("tasks", tasks);
            // 定时任务可执行方法
-           model.put(SystemConstant.SCHEDULE_CRON_CONSTANT_KEY, constantService
+           model.put(Schedule_constant.SCHEDULE_CRON_CONSTANT_KEY, constantService
                    .list(Wrappers.<Constant>lambdaQuery()
-                           .eq(Constant::getConstType, SystemConstant.SCHEDULE_CRON_CONSTANT_QUERY_TYPE)));
-           model.put(SystemConstant.SCHEDULE_TASK_METHODS_KEY, getTaskFuncNameWithDesc());
+                           .eq(Constant::getConstType, Schedule_constant.SCHEDULE_CRON_CONSTANT_QUERY_TYPE)));
+           model.put(Schedule_constant.SCHEDULE_TASK_METHODS_KEY, getTaskFuncNameWithDesc());
        }
    }
    
@@ -192,10 +193,10 @@ public class FrameworkPageController extends MyAbstractController {
    private void prepareExtraDataForForm(String module, HttpServletRequest request, Map<String, Object> model) {
        switch (module) {
            case "timerTask":
-               model.put(SystemConstant.SCHEDULE_TASK_METHODS_KEY, getTaskFuncNameWithDesc());
-               model.put(SystemConstant.SCHEDULE_CRON_CONSTANT_KEY, constantService
+               model.put(Schedule_constant.SCHEDULE_TASK_METHODS_KEY, getTaskFuncNameWithDesc());
+               model.put(Schedule_constant.SCHEDULE_CRON_CONSTANT_KEY, constantService
                        .list(Wrappers.<Constant>lambdaQuery()
-                               .eq(Constant::getConstType, SystemConstant.SCHEDULE_CRON_CONSTANT_QUERY_TYPE)));
+                               .eq(Constant::getConstType, Schedule_constant.SCHEDULE_CRON_CONSTANT_QUERY_TYPE)));
                break;
            default:
                break;
@@ -208,7 +209,7 @@ public class FrameworkPageController extends MyAbstractController {
    @GetMapping("user/personaldata")
    public String personaldata(HttpServletRequest request, Map<String, Object> model) {
        Map<String, Object> jwttokenDatas = RequestAndResponseUtil.getJwttokenStorageDatasFromRequest(request);
-       Object userid = jwttokenDatas.get(SystemConstant.JWT_LOGIN_USERID_KEY);
+       Object userid = jwttokenDatas.get(JWT_constant.JWT_LOGIN_USERID_KEY);
        User user = userService.getById(userid.toString());
        UserInfo userInfo = userInfoService.getById(userid.toString());
        List<Role> userRoles = userRoleService.getRolesByUserId(userid.toString());
@@ -226,7 +227,7 @@ public class FrameworkPageController extends MyAbstractController {
    @GetMapping("user/account/changePassword")
    public String changePassword(HttpServletRequest request, Map<String, Object> model) {
        Map<String, Object> jwttokenDatas = RequestAndResponseUtil.getJwttokenStorageDatasFromRequest(request);
-       Object userid = jwttokenDatas.get(SystemConstant.JWT_LOGIN_USERID_KEY);
+       Object userid = jwttokenDatas.get(JWT_constant.JWT_LOGIN_USERID_KEY);
        User user = userService.getById(userid.toString());
        UserInfo userInfo = userInfoService.getById(userid.toString());
        model.put("current_user", user);
