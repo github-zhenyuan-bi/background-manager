@@ -3,7 +3,7 @@ package pro.bzy.boot.framework.web.controller;
 import pro.bzy.boot.framework.web.domain.entity.Permission;
 import pro.bzy.boot.framework.web.mapper.PermissionMapper;
 import pro.bzy.boot.framework.web.service.PermissionService;
-
+import pro.bzy.boot.framework.web.domain.bean.PermissionSettForm;
 import pro.bzy.boot.framework.web.domain.bean.R;
 import pro.bzy.boot.framework.utils.ExceptionCheckUtil;
 
@@ -12,6 +12,7 @@ import javax.annotation.Resource;
 import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 
 import java.util.Arrays;
 import java.util.List;
@@ -22,6 +23,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
@@ -140,5 +142,13 @@ public class PermissionController {
         
         boolean flag = permissionService.updateById(updateBean);
         return R.ofSuccess(flag? "更新成功" : "更新失败");
+    }
+    
+    
+    @ApiOperation(value="更新菜单资源权限配置")
+    @PostMapping("updateMenuPerms")
+    public R<String> updateMenuPerms(@RequestBody List<PermissionSettForm> permSetts) {
+        System.out.println(permSetts);
+        return R.ofSuccess("更新成功");
     }
 }

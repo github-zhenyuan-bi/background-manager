@@ -1,6 +1,10 @@
 package pro.bzy.boot.framework.web.service;
 
+import pro.bzy.boot.framework.web.domain.bean.PermissionSettForm;
 import pro.bzy.boot.framework.web.domain.entity.Permission;
+
+import java.util.List;
+
 import com.baomidou.mybatisplus.extension.service.IService;
 
 /**
@@ -11,4 +15,6 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface PermissionService extends IService<Permission> {
 
+    /** 为菜单资源更新权限配置信息 */
+    void updatePermsForMenu(String menuId, List<PermissionSettForm> permSetts);
 }

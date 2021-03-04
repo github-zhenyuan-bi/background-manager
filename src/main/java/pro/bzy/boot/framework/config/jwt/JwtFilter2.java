@@ -81,7 +81,7 @@ public class JwtFilter2 extends AccessControlFilter {
                         (int) PropertiesUtil.getJwtTokenExpire(JWT_constant.JWT_ACCESS_TOKEN_EXPIRE_KEY_IN_YML));
                 access_token = new_access_token;
             } catch (Exception e2) {
-                log.error(e.getMessage(), e);
+                log.warn(e2.getMessage());
                 cleanCookiesAndHeaderThenRedirectToLogin(httpRequest, httpResponse, e.getMessage());
                 return false;
             }

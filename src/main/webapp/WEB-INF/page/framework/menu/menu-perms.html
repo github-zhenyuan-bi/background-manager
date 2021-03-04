@@ -1,0 +1,67 @@
+<form id="menu-perms-form" style="width: 500px;">
+	<h6 class="bg-grey">配置示例</h6>
+	<div class="menu-perms-set-example pd-l-20 m-b-20">
+		<p><span>该资源表达式头:</span><span class="pd-l-5 text-secondary">${(curMenu.filterExp)!}</span></p>
+	    <p><span>资源匹配表达式:</span><span class="pd-l-5 text-secondary">add**</span></p>
+	    <p><span>权限名称:</span><span class="pd-l-5 text-secondary">menu:add</span></p>
+	    <p><span>结果:</span><span class="pd-l-5 text-secondary">${(curMenu.filterExp)!}add**=perms[menu:add]</span></p>
+	</div>
+	<h6 class="m-t-20 bg-grey">配置</h6>
+	<div class="form-group row module-item">
+	    <label class="col-3 col-form-label">权限配置 :</label>
+	    <div class="col-7">
+	        <input class="form-control form-control-sm m-b-5" oninput="permSettChange(this)" type="text" name="urlExp" placeholder="请输入资源匹配表达式部分"/>
+	        <input class="form-control form-control-sm m-b-5" oninput="permSettChange(this)" type="text" name="perm" placeholder="请输入权限名称"/>
+	        <p class="sett-res"></p>
+	    </div>
+	    <div class="col-2 pd-lr-5 d-flex flex-column align-items-center justify-content-center">
+		    <a class="addNextContentBtn" href="javascript:void(0);" onclick="addNextContent(this)"><i class="fa fa-plus m-b-20 text-primary" aria-hidden="true"></i></a>
+		    <a class="removeCurrentContentBtn" href="javascript:void(0);" onclick="removeContent(this)"><i class="fa fa-minus text-danger" aria-hidden="true"></i></a>
+	    </div>
+	</div>
+</form>
+
+<div class="template d-none">
+	<div class="form-group row module-item">
+	    <label class="col-3 col-form-label">权限配置 :</label>
+	    <div class="col-7">
+	        <input class="form-control form-control-sm m-b-5" oninput="permSettChange(this)" type="text" name="urlExp" placeholder="请输入资源匹配表达式部分"/>
+	        <input class="form-control form-control-sm m-b-5" oninput="permSettChange(this)" type="text" name="perm" placeholder="请输入权限名称"/>
+	        <p class="sett-res"></p>
+	    </div>
+	    <div class="col-2 pd-lr-5 d-flex flex-column align-items-center justify-content-center">
+		    <a class="addNextContentBtn" href="javascript:void(0);" onclick="addNextContent(this)"><i class="fa fa-plus m-b-20 text-primary" aria-hidden="true"></i></a>
+		    <a class="removeCurrentContentBtn" href="javascript:void(0);" onclick="removeContent(this)"><i class="fa fa-minus text-danger" aria-hidden="true"></i></a>
+	    </div>
+	</div>
+</div>
+
+<script>
+	var $moduleTemplate = $(".template").children(".module-item");
+	// 增加一个模块
+	function addNextContent(_this) {
+		var __thisWrapper = $(_this).parents(".module-item");
+		__thisWrapper.after($moduleTemplate.clone());
+	}
+	// 删除当前内容
+	function removeContent(_this) {
+		var __thisWrapper = $(_this).parents(".module-item");
+		__thisWrapper.remove();
+	}
+	// 输入内容改变
+	function permSettChange(input) {
+		var $parent = $(input).parent();;
+		var $urlExp = $parent.children("input[name='urlExp']");
+		var $perm = $parent.children("input[name='perm']");
+		var $p = $parent.children("p");
+		
+		var urlExp_val = $urlExp.val();
+		var perm_val   = $perm.val();
+		if (urlExp_val && perm_val) {
+			var resStr = "${(curMenu.filterExp)!}" + urlExp_val + "=perms["+perm_val+"]";
+			$p.text(resStr);
+		} else {
+			$p.text("");
+		}
+	}
+</script>

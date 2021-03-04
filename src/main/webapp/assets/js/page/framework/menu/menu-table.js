@@ -102,6 +102,40 @@ window.operateMenuEvents = {
 					//_menuTable.bootstrapTable('refresh');
 				}
 			});
+		},
+		perms: function($btn, value, row, index) {
+			var $cooperationSideBar = null;
+		  	function initSideBar() {
+				if ($cooperationSideBar == null) {
+					$cooperationSideBar = $.SideBarbuilder({
+						title: "菜单资源权限配置",
+						//contentUrl: "/wx/wxMiniprogramSetting/page/cooperationFormEdit",
+						//contentDom: "/wx/wxMiniprogramSetting/page/cooperationFormEdit",
+						confirmBtnAction: function(dom) {
+							var $form = dom.find("#menu-perms-form");
+							var urlExps = $form.find("input[name='urlExp']");
+							var perms   = $form.find("input[name='perm']");
+							var datas = [];
+							var size = urlExps.length;
+							for (var i = 0; i < size; i++) {
+								var dataTemp = {urlExp: urlExps[i].value, perm: perms[i].value};
+								datas.push(dataTemp);
+							}
+							fetchPost("/framework/permission/updateMenuPerms", {body: JSON.stringify(datas)}, function(res) {
+								console.log(res)
+							});
+						},
+						cancelBtnAction: function(dom) {
+							$cooperationSideBar.hide();
+						}
+					});
+				}
+			}
+		  	initSideBar();
+		  	$cooperationSideBar.show(function(sidebar) {
+ 				$cooperationSideBar.option.contentUrl = "/framework/menu/form/menu-perms?id="+value;
+ 				sidebar.loadContent();
+ 			});
 		}
 		
 };
@@ -134,6 +168,7 @@ myBsTable.treeTable(_menuTable, {
 				   (!row.pid || row.pid == '-1'
 						   ? '<a class="tb-op add" data-event="add" title="添加子菜单" href="javascript:void(0);"><i class="fa fa-plus"></i></a>'
 						   : '') + 
+				   '<a class="tb-op perms" data-event="perms" title="权限配置" href="javascript:void(0);"><i class="fa fa-link"></i></a>' +
 			   	   '<a class="tb-op remove" data-event="remove" title="删除" href="javascript:void(0);"><i class="fa fa-trash-o"></i></a>';
 		}},
     ],
@@ -142,7 +177,7 @@ myBsTable.treeTable(_menuTable, {
             initialState: 'expanded',// 所有节点都折叠 （展开就是 expanded）
             treeColumn: 0,
             expanderExpandedClass: 'fa fa-caret-down',  //图标样式
-            expanderCollapsedClass: 'fa fa-angle-right',
+            expanderCollapsedClass: 'fa fa-caret-right',
             onChange: function() {
                 _menuTable.bootstrapTable('resetWidth');
             }

@@ -162,6 +162,7 @@ public class FrameworkPageController extends MyAbstractController {
                break;
            case "menu":
                List<RoleMenu> roleMenus = roleMenuService.list(Wrappers.<RoleMenu>lambdaQuery().eq(RoleMenu::getRoleId, id));
+               model.put("curMenu", menuService.getById(id));
                model.put("roleMenus", roleMenus);
                break;
            case "timerTask":

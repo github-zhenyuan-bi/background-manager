@@ -52,6 +52,14 @@ public class Permission extends Model<Permission> {
     private String id;
     
     
+    @ApiModelProperty(value = "菜单资源id", position = 8)
+    private String menuId;
+    
+    
+    @ApiModelProperty(value = "匹配url部分", position = 8)
+    private String partOfUrl;
+    
+    
     
     @ApiModelProperty(value = "权限名称", position = 10)
     @TableField("NAME")
