@@ -5,6 +5,7 @@ import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
 import pro.bzy.boot.framework.config.aop.parent.MyAopSupport;
@@ -26,6 +27,7 @@ import pro.bzy.boot.framework.web.service.TimerTaskLogService;
 @Component
 public class SchedulingFunctionAop extends MyAopSupport{
 
+    @Lazy
     @Autowired
     private TimerTaskLogService timerTaskLogService;
     

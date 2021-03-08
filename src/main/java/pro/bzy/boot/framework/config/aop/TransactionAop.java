@@ -7,6 +7,7 @@ import org.springframework.aop.support.DefaultPointcutAdvisor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionDefinition;
 import org.springframework.transaction.interceptor.DefaultTransactionAttribute;
@@ -22,6 +23,7 @@ public class TransactionAop extends MyAopSupport {
     
     private static final String AOP_POINTCUT_EXPRESSION = "execution(* pro..*.service.impl..*.*(..))";
 
+    @Lazy
     @Autowired
     private PlatformTransactionManager transactionManager;
 

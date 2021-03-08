@@ -64,7 +64,7 @@ public class MenuController {
     @ApiOperation(value="菜单列表")
     @GetMapping("getList")
     public R<List<Menu>> getList(Menu queryBean) {
-        List<Menu> menus = menuService.list(Wrappers.<Menu>lambdaQuery(queryBean).orderByAsc(Menu::getSort));
+        List<Menu> menus = menuService.getMenuList(queryBean);
         return R.ofSuccess(menus);
     }
     

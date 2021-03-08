@@ -10,11 +10,17 @@ import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.web.filter.mgt.DefaultFilterChainManager;
 import org.apache.shiro.web.filter.mgt.PathMatchingFilterChainResolver;
 import org.apache.shiro.web.servlet.AbstractShiroFilter;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
+import com.google.common.collect.Maps;
+
 import pro.bzy.boot.framework.config.shrio.service.ShiroService;
+import pro.bzy.boot.framework.utils.CollectionUtil;
 import pro.bzy.boot.framework.web.domain.entity.Menu;
+import pro.bzy.boot.framework.web.domain.entity.Permission;
 import pro.bzy.boot.framework.web.service.MenuService;
+import pro.bzy.boot.framework.web.service.PermissionService;
 import pro.bzy.boot.framework.web.service.RoleMenuService;
 
 import lombok.extern.slf4j.Slf4j;
@@ -23,22 +29,40 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 public class ShiroServiceImpl implements ShiroService {
 
+    @Lazy
     @Resource
     private MenuService menuService;
     
+    @Lazy
     @Resource
     private RoleMenuService roleMenuService;
+    
+    @Lazy
+    @Resource
+    private PermissionService permissionService;
     
     
     @Override
     public Map<String, String> loadFilterChainDefinitionMap() {
-        // 全部的资源菜单列表
-        List<Menu> menus = menuService.list();
+        Map<String, String> resMap = Maps.newHashMap();
         
-        // 每一个菜单对应的 角色权限
-        Map<String, String> filterChainDefinitionMap = roleMenuService.getMenuNamesWithRoleNames(menus);
-        filterChainDefinitionMap.put("/bgManage/**", "authc");
-        return filterChainDefinitionMap;
+        List<Menu> menus = menuService.list();
+        if (CollectionUtil.isNotEmpty(menus)) {
+            List<Permission> perms = permissionService.list();
+            if (CollectionUtil.isNotEmpty(perms)) {
+                Map<String, List<Permission>> permsOfMenu = CollectionUtil.groupBy(perms, perm -> perm.getMenuId());
+                for (Menu menu : menus) {
+                    List<Permission> thisPerms = permsOfMenu.get(menu.getId());
+                    if (CollectionUtil.isNotEmpty(thisPerms)) {
+                        for (Permission perm : thisPerms) {
+                            resMap.put(menu.getFilterExp()+perm.getPartOfUrl(), "perms["+perm.getName()+"]");
+                        }
+                    }
+                }
+            }
+        }
+        
+        return resMap;
     }
 
     

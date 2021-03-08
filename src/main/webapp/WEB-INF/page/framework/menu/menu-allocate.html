@@ -13,6 +13,7 @@
     	url: '/framework/menu/getList',
     	// 在哪一列展开树形 按钮
         treeShowField: 'name',
+        classes: "table table-sm",
         clickToSelect: true,
         // 字段
         columns: [
@@ -24,8 +25,22 @@
 				</#if>
         		return false;
         	}},
-            { field: 'name',  title: '名称', halign: 'left', align: 'left' },
-            { field: 'filterExp',  title: '权限过滤', halign: 'left', align: 'left' }
+            { field: 'name',  title: '名称', width: 180, halign: 'left', align: 'left' },
+            { field: 'filterExp',  title: '权限过滤', halign: 'left', align: 'left', formatter: function(value, row, index) {
+        		return '<div style="font-size: 12px">'+value+'</div>';
+    		}},
+            { field: 'perms',  title: '权限', halign: 'left', align: 'left', formatter: function(value, row, index) {
+            	var str = '<div style="font-size: 12px">';
+        		if (value && value.length > 0) {
+        			for (var i = 0; i < value.length; i++) {
+        				str += '<div class="form-check form-check-inline">' +
+        				  '<input class="form-check-input" type="checkbox" value="">' +
+        				  '<label class="form-check-label">'+value[i].partOfUrl+'('+value[i].descrip+')</label>' +
+        				'</div>';
+        			} 
+        		}
+        		return str + '</div>';
+    		}}
         ],
         onClickRow: function(row, tr, flied) {
         },
@@ -49,7 +64,7 @@
                 initialState: 'expanded',// 所有节点都折叠 （展开就是 expanded）
                 treeColumn: 1,
                 expanderExpandedClass: 'fa fa-caret-down',  //图标样式
-                expanderCollapsedClass: 'fa fa-angle-right',
+                expanderCollapsedClass: 'fa fa-caret-right',
                 onChange: function() {
                     //_menuAllocateTable.bootstrapTable('resetWidth');
                 }

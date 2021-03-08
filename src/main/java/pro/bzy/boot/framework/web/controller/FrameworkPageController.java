@@ -6,6 +6,7 @@ import java.util.Map;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,6 +26,7 @@ import pro.bzy.boot.framework.utils.RequestAndResponseUtil;
 import pro.bzy.boot.framework.utils.SpringContextUtil;
 import pro.bzy.boot.framework.web.controller.parent.MyAbstractController;
 import pro.bzy.boot.framework.web.domain.entity.Constant;
+import pro.bzy.boot.framework.web.domain.entity.Permission;
 import pro.bzy.boot.framework.web.domain.entity.Role;
 import pro.bzy.boot.framework.web.domain.entity.RoleMenu;
 import pro.bzy.boot.framework.web.domain.entity.TimerTask;
@@ -33,6 +35,7 @@ import pro.bzy.boot.framework.web.domain.entity.UserInfo;
 import pro.bzy.boot.framework.web.domain.entity.UserUsergroup;
 import pro.bzy.boot.framework.web.service.ConstantService;
 import pro.bzy.boot.framework.web.service.MenuService;
+import pro.bzy.boot.framework.web.service.PermissionService;
 import pro.bzy.boot.framework.web.service.RoleMenuService;
 import pro.bzy.boot.framework.web.service.RoleService;
 import pro.bzy.boot.framework.web.service.TimerTaskService;
@@ -66,6 +69,8 @@ public class FrameworkPageController extends MyAbstractController {
     private ConstantService constantService;
     @Resource
     private UserUsergroupService userUsergroupService;
+    @Autowired
+    private PermissionService permissionService;
     
     
     
@@ -162,6 +167,7 @@ public class FrameworkPageController extends MyAbstractController {
                break;
            case "menu":
                List<RoleMenu> roleMenus = roleMenuService.list(Wrappers.<RoleMenu>lambdaQuery().eq(RoleMenu::getRoleId, id));
+               model.put("menuPerms", permissionService.list(Wrappers.<Permission>lambdaQuery().eq(Permission::getMenuId, id)));
                model.put("curMenu", menuService.getById(id));
                model.put("roleMenus", roleMenus);
                break;

@@ -152,6 +152,10 @@ public class Menu extends Model<Menu> implements TreeDomain<Menu>{
     private List<Menu> childs;
     
     
+    /** 权限  */
+    @TableField(exist = false)
+    private List<Permission> perms;
+    
     
     /**
      * 获取默认的跟菜单

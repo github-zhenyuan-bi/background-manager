@@ -1,5 +1,7 @@
 package pro.bzy.boot.framework.config.aop.parent;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -21,9 +23,9 @@ import pro.bzy.boot.framework.utils.funtions.ExecutableFunction;
 public abstract class MyAopSupport {
     
     public enum JoinPointType {
-        CONTROlLER("Controller", "==============="),
-        SERVICE("Service",       "---------------"),
-        ANNOTATION("Annotation", "###############")
+        CONTROlLER("Controller", "###############"),
+        SERVICE("Service",       "==============="),
+        ANNOTATION("Annotation", "---------------")
         ;
         @Getter private final String type;
         @Getter private final String split;
@@ -118,7 +120,18 @@ public abstract class MyAopSupport {
      * @return
      */
     protected Object logMethodReturn(Logger log, Object obj) {
-        log.debug("【RETURN      】==># {}", obj);
+        if (obj != null) {
+            int index = 0;
+            if (obj instanceof ArrayList)
+                for (Object item : (ArrayList<?>) obj)
+                    log.debug("【RETURN row{} 】==># {}", index++, item);
+            if (obj instanceof HashMap) 
+                for (Map.Entry<?, ?> entry : ((HashMap<?, ?>)obj).entrySet())
+                    log.debug("【RETURN row{} 】==># {}", index++, entry);
+            
+        } else {
+            log.debug("【RETURN      】==># {}", obj);
+        }
         log.debug("{} AOP -> {} <- FINISH {}", getType().split, getType().type, getType().split);
         return obj;
     }

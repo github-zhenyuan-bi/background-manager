@@ -18,6 +18,7 @@ import pro.bzy.boot.framework.config.jwt.JwtUtil;
 public class CustomJwtRealm extends AuthorizingRealm{
     
 
+    
 
     /*
      * 多重写一个support

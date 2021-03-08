@@ -147,8 +147,8 @@ public class PermissionController {
     
     @ApiOperation(value="更新菜单资源权限配置")
     @PostMapping("updateMenuPerms")
-    public R<String> updateMenuPerms(@RequestBody List<PermissionSettForm> permSetts) {
-        System.out.println(permSetts);
+    public R<String> updateMenuPerms(String id, @RequestBody List<PermissionSettForm> permSetts) {
+        permissionService.updatePermsForMenu(id, permSetts);
         return R.ofSuccess("更新成功");
     }
 }

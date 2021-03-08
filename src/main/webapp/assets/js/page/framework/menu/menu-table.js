@@ -113,16 +113,25 @@ window.operateMenuEvents = {
 						//contentDom: "/wx/wxMiniprogramSetting/page/cooperationFormEdit",
 						confirmBtnAction: function(dom) {
 							var $form = dom.find("#menu-perms-form");
-							var urlExps = $form.find("input[name='urlExp']");
-							var perms   = $form.find("input[name='perm']");
+							var $moduleItems = $form.find(".module-item");
+							
 							var datas = [];
-							var size = urlExps.length;
-							for (var i = 0; i < size; i++) {
-								var dataTemp = {urlExp: urlExps[i].value, perm: perms[i].value};
-								datas.push(dataTemp);
+							if ($moduleItems.length > 0) {
+								$moduleItems.each(function() {
+									var $this = $(this);
+									var dataTemp = {};
+									dataTemp.id      = $this.data("id");
+									dataTemp.urlExp = $this.find("input[name='urlExp']").val();
+									dataTemp.perm   = $this.find("input[name='perm']").val();
+									dataTemp.descrip = $this.find("input[name='descrip']").val();
+									datas.push(dataTemp);
+								});
 							}
-							fetchPost("/framework/permission/updateMenuPerms", {body: JSON.stringify(datas)}, function(res) {
-								console.log(res)
+							fetchPost("/framework/permission/updateMenuPerms?id=" + value, {body: JSON.stringify(datas)}, function(res) {
+								mySwal.alertForRes(res, {
+									text: "更新权限配置成功",
+									onOpen: function() {$cooperationSideBar.hide();}
+								});
 							});
 						},
 						cancelBtnAction: function(dom) {

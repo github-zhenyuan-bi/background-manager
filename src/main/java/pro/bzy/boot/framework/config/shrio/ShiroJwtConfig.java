@@ -14,9 +14,11 @@ import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.web.filter.authc.AnonymousFilter;
 import org.apache.shiro.web.filter.authc.LogoutFilter;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
+import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Lazy;
 
 import lombok.Setter;
 import pro.bzy.boot.framework.config.jwt.JwtDefaultSubjectFactory;
@@ -25,6 +27,7 @@ import pro.bzy.boot.framework.config.shrio.parent.MyShiroConfig;
 
 @Configuration
 @ConfigurationProperties(prefix = "app.config.shiro")
+@AutoConfigureAfter(ShiroLifecycleBeanPostProcessorConfig.class)//配置Bean加载的先后顺序
 public class ShiroJwtConfig implements MyShiroConfig{
     
     /** 登陆url */
@@ -33,8 +36,12 @@ public class ShiroJwtConfig implements MyShiroConfig{
     /** 权限验证成功url */
     @Setter private String successUrl;
     
-    
-    
+
+    @Bean
+    public Realm realm() {
+        return new CustomJwtRealm();
+    }
+
     /*
      * a. 告诉shiro不要使用默认的DefaultSubject创建对象，因为不能创建Session
      * */
@@ -42,17 +49,12 @@ public class ShiroJwtConfig implements MyShiroConfig{
     public SubjectFactory subjectFactory() {
         return new JwtDefaultSubjectFactory();
     }
-
+    
     @Bean
-    public Realm realm() {
-        return new CustomJwtRealm();
-    }
-
-    @Bean
-    public DefaultWebSecurityManager securityManager() {
+    public DefaultWebSecurityManager securityManager(@Lazy Realm realm) {
         DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager();
         //securityManager.setCacheManager(ehCacheManager());
-        securityManager.setRealm(realm());
+        securityManager.setRealm(realm);
         
         // 关闭 ShiroDAO 功能
         DefaultSubjectDAO subjectDAO = new DefaultSubjectDAO();
@@ -67,9 +69,9 @@ public class ShiroJwtConfig implements MyShiroConfig{
     }
 
     @Bean
-    public ShiroFilterFactoryBean shiroFilterFactoryBean() {
+    public ShiroFilterFactoryBean shiroFilterFactoryBean(@Lazy DefaultWebSecurityManager securityManager) {
         ShiroFilterFactoryBean shiroFilter = new ShiroFilterFactoryBean();
-        shiroFilter.setSecurityManager(securityManager());
+        shiroFilter.setSecurityManager(securityManager);
         shiroFilter.setLoginUrl(loginUrl);
         shiroFilter.setUnauthorizedUrl(loginUrl);
         /*
@@ -83,7 +85,6 @@ public class ShiroJwtConfig implements MyShiroConfig{
         filterMap.put("jwt", new JwtFilter2());
         filterMap.put("logout", new LogoutFilter());
         shiroFilter.setFilters(filterMap);
-
         // 拦截器
         Map<String, String> filterRuleMap = new LinkedHashMap<>();
         // 静态资源
@@ -95,7 +96,6 @@ public class ShiroJwtConfig implements MyShiroConfig{
         filterRuleMap.put("/500**", "anon");
         filterRuleMap.put("/**/favicon.ico", "anon");
         filterRuleMap.put("/imageServer/**", "anon");
-        
         // 登陆注册
         filterRuleMap.put("/", "anon");
         filterRuleMap.put("/login**", "anon");

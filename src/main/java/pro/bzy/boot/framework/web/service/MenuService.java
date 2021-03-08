@@ -25,4 +25,7 @@ public interface MenuService extends IService<Menu> {
     
     /** 根据类别查询菜单+ 资源授权对象过滤*/
     List<Menu> getByAccessorAndTypeThenOrder(String accessor, String type);
+    
+    /** 查询菜单分配列表 */
+    List<Menu> getMenuList(Menu queryBean);
 }

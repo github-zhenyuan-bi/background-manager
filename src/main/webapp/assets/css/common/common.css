@@ -125,7 +125,7 @@ i.fa-venus{color: #e198b4; font-weight: bold;}
 /* 图片文件上传组件样式 */
 .img-upload-area {
 	width: 200px; 
-	height: auto; 
+	height: auto;
 	border: 1px solid rgb(204, 204, 204); 
 	padding: 10px; 
 	cursor: pointer;
@@ -171,3 +171,8 @@ i.fa-venus{color: #e198b4; font-weight: bold;}
 .juben-badge-text {margin-right: 5px; font-size: 12px;}
 .juben-badge-text.remen {color: red;}
 .juben-badge-text.xin {color: #0a9007;}
+
+
+.table-sm td, .table-sm th {
+    padding: .5rem!important;
+}

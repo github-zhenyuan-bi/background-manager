@@ -95,7 +95,7 @@ window.operateRoleEvents = {
 		allocatePerms: function($btn, value, row, index) {
 			var $addRole = _roleAdd.clone();
 			mySwal.loadHtml("分配菜单权限", "/framework/menu/form/menu-allocate?id=" + value, {
-				width: 600,
+				width: '60rem',
 				preConfirm: function() {
 					var selcDatas = $('#menu-allocate-table').bootstrapTable('getSelections');
 					var menuidArr = [];
