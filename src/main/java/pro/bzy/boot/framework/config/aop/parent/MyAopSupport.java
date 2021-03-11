@@ -122,10 +122,10 @@ public abstract class MyAopSupport {
     protected Object logMethodReturn(Logger log, Object obj) {
         if (obj != null) {
             int index = 0;
-            if (obj instanceof ArrayList)
+            if (obj.getClass() == ArrayList.class)
                 for (Object item : (ArrayList<?>) obj)
                     log.debug("【RETURN row{} 】==># {}", index++, item);
-            if (obj instanceof HashMap) 
+            if (obj.getClass() == HashMap.class) 
                 for (Map.Entry<?, ?> entry : ((HashMap<?, ?>)obj).entrySet())
                     log.debug("【RETURN row{} 】==># {}", index++, entry);
             

@@ -23,7 +23,8 @@ public interface JWT_constant {
     String JWT_LOGIN_USERID_KEY = "userid"; // 用户id 键
     String JWT_LOGIN_USER = "user"; //  用户
     String JWT_LOGIN_USER_IP_KEY = "userip";    // 用户认证token所在ip
-    
+    String JWT_ROLE_AND_PERMISSION_KEY_SUFFIX = "_perms";
     
     int JWT_ERROR_RESPONSE_CODE = 600;
+    int JWT_UNAUTHOR_RESPONSE_CODE = 601;
 }

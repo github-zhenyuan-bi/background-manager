@@ -242,4 +242,14 @@ public class FrameworkPageController extends MyAbstractController {
        prepareMenuData(request, model, menuService);
        return "/framework/user/user-changePassword";
    }
+   
+   
+   
+   @ApiOperation(value="表单页面")
+   @GetMapping("menuAllocate")
+   public String menuAllocate(String roleId, HttpServletRequest request, Map<String, Object> model) {
+       model.put("curRole", roleService.getById(roleId));
+       model.put("roleMenus", roleMenuService.list(Wrappers.<RoleMenu>lambdaQuery().eq(RoleMenu::getRoleId, roleId)));
+       return "/framework/menu/menu-allocate";
+   }
 }

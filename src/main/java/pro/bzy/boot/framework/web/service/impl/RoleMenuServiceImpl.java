@@ -3,8 +3,10 @@ package pro.bzy.boot.framework.web.service.impl;
 import pro.bzy.boot.framework.web.domain.entity.Menu;
 import pro.bzy.boot.framework.web.domain.entity.Role;
 import pro.bzy.boot.framework.web.domain.entity.RoleMenu;
+import pro.bzy.boot.framework.web.domain.entity.RolePermission;
 import pro.bzy.boot.framework.web.mapper.RoleMenuMapper;
 import pro.bzy.boot.framework.web.service.RoleMenuService;
+import pro.bzy.boot.framework.web.service.RolePermissionService;
 import pro.bzy.boot.framework.web.service.RoleService;
 import pro.bzy.boot.framework.web.service.UserRoleService;
 import pro.bzy.boot.framework.utils.CollectionUtil;
@@ -14,6 +16,9 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 
+import lombok.NonNull;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -37,6 +42,8 @@ public class RoleMenuServiceImpl extends ServiceImpl<RoleMenuMapper, RoleMenu> i
     private RoleService roleService;
     @Resource
     private UserRoleService userRoleService;
+    @Autowired
+    private RolePermissionService rolePermissionService;
     
     @Override
     public Map<String, String> getMenuNamesWithRoleNames(List<Menu> menus) {
@@ -65,15 +72,23 @@ public class RoleMenuServiceImpl extends ServiceImpl<RoleMenuMapper, RoleMenu> i
     
     
     @Override
-    public void updateRoleWithMenuRelationShip(String roleId, String[] menuIds) {
-        // 删除旧的绑定关系
-        remove(Wrappers.<RoleMenu>lambdaUpdate().eq(RoleMenu::getRoleId, roleId));
+    public void updateRoleWithMenuAndPermRelationShip(@NonNull String roleId, 
+            String[] menuIds, String[] permIds) {
+        // 0.1 删除【角色-菜单】关联
+        this.remove(Wrappers.<RoleMenu>lambdaUpdate().eq(RoleMenu::getRoleId, roleId));
+        // 0.2 删除【角色-权限】关联
+        rolePermissionService.remove(Wrappers.<RolePermission>lambdaQuery().eq(RolePermission::getRoleId, roleId));
         
-        // 存储新的关系
-        if (menuIds != null && menuIds.length > 0) {
-            List<RoleMenu> roleMenus = Stream.<String>of(menuIds)
-                    .map(menuId -> new RoleMenu(roleId, menuId)).collect(Collectors.toList());
-            saveBatch(roleMenus);
+        // 1.1 重绑定新的【角色-菜单】关联
+        if (CollectionUtil.isNotEmpty(menuIds)) {
+            saveBatch(Stream.<String>of(menuIds)
+                    .map(menuId -> new RoleMenu(roleId, menuId)).collect(Collectors.toList()));
+        }
+        // 1.2 重绑定新的【角色-权限】关联
+        if (CollectionUtil.isNotEmpty(permIds)) {
+            rolePermissionService.saveBatch(Stream.<String>of(permIds)
+                    .map(permId -> new RolePermission(roleId, permId))
+                            .collect(Collectors.toList()));
         }
     }
 

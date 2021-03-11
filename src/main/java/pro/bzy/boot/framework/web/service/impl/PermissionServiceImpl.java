@@ -1,5 +1,6 @@
 package pro.bzy.boot.framework.web.service.impl;
 
+import pro.bzy.boot.framework.config.shrio.service.ShiroService;
 import pro.bzy.boot.framework.utils.CollectionUtil;
 import pro.bzy.boot.framework.web.domain.bean.PermissionSettForm;
 import pro.bzy.boot.framework.web.domain.entity.Permission;
@@ -14,6 +15,7 @@ import com.google.common.collect.Sets;
 import freemarker.template.utility.NullArgumentException;
 import lombok.NonNull;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -33,7 +35,8 @@ public class PermissionServiceImpl extends ServiceImpl<PermissionMapper, Permiss
 
     @Resource
     private PermissionMapper permissionMapper;
-
+    @Autowired
+    private ShiroService shiroService;
     
     
     @Override
@@ -68,6 +71,8 @@ public class PermissionServiceImpl extends ServiceImpl<PermissionMapper, Permiss
             if (CollectionUtil.isNotEmpty(perms))
                 saveBatch(perms);
         }
+        // 3. 更新shiroFilter
+        shiroService.updateFilterChainDefinitionMap();
     }
     
     

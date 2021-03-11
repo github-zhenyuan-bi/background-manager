@@ -2,7 +2,6 @@ package pro.bzy.boot.framework.config.jwt;
 
 import java.io.IOException;
 import java.util.Map;
-import java.util.Objects;
 
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
@@ -10,13 +9,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.shiro.web.filter.AccessControlFilter;
-import org.springframework.util.StringUtils;
 
 import com.auth0.jwt.exceptions.TokenExpiredException;
 
 import io.jsonwebtoken.JwtException;
 import lombok.extern.slf4j.Slf4j;
 import pro.bzy.boot.framework.config.constant.JWT_constant;
+import pro.bzy.boot.framework.config.shrio.ShiroFilterUtil;
 import pro.bzy.boot.framework.utils.CacheUtil;
 import pro.bzy.boot.framework.utils.PropertiesUtil;
 import pro.bzy.boot.framework.utils.RequestAndResponseUtil;
@@ -35,7 +34,6 @@ public class JwtFilter2 extends AccessControlFilter {
         return false;
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     protected boolean onAccessDenied(ServletRequest servletRequest, ServletResponse servletResponse) throws Exception {
         log.trace("onAccessDenied 方法被调用");
@@ -44,23 +42,16 @@ public class JwtFilter2 extends AccessControlFilter {
         Map<String, String> nameAndValuesOfCookies = RequestAndResponseUtil.getCookiesFromRequest(httpRequest);
 
         // 1. 从cookie或者header中获取token
-        String access_token = RequestAndResponseUtil.getJwtTokenFromCookiesOrRequestHeader(
-                JWT_constant.JWT_ACCESS_TOKEN_KEY, httpRequest, nameAndValuesOfCookies); 
-        String refresh_token = RequestAndResponseUtil.getJwtTokenFromCookiesOrRequestHeader(
-                JWT_constant.JWT_REFRESH_TOKEN_KEY, httpRequest, nameAndValuesOfCookies); 
+        String access_token = ShiroFilterUtil.getAccessToken(httpRequest, nameAndValuesOfCookies);
+        String refresh_token = ShiroFilterUtil.getRefreshToken(httpRequest, nameAndValuesOfCookies);
+        
         Map<String, Object> datas = null;
         try {
             // 2. 已获取jwtToken 验证jwtToken合法性
-            if (StringUtils.isEmpty(access_token) && StringUtils.isEmpty(refresh_token)) 
-                throw new JwtException(
-                        JWT_constant.JWT_ACCESS_TOKEN_KEY + "且" +
-                        JWT_constant.JWT_REFRESH_TOKEN_KEY +
-                        "为空，无法正常从Header或Cookies中获取，故无法认证，现准备跳转登录页");
+            ShiroFilterUtil.checkTokenNotnull(access_token, refresh_token);
                 
             // 3. token过期校验
-            datas = CacheUtil.get(access_token, Map.class);
-            if (Objects.isNull(datas))
-                throw new TokenExpiredException("过期");
+            datas = ShiroFilterUtil.getJwttokenDatasFromCache(access_token);
             
             // 4. ip验证
             checkUserIp(datas, httpRequest);

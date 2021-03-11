@@ -63,8 +63,8 @@ public class MenuController {
     
     @ApiOperation(value="菜单列表")
     @GetMapping("getList")
-    public R<List<Menu>> getList(Menu queryBean) {
-        List<Menu> menus = menuService.getMenuList(queryBean);
+    public R<List<Menu>> getList(String roleId, Menu queryBean) {
+        List<Menu> menus = menuService.getMenuList(roleId, queryBean);
         return R.ofSuccess(menus);
     }
     

@@ -17,4 +17,8 @@ import com.baomidou.mybatisplus.extension.service.IService;
 public interface RolePermissionService extends IService<RolePermission> {
 
     List<Permission> getPermsByRole(List<Role> roles);
+    
+    
+    /** 查询用户拥有的权限内容 */
+    List<String> getPermsNameOfUser(String userid);
 }

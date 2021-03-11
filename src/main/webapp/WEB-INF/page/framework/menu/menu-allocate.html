@@ -10,11 +10,11 @@
 	
 	
 	myBsTable.treeTable(_menuAllocateTable, {
-    	url: '/framework/menu/getList',
+    	url: '/framework/menu/getList?roleId=${(curRole.id)!}',
     	// 在哪一列展开树形 按钮
         treeShowField: 'name',
         classes: "table table-sm",
-        clickToSelect: true,
+        //clickToSelect: true,
         // 字段
         columns: [
         	{ checkbox: true, formatter: function(value, row, index) {
@@ -34,7 +34,7 @@
         		if (value && value.length > 0) {
         			for (var i = 0; i < value.length; i++) {
         				str += '<div class="form-check form-check-inline">' +
-        				  '<input class="form-check-input" type="checkbox" value="">' +
+        				  '<input class="form-check-input perm-check" type="checkbox" value="'+value[i].id+'" '+ (value[i].roleHas? 'checked':'')  +'>' +
         				  '<label class="form-check-label">'+value[i].partOfUrl+'('+value[i].descrip+')</label>' +
         				'</div>';
         			} 

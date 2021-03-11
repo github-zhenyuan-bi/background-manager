@@ -15,7 +15,7 @@ public class ShiroFilterMapInitOnAppRun implements ApplicationRunner{
     
     @Override
     public void run(ApplicationArguments args) throws Exception {
-        shiroService.loadFilterChainDefinitionMap();
+        shiroService.updateFilterChainDefinitionMap();
     }
 
 }

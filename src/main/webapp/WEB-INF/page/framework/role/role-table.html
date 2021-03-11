@@ -94,18 +94,21 @@ window.operateRoleEvents = {
 		 */
 		allocatePerms: function($btn, value, row, index) {
 			var $addRole = _roleAdd.clone();
-			mySwal.loadHtml("分配菜单权限", "/framework/menu/form/menu-allocate?id=" + value, {
+			mySwal.loadHtml("分配菜单权限", "/framework/menuAllocate?roleId=" + value, {
 				width: '60rem',
 				preConfirm: function() {
 					var selcDatas = $('#menu-allocate-table').bootstrapTable('getSelections');
-					var menuidArr = [];
+					var menuidArr = [], permidArr = [];
 					if (selcDatas != null && selcDatas.length > 0) {
     					for (let selcd of selcDatas) {
     						menuidArr.push(selcd.id);
 						}
 					}
+					$('#menu-allocate-table').find(".perm-check:checked").each(function() {
+						permidArr.push(this.value);
+					});
 					return fetchPostSwalComfirm('/framework/role/updateRoleWithMenuRelationship'
-							, {body: JSON.stringify({roleId: value, menuIds: menuidArr.join(",")})}
+							, {body: JSON.stringify({roleId: value, menuIds: menuidArr.join(","), permIds: permidArr.join(",")})}
 							, function(res) {
 								mySwal.alertForRes(res, {
 									text: "分配菜单资源成功"

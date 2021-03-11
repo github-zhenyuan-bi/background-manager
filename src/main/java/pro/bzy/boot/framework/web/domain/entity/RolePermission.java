@@ -41,6 +41,12 @@ public class RolePermission extends Model<RolePermission> {
 	
     private static final long serialVersionUID = 1L;
     
+    public RolePermission() {}
+    public RolePermission(String roleId, String permissionId) {
+        this.roleId = roleId;
+        this.permissionId = permissionId;
+    }
+    
     
     @ApiModelProperty(value = "角色id", position = 5)
     @TableField("ROLE_ID")
@@ -51,5 +57,6 @@ public class RolePermission extends Model<RolePermission> {
     @ApiModelProperty(value = "权限id", position = 10)
     @TableField("PERMISSION_ID")
     private String permissionId;
+    
     
 }

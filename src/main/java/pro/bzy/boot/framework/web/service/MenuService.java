@@ -27,5 +27,5 @@ public interface MenuService extends IService<Menu> {
     List<Menu> getByAccessorAndTypeThenOrder(String accessor, String type);
     
     /** 查询菜单分配列表 */
-    List<Menu> getMenuList(Menu queryBean);
+    List<Menu> getMenuList(String roleId, Menu queryBean);
 }

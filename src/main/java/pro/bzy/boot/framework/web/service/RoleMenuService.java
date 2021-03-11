@@ -21,7 +21,7 @@ public interface RoleMenuService extends IService<RoleMenu> {
     
     
     /** 绑定新的角色和菜单资源关系 */
-    void updateRoleWithMenuRelationShip(String roleId, String[] menuIds);
+    void updateRoleWithMenuAndPermRelationShip(String roleId, String[] menuIds, String[] permIds);
     
     
     /** 查询角色的全部权限菜单 */

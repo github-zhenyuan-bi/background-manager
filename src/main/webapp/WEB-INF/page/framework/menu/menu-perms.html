@@ -3,7 +3,7 @@
 	<div class="menu-perms-set-example pd-l-20 m-b-20">
 		<p><span>该资源表达式头:</span><span class="pd-l-5 text-secondary">${(curMenu.filterExp)!}</span></p>
 	    <p><span>资源匹配表达式:</span><span class="pd-l-5 text-secondary">add**</span></p>
-	    <p><span>权限名称:</span><span class="pd-l-5 text-secondary">menu:add</span></p>
+	    <p><span>权限名称:</span><span class="pd-l-5 text-secondary">perms[menu:add]</span></p>
 	    <p><span>结果:</span><span class="pd-l-5 text-secondary">${(curMenu.filterExp)!}add**=perms[menu:add]</span></p>
 	</div>
 	<h6 class="m-t-20 bg-grey">配置</h6>
@@ -79,7 +79,7 @@
 		var urlExp_val = $urlExp.val();
 		var perm_val   = $perm.val();
 		if (urlExp_val && perm_val) {
-			var resStr = "${(curMenu.filterExp)!}" + urlExp_val + "=perms["+perm_val+"]";
+			var resStr = "${(curMenu.filterExp)!}" + urlExp_val + "="+perm_val+"";
 			$p.text(resStr);
 		} else {
 			$p.text("");

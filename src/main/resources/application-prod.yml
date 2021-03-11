@@ -93,6 +93,7 @@ app:
     shiro:
       login-url: /login
       success-url: bbb
+      unauthor-url: /unauthor.html
       authen-timeout: 1800000
     jwt:
       access-token-expire: 600 #单位s 时长10分钟

@@ -14,6 +14,7 @@ import io.swagger.annotations.ApiModelProperty;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import lombok.experimental.Accessors;
 
 /**
@@ -27,6 +28,7 @@ import lombok.experimental.Accessors;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
+@ToString(of= {"name", "roleHas"})
 @TableName("T_PERMISSION")
 @ApiModel(value="Permission", description="权限")
 public class Permission extends Model<Permission> {
@@ -90,6 +92,9 @@ public class Permission extends Model<Permission> {
     private String descrip;
     
     
+    @ApiModelProperty(value = "某角色是否有该权限", position = 35)
+    @TableField(exist=false)
+    private boolean roleHas;
     
 
     @Override

@@ -10,11 +10,12 @@ import org.apache.shiro.mgt.DefaultSessionStorageEvaluator;
 import org.apache.shiro.mgt.DefaultSubjectDAO;
 import org.apache.shiro.mgt.SubjectFactory;
 import org.apache.shiro.realm.Realm;
+import org.apache.shiro.spring.LifecycleBeanPostProcessor;
+import org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.web.filter.authc.AnonymousFilter;
 import org.apache.shiro.web.filter.authc.LogoutFilter;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
-import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -23,11 +24,11 @@ import org.springframework.context.annotation.Lazy;
 import lombok.Setter;
 import pro.bzy.boot.framework.config.jwt.JwtDefaultSubjectFactory;
 import pro.bzy.boot.framework.config.jwt.JwtFilter2;
+import pro.bzy.boot.framework.config.shrio.filter.PermissionFilter;
 import pro.bzy.boot.framework.config.shrio.parent.MyShiroConfig;
 
 @Configuration
 @ConfigurationProperties(prefix = "app.config.shiro")
-@AutoConfigureAfter(ShiroLifecycleBeanPostProcessorConfig.class)//配置Bean加载的先后顺序
 public class ShiroJwtConfig implements MyShiroConfig{
     
     /** 登陆url */
@@ -36,7 +37,9 @@ public class ShiroJwtConfig implements MyShiroConfig{
     /** 权限验证成功url */
     @Setter private String successUrl;
     
-
+    /** 未授权url */
+    @Setter private String unauthorUrl;
+    
     @Bean
     public Realm realm() {
         return new CustomJwtRealm();
@@ -68,12 +71,12 @@ public class ShiroJwtConfig implements MyShiroConfig{
         return securityManager;
     }
 
-    @Bean
+    @Bean("shiroFilter")
     public ShiroFilterFactoryBean shiroFilterFactoryBean(@Lazy DefaultWebSecurityManager securityManager) {
         ShiroFilterFactoryBean shiroFilter = new ShiroFilterFactoryBean();
         shiroFilter.setSecurityManager(securityManager);
         shiroFilter.setLoginUrl(loginUrl);
-        shiroFilter.setUnauthorizedUrl(loginUrl);
+        shiroFilter.setUnauthorizedUrl(unauthorUrl);
         /*
          * c. 添加jwt过滤器，并在下面注册
          * 也就是将jwtFilter注册到shiro的Filter中
@@ -84,34 +87,29 @@ public class ShiroJwtConfig implements MyShiroConfig{
         filterMap.put("anon", new AnonymousFilter());
         filterMap.put("jwt", new JwtFilter2());
         filterMap.put("logout", new LogoutFilter());
+        filterMap.put("myperms", new PermissionFilter());
         shiroFilter.setFilters(filterMap);
         // 拦截器
         Map<String, String> filterRuleMap = new LinkedHashMap<>();
-        // 静态资源
-        filterRuleMap.put("/assets/**", "anon");
-        filterRuleMap.put("/images/**", "anon");
-        filterRuleMap.put("/webjars/**", "anon");
-        filterRuleMap.put("/error/**", "anon");
-        filterRuleMap.put("/404**", "anon");
-        filterRuleMap.put("/500**", "anon");
-        filterRuleMap.put("/**/favicon.ico", "anon");
-        filterRuleMap.put("/imageServer/**", "anon");
-        // 登陆注册
-        filterRuleMap.put("/", "anon");
-        filterRuleMap.put("/login**", "anon");
-        filterRuleMap.put("/register**", "anon");
-        filterRuleMap.put("/logout", "logout");
-        
-        // 剧本相关接口
-        filterRuleMap.put("/**/public/**", "anon");
-        
-        filterRuleMap.put("/**", "jwt");
         shiroFilter.setFilterChainDefinitionMap(filterRuleMap);
 
         return shiroFilter;
     }
     
     
+    @Bean("lifecycleBeanPostProcessor")
+    public LifecycleBeanPostProcessor lifecycleBeanPostProcessor() {
+        return new LifecycleBeanPostProcessor();
+    }
+    
+    
+    //加入注解的使用，不加入这个注解不生效
+    @Bean
+    public AuthorizationAttributeSourceAdvisor authorizationAttributeSourceAdvisor(@Lazy DefaultWebSecurityManager securityManager) {
+        AuthorizationAttributeSourceAdvisor authorizationAttributeSourceAdvisor = new AuthorizationAttributeSourceAdvisor();
+        authorizationAttributeSourceAdvisor.setSecurityManager(securityManager);
+        return authorizationAttributeSourceAdvisor;
+    }
     
     
     /**

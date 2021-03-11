@@ -3,10 +3,12 @@ package pro.bzy.boot.framework.web.service.impl;
 import pro.bzy.boot.framework.utils.CollectionUtil;
 import pro.bzy.boot.framework.web.domain.entity.Menu;
 import pro.bzy.boot.framework.web.domain.entity.Permission;
+import pro.bzy.boot.framework.web.domain.entity.RolePermission;
 import pro.bzy.boot.framework.web.mapper.MenuMapper;
 import pro.bzy.boot.framework.web.service.MenuService;
 import pro.bzy.boot.framework.web.service.PermissionService;
 import pro.bzy.boot.framework.web.service.RoleMenuService;
+import pro.bzy.boot.framework.web.service.RolePermissionService;
 import lombok.NonNull;
 
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
@@ -15,6 +17,7 @@ import com.google.common.collect.Lists;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.util.List;
 import java.util.Map;
@@ -36,6 +39,8 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
     private RoleMenuService roleMenuService;
     @Autowired
     private PermissionService permissionService;
+    @Autowired
+    private RolePermissionService rolePermissionService;
 
     @Override
     public List<Menu> buildTreeMenus() {
@@ -89,15 +94,33 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
 
 
     @Override
-    public List<Menu> getMenuList(Menu queryBean) {
+    public List<Menu> getMenuList(String roleId, Menu queryBean) {
+        // 1. 查询全部菜单
         List<Menu> menus = list(Wrappers.<Menu>lambdaQuery(queryBean).orderByAsc(Menu::getSort));
+        
+        // 2. 查询菜单对应的权限信息
         if (CollectionUtil.isNotEmpty(menus)) {
             List<Permission> allPerms = permissionService.list(Wrappers.<Permission>lambdaQuery()
                     .in(Permission::getMenuId, Lists.transform(menus, menu -> menu.getId())));
             
             if (CollectionUtil.isNotEmpty(allPerms)) {
+                // 3. 查询角色拥有的权限信息
+                if (!StringUtils.isEmpty(roleId)) {
+                    List<RolePermission> rolePerms = rolePermissionService.list(Wrappers.<RolePermission>lambdaQuery().eq(RolePermission::getRoleId, roleId));
+                    if (CollectionUtil.isNotEmpty(rolePerms)) {
+                        List<String> rolePermIds = Lists.transform(rolePerms, rp -> rp.getPermissionId());
+                        allPerms.stream().filter(perm -> {
+                            perm.setRoleHas(false);
+                            for (String rpId : rolePermIds) 
+                                if (rpId.equals(perm.getId())) 
+                                    return true;
+                            return false;
+                        }).forEach(perm -> perm.setRoleHas(true));
+                    }
+                }
+                
+                // 权限进行 对应得菜单资源分组 然后塞入菜单资源对象中
                 Map<String, List<Permission>> menuOfPerms = CollectionUtil.groupBy(allPerms, perm -> perm.getMenuId());
-               
                 for (Menu menu : menus) 
                     menu.setPerms(menuOfPerms.get(menu.getId()));
             }

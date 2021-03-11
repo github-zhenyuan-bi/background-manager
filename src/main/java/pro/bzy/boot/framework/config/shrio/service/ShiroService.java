@@ -12,7 +12,11 @@ public interface ShiroService {
      * @param :
      * @return: java.util.Map<java.lang.String,java.lang.String>
      */
-    Map<String, String> loadFilterChainDefinitionMap();
+    Map<String, String> getFilterChainDefinitionMapFromDB();
+    
+    
+    void updateFilterChainDefinitionMap();
+    
 
     /**
      * 在对uri权限进行增删改操作时，需要调用此方法进行动态刷新加载数据库中的uri权限

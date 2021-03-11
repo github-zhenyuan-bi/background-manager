@@ -149,10 +149,12 @@ public class RoleController {
     public R<String> updateRoleWithMenuRelationship(@RequestBody Map<String, Object> params) {
         Object roleId  = params.get("roleId");
         Object menuIds = params.get("menuIds");
+        Object permIds = params.get("permIds");
         
         ExceptionCheckUtil.notNull(roleId, "角色ID不能为空");
         String[] menuIdArr = menuIds == null? null : menuIds.toString().split(",");
-        roleMenuService.updateRoleWithMenuRelationShip(roleId.toString(), menuIdArr);
+        String[] permIdArr = permIds == null? null : permIds.toString().split(",");
+        roleMenuService.updateRoleWithMenuAndPermRelationShip(roleId.toString(), menuIdArr, permIdArr);
         return R.ofSuccess("更新成功");
     }
 }

@@ -42,7 +42,7 @@ import pro.bzy.boot.framework.web.domain.bean.TreeDomain;
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-@ToString(of= {"name"})
+@ToString(of= {"name", "perms"})
 @TableName("T_MENU")
 @ApiModel(value="Menu", description="菜单资源")
 public class Menu extends Model<Menu> implements TreeDomain<Menu>{
