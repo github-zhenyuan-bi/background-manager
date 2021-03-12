@@ -19,4 +19,7 @@ public interface CACHE_constant {
     
     /** 日志记录模块 -- 访问资源url&名称 -- 缓存 -- 缓存键前缀 */
     String CACHE_URI_DESC_PREFIX = "uri-cache-";
+    
+    
+    String USER_HAS_ADMIN_ROLE = "user_has_admin_role_";
 }

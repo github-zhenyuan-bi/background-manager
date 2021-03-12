@@ -1,6 +1,5 @@
 package pro.bzy.boot.framework.config.jwt;
 
-import java.io.IOException;
 import java.util.Map;
 
 import javax.servlet.ServletRequest;
@@ -19,7 +18,6 @@ import pro.bzy.boot.framework.config.shrio.ShiroFilterUtil;
 import pro.bzy.boot.framework.utils.CacheUtil;
 import pro.bzy.boot.framework.utils.PropertiesUtil;
 import pro.bzy.boot.framework.utils.RequestAndResponseUtil;
-import pro.bzy.boot.framework.web.domain.bean.R;
 
 @Slf4j
 public class JwtFilter2 extends AccessControlFilter {
@@ -73,55 +71,18 @@ public class JwtFilter2 extends AccessControlFilter {
                 access_token = new_access_token;
             } catch (Exception e2) {
                 log.warn(e2.getMessage());
-                cleanCookiesAndHeaderThenRedirectToLogin(httpRequest, httpResponse, e.getMessage());
+                ShiroFilterUtil.handleUnAuthenc(httpRequest, httpResponse, e2.getMessage(), getLoginUrl());
                 return false;
             }
         } catch (Exception e) {
             log.error("jwtToken认证失败, 原因：" + e.getMessage());
-            cleanCookiesAndHeaderThenRedirectToLogin(httpRequest, httpResponse, e.getMessage());
+            ShiroFilterUtil.handleUnAuthenc(httpRequest, httpResponse, e.getMessage(), getLoginUrl());
             return false;
         }
         setUserDetailToRequestForRenderView(datas, httpRequest, httpResponse);
         return true;
     }
 
-    
-
-    /**
-     * 清楚Cookie中的jwttoken信息 然后返回登录页
-     * @param httpRequest
-     * @param httpResponse
-     * @throws IOException
-     */
-    private void cleanCookiesAndHeaderThenRedirectToLogin(
-            HttpServletRequest httpRequest, HttpServletResponse httpResponse, String msg) throws IOException {
-        // 清楚Cookie中的jwttoken信息
-        RequestAndResponseUtil.clearLoginJwttokenDataFromCookies(httpRequest, httpResponse);
-        // 如果ajax请求 则抛出jwttoken的异常 否则直接重定向到登录页
-        if (RequestAndResponseUtil.isAjaxRequest(httpRequest)) {
-            RequestAndResponseUtil.responseJson(httpResponse, 
-                    JWT_constant.JWT_ERROR_RESPONSE_CODE,
-                    R.builder().code(600).msg(msg).build());
-        } else {
-            setUrlToResponse(httpRequest, httpResponse);
-            redirectToLogin(httpRequest, httpResponse);
-        }
-    }
-    
-    
-    
-    /**
-     * 将认证前访问被拦截的资源地址记录 以便认证后恢复访问
-     * @param httpRequest
-     * @param httpResponse
-     */
-    private void setUrlToResponse(HttpServletRequest httpRequest, HttpServletResponse httpResponse) {
-        String curAccessUrl = httpRequest.getRequestURI();
-        if (curAccessUrl.startsWith("/login")) {}
-        else {
-            RequestAndResponseUtil.setLastAccessUrlToCookie(httpRequest, httpResponse, curAccessUrl);
-        }
-    }
     
     
     
