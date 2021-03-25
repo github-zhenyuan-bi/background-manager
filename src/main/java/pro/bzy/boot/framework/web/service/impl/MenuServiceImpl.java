@@ -3,12 +3,14 @@ package pro.bzy.boot.framework.web.service.impl;
 import pro.bzy.boot.framework.utils.CollectionUtil;
 import pro.bzy.boot.framework.web.domain.entity.Menu;
 import pro.bzy.boot.framework.web.domain.entity.Permission;
+import pro.bzy.boot.framework.web.domain.entity.Role;
 import pro.bzy.boot.framework.web.domain.entity.RolePermission;
 import pro.bzy.boot.framework.web.mapper.MenuMapper;
 import pro.bzy.boot.framework.web.service.MenuService;
 import pro.bzy.boot.framework.web.service.PermissionService;
 import pro.bzy.boot.framework.web.service.RoleMenuService;
 import pro.bzy.boot.framework.web.service.RolePermissionService;
+import pro.bzy.boot.framework.web.service.UserRoleService;
 import lombok.NonNull;
 
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
@@ -41,6 +43,8 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
     private PermissionService permissionService;
     @Autowired
     private RolePermissionService rolePermissionService;
+    @Resource
+    private UserRoleService userRoleService;
 
     @Override
     public List<Menu> buildTreeMenus() {
@@ -83,12 +87,25 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
 
     @Override
     public List<Menu> getByAccessorAndTypeThenOrder(String accessor, String type) {
-        List<String> menuIds = roleMenuService.getUserPermitToAccessMenu(accessor);
-        List<Menu> menuList = list(Wrappers.<Menu>lambdaQuery()
-                .in(CollectionUtil.isNotEmpty(menuIds), Menu::getId, menuIds)
-                .eq(Menu::getMenuType, type)
-                .orderByAsc(Menu::getSort));
-        return menuList;
+        List<Role> roles = userRoleService.getRolesByUserId(accessor);
+        boolean isAdmin = roles.stream().anyMatch(role -> role.getName().toLowerCase().contains("admin"));
+        if (isAdmin) {
+            List<Menu> menuList = list(Wrappers.<Menu>lambdaQuery()
+                    .eq(Menu::getMenuType, type)
+                    .orderByAsc(Menu::getSort));
+            return menuList;
+        } else {
+            List<String> menuIds = roleMenuService.getUserPermitToAccessMenu(accessor);
+            if (CollectionUtil.isEmpty(menuIds)) {
+                return Lists.newArrayListWithCapacity(0);
+            } else {
+                List<Menu> menuList = list(Wrappers.<Menu>lambdaQuery()
+                    .in(CollectionUtil.isNotEmpty(menuIds), Menu::getId, menuIds)
+                    .eq(Menu::getMenuType, type)
+                    .orderByAsc(Menu::getSort));
+                return menuList;
+            }
+        }
     }
 
 

@@ -3,6 +3,7 @@ package pro.bzy.boot.framework.config.exceptions;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.shiro.authc.AuthenticationException;
+import org.apache.shiro.authz.UnauthorizedException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -22,6 +23,16 @@ public class GlobalExceptionHandler {
         return R.builder().code(R.FORM_VALIDATE_ERROR).msg(fve.getMessage()).data(fve.getErrDatas()).build();
     }
     
+    
+    /**
+     * shiro授权异常
+     * @return
+     */
+    @ExceptionHandler({UnauthorizedException.class})
+    public @ResponseBody R<String> shiroUnauthorizedException(
+            HttpServletRequest request, UnauthorizedException uae) {
+        return R.ofError(601, "Unauthorized", uae.getMessage());
+    }
     
     
     /**

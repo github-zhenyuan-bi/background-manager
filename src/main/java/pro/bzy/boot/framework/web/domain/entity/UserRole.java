@@ -3,7 +3,9 @@ package pro.bzy.boot.framework.web.domain.entity;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -47,6 +49,11 @@ public class UserRole extends Model<UserRole> {
 	
 	
     private static final long serialVersionUID = 1L;
+    
+    
+    @ApiModelProperty(value = "id", position = 1)
+    @TableId(value = "ID", type = IdType.ASSIGN_UUID)
+    private String id;
     
     
     @ApiModelProperty(value = "用户id", position = 5)

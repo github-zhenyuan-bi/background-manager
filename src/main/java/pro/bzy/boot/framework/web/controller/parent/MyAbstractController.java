@@ -98,8 +98,10 @@ public abstract class MyAbstractController {
     protected void prepareMenuData(HttpServletRequest request, Map<String, Object> model
             , MenuService menuService) {
         @SuppressWarnings("unchecked")
-        Map<String, Object> baseStorageDatas = (Map<String, Object>) request.getAttribute(JWT_constant.JWT_BASESTORAGE_DATAS_KEY);
-        String accessor = baseStorageDatas.getOrDefault(JWT_constant.JWT_LOGIN_USERID_KEY, "").toString();
+        Map<String, Object> baseStorageDatas = (Map<String, Object>) request.getAttribute(
+                JWT_constant.JWT_BASESTORAGE_DATAS_KEY);
+        String accessor = baseStorageDatas.getOrDefault(
+                JWT_constant.JWT_LOGIN_USERID_KEY, "").toString();
         
         List<Menu> menuList = menuService.getByAccessorAndTypeThenOrder(accessor, DB_constant.BACKGROUND_MANAGER_MENU_KEY);
         List<Menu> treeMenuList = CollectionUtil.buildTree(Menu.getDefualtRootMenu(), menuList);

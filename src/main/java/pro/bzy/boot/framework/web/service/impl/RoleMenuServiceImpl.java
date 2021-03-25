@@ -82,7 +82,7 @@ public class RoleMenuServiceImpl extends ServiceImpl<RoleMenuMapper, RoleMenu> i
         // 1.1 重绑定新的【角色-菜单】关联
         if (CollectionUtil.isNotEmpty(menuIds)) {
             saveBatch(Stream.<String>of(menuIds)
-                    .map(menuId -> new RoleMenu(roleId, menuId)).collect(Collectors.toList()));
+                    .map(menuId ->  new RoleMenu(null, roleId, menuId)).collect(Collectors.toList()));
         }
         // 1.2 重绑定新的【角色-权限】关联
         if (CollectionUtil.isNotEmpty(permIds)) {

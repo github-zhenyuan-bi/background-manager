@@ -4,7 +4,7 @@
 		<p><span>该资源表达式头:</span><span class="pd-l-5 text-secondary">${(curMenu.filterExp)!}</span></p>
 	    <p><span>资源匹配表达式:</span><span class="pd-l-5 text-secondary">add**</span></p>
 	    <p><span>权限名称:</span><span class="pd-l-5 text-secondary">perms[menu:add]</span></p>
-	    <p><span>结果:</span><span class="pd-l-5 text-secondary">${(curMenu.filterExp)!}add**=perms[menu:add]</span></p>
+	    <p><span>结果:</span><span class="pd-l-5 text-secondary">${(curMenu.filterExp)!}add**=myperms[menu:add]</span></p>
 	</div>
 	<h6 class="m-t-20 bg-grey">配置</h6>
 	
@@ -16,7 +16,7 @@
 			        <input class="form-control form-control-sm m-b-5" oninput="permSettChange(this)" type="text" name="urlExp" value="${(perm.partOfUrl)!}" placeholder="请输入资源匹配表达式部分"/>
 			        <input class="form-control form-control-sm m-b-5" oninput="permSettChange(this)" type="text" name="perm" value="${(perm.name)!}" placeholder="请输入权限名称"/>
 			        <input class="form-control form-control-sm m-b-5" type="text" name="descrip" value="${(perm.descrip)!}" placeholder="请输入权限说明"/>
-			        <p class="sett-res"><#if perm.partOfUrl?? && perm.name??>${(curMenu.filterExp)!}${(perm.partOfUrl)!}=perms[${(perm.name)!}]</#if></p>
+			        <p class="sett-res"><#if perm.partOfUrl?? && perm.name??>${(curMenu.filterExp)!}${(perm.partOfUrl)!}=${(perm.name)!}</#if></p>
 			    </div>
 			    <div class="col-2 pd-lr-5 d-flex flex-column align-items-center justify-content-center">
 				    <a class="addNextContentBtn" href="javascript:void(0);" onclick="addNextContent(this)"><i class="fa fa-plus m-b-20 text-primary" aria-hidden="true"></i></a>

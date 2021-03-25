@@ -64,12 +64,16 @@ public class R<T> {
     }
     
     
+    public static  <T> R<T> ofError(int code, String msg, T data) {
+        return R.<T>builder().code(code).msg(msg).data(data).build();
+    }
+    
     
     /**
      * 请求响应失败
      */
     public static  <T> R<T> ofError(String msg, T data) {
-        return R.<T>builder().code(ERROR).msg(msg).data(data).build();
+        return ofError(ERROR, msg, data);
     }
     
     /**
